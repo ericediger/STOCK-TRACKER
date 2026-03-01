@@ -2,14 +2,14 @@
 
 > **Purpose:** Session transition artifact. Written by the lead at the end of every session. Read first by the lead at the start of the next session — before AGENTS.md, before any code.
 > **Replaces reading:** Do not re-read prior session plans or chat history. If it is not in this document, it is not guaranteed to be current.
-> **Last Updated:** 2026-03-01
-> **Session:** Phase I Close / Phase II Planning → Phase II Session 1 (S22)
+> **Last Updated:** 2026-03-01 (Post-S22)
+> **Session:** Phase II Session 1 (S22) → Phase II Session 2 (Epic 3)
 
 ---
 
 ## 1) Current State (One Paragraph)
 
-STALKER Phase I is complete across 21 sessions with zero scope cuts. The application is a production-ready, local-first portfolio tracker running on SQLite via Prisma, Next.js 15 App Router, a standalone scheduler, three market data providers (FMP, Tiingo, Alpha Vantage), and a fully operational five-tool LLM advisor. The real portfolio contains 83 instruments, 87 transactions, and approximately 53,600 price bars. Session 21 resolved seven IAT issues (data correctness bugs, performance blockers, and missing features), and the codebase is at 720 tests passing across 62 files with zero TypeScript errors. Phase II has been formally scoped: `PROJECT-SPEC.md` is authored and in Active status (M0 approved), defining four confirmed epics derived from UAT findings and one blocked epic awaiting Executive Sponsor input. Two S21 items remain unresolved and are hard blockers for Phase II Session 1 — they must be cleared by the Executive Sponsor before any coding begins. See §6 for the formal escalations.
+Phase II Session 1 (S22) completed Epics 1 and 2 — default sort (symbol A-Z) and column parity (canonical PositionSummary layout). All four HANDOFF.md §6 escalations were resolved by the Executive Sponsor before coding began: S21 UAT confirmed pass, XRP instrument deleted (re-add after Epic 4), GNEWS_API_KEY provided, and Epic 5 inputs received. Three pre-existing build issues were fixed (Toast warning variant, holdings-utils type indexing, useHoldingDetail return type). DECISIONS.md was established with 8 formal decisions (AD-S22-1 through AD-S22-10). Quality gates green: 0 tsc errors, 720 tests passing across 62 files, build success. Joint lead review verified all 12 exit criteria across both epics — no downstream scope amendments required. Epic 3 (News Feed) session contract issued and ready for immediate execution.
 
 ---
 
@@ -107,92 +107,67 @@ STALKER Phase I is complete across 21 sessions with zero scope cuts. The applica
 
 ### 5.1 Recommended Scope
 
-**Phase II Session 1 objective:** Close the two S21 blockers (manual UAT verification and XRP decision), then execute Epics 1 and 2 in full within the same session. Epics 1 (default sort) and 2 (column parity) share no file-level conflicts and are both low-to-medium risk with no external dependencies. They are the correct starting point — they deliver immediate, visible improvements and establish that the Phase II coding loop is working cleanly before the external-dependency work (Epic 3: GNews) and schema-migration work (Epic 4: crypto) begin.
+**Phase II Session 2 objective:** Execute Epic 3 (News Feed) in full. This is a single-epic session with one external dependency (GNews API) and no schema changes. The `GNEWS_API_KEY` has been provided by the ES and is ready to configure.
 
-Additionally at session open: run `pnpm test` to reconcile the 683→720 test count delta, and update `KNOWN-LIMITATIONS.md` with the PriceBar fallback coverage gap.
+At session open: add `GNEWS_API_KEY` to `apps/web/.env.local`. Update `.env.example` with the `GNEWS_API_KEY` entry (with comment) and clean up stale entries (Stooq reference, outdated LLM_MODEL).
 
-Do not begin Epic 3 or Epic 4 in this session unless Epics 1 and 2 are fully complete, UAT-verified, and all quality gates are passing. If capacity remains after Epics 1 and 2, the lead may begin Epic 3 scoping but should not write code until the GNEWS_API_KEY status is confirmed.
+Do not begin Epic 4 in this session unless Epic 3 is fully complete, all exit criteria verified, and all quality gates are passing. If capacity remains after Epic 3, the lead may begin Epic 4 scoping (review CoinGecko API documentation, audit `instrument.type` branches) but should not write code until the joint lead review of Epic 3 is complete.
 
 ### 5.2 Roles to Staff
 
 | Role | Required / Optional | Notes |
 |------|---------------------|-------|
-| Lead Engineering | Required | Owns all Phase II Session 1 execution. Solo mode is appropriate for Epics 1 and 2 given low complexity and no parallelism benefit. |
-| Lead Product | Required at epic close | Conducts joint review with Lead Engineering after each epic closes to verify exit criteria, assess downstream session impact, and update HANDOFF.md §5 before the next session begins. Not required during active coding. |
-| BA | Optional | Not needed for Epics 1 and 2. Required for Epic 5 scoping once ES inputs are received. |
+| Lead Engineering | Required | Owns all Epic 3 execution. Solo mode is appropriate — single epic, no parallelism benefit. |
+| Lead Product | Required at epic close | Conducts joint review with Lead Engineering after Epic 3 closes to verify exit criteria and issue the Epic 4 session contract. |
 
 ### 5.3 Context to Load
 
 1. This file (done).
-2. `PROJECT-SPEC.md` — read §3 (Epics 1 and 2 scope and exit criteria), §4 (AC-F-01 through AC-F-03, AC-Q-01 through AC-Q-03), and §6 (operating model and session-to-session governance). These are the validation anchors for Phase II Session 1.
-3. `DECISIONS.md` — read in full before writing any code. If a decision exists covering an area you are about to implement, follow it and cite the decision ID in your session output. Record any new decisions made this session at session close.
-4. `SPEC_S22_Enhancement_PRD.md` — Section 2 (default sort) and Section 3 (column parity) for engineering-level implementation detail.
+2. `PROJECT-SPEC.md` — read §3 (Epic 3 scope and exit criteria), §4 (AC-F-04, AC-NF-01, AC-NF-02, AC-NF-05, AC-Q-01, AC-Q-05).
+3. `DECISIONS.md` — read in full before writing any code.
+4. `SPEC_S22_Enhancement_PRD.md` — Section 1 (news feed) for engineering-level implementation detail.
 5. `AGENTS.md` (project) — operating rules, guardrails, quality gate commands.
-6. `KNOWN-LIMITATIONS.md` — update at session open before coding begins (add PriceBar fallback coverage gap).
-7. `apps/web/src/components/holding-detail/PositionSummary.tsx` — current 12-field implementation; starting point for Epic 2 expansion.
-8. `apps/web/src/app/(pages)/page.tsx` and `/holdings/page.tsx` — current sort implementation; starting point for Epic 1.
-9. `apps/web/src/app/api/portfolio/holdings/[symbol]/route.ts` — confirm whether `realizedPnl` is in the response (Epic 2 entry criterion).
+6. `KNOWN-LIMITATIONS.md` — review current state.
+7. `apps/web/src/components/holding-detail/LatestNews.tsx` — existing S21 Google News link component (to be replaced/extended).
+8. `apps/web/src/app/(pages)/holdings/[symbol]/page.tsx` — holding detail page layout; news section must move below HoldingTransactions.
+9. `apps/web/src/app/api/portfolio/holdings/[symbol]/route.ts` — reference for API route patterns in the holdings path.
 
 ### 5.4 Session Contract Starting Points
 
-> **Epic close protocol:** When each epic's exit criteria are satisfied, Lead Engineering and Lead Product conduct a joint review before the next session begins. They verify exit criteria against `PROJECT-SPEC.md §3`, assess whether any discovery or technical debt requires amendment to subsequent epic scope, record any decisions in `DECISIONS.md`, and update HANDOFF.md §5 before the next session contract is issued. If a required amendment carries product authority implications, it is escalated to the ES as a Category B item. All other scope adjustments are resolved by the leads and documented.
+> **Epic close protocol:** When Epic 3 exit criteria are satisfied, Lead Engineering and Lead Product conduct a joint review before the Epic 4 session contract is issued. They verify exit criteria against `PROJECT-SPEC.md §3`, assess whether any discovery or technical debt requires amendment to Epic 4 scope, record any decisions in `DECISIONS.md`, and update HANDOFF.md §5 before the next session contract is issued.
 
 ```
-Epic 1 — Default Sort
+Epic 3 — News Feed
 
-- Objective:       Set the default sort on the dashboard and holdings page
-                   holdings tables to symbol ascending (A-Z). Apply to
-                   initial render and background data refreshes. Reflect
-                   sort state in URL query params.
+- Objective:       Replace the existing single Google News link with a "Recent
+                   News" card/list section on the holding detail page. GNews API
+                   integration with 30-minute cache. Graceful fallback when
+                   GNEWS_API_KEY is absent.
 - Role:            Lead Engineering
 - Mode:            Solo
 - Comms policy:    Direct (single agent, no coordination overhead)
 - File scope:
-    Allowed:       apps/web/src/app/(pages)/page.tsx
-                   apps/web/src/app/(pages)/holdings/page.tsx
-                   apps/web/src/components/ (table components only)
-    Forbidden:     packages/*, apps/web/src/app/api/*, schema.prisma
-- Deliverables:    Holdings table on / defaults to symbol A-Z.
-                   Holdings table on /holdings defaults to symbol A-Z.
-                   Sort state in URL params (?sort=symbol&dir=asc).
-                   Ascending sort indicator on symbol column header.
-                   pnpm test passes. TypeScript 0 errors.
+    Allowed:       apps/web/src/app/api/holdings/[symbol]/news/ (new route)
+                   apps/web/src/components/holding-detail/ (LatestNews replacement,
+                     new components as needed)
+                   apps/web/src/app/(pages)/holdings/[symbol]/page.tsx
+                   apps/web/src/lib/hooks/ (new useNews hook if needed)
+                   .env.example
+    Forbidden:     packages/*, apps/web/prisma/schema.prisma,
+                   apps/web/src/app/api/portfolio/*,
+                   apps/web/src/components/dashboard/*
+- Deliverables:    GET /api/holdings/[symbol]/news route with GNews + cache.
+                   NewsSection component with card list, loading, empty, fallback.
+                   Holding detail layout updated (news below transactions).
+                   .env.example updated with GNEWS_API_KEY.
+                   pnpm test passes. TypeScript 0 errors. Build succeeds.
                    Any new decisions recorded in DECISIONS.md.
-- Stop conditions: Pause and surface to Lead Product if sort change
-                   requires API modification (it should not).
+- Stop conditions: Pause and surface to Lead Product if GNews API response
+                   shape cannot be normalized. Pause if free-tier rate limit
+                   binds during development.
 ```
 
-```
-Epic 2 — Column Parity
-
-- Objective:       Add Current Price, Realized PnL, and Average Cost Per
-                   Share to the holding detail page position summary grid.
-                   Expand grid from 3×4 to 4×4. Apply staleness label to
-                   Current Price when provider is 'price-history'.
-- Role:            Lead Engineering
-- Mode:            Solo
-- Comms policy:    Direct
-- File scope:
-    Allowed:       apps/web/src/components/holding-detail/PositionSummary.tsx
-                   apps/web/src/lib/hooks/useHoldingDetail.ts
-                   apps/web/src/app/api/portfolio/holdings/[symbol]/route.ts
-                   (only if realizedPnl is confirmed absent from response)
-    Forbidden:     packages/analytics/* (FIFO engine — read only, not modified)
-                   schema.prisma
-- Deliverables:    Current Price field with staleness label variant.
-                   Realized PnL field (neutral color for zero-sell state).
-                   Avg Cost field (computed at render, no new DB query).
-                   4×4 grid layout with reserved empty 16th cell.
-                   All values right-aligned, tabular-nums, U+2212 for negatives.
-                   pnpm test passes. TypeScript 0 errors.
-                   Any new decisions recorded in DECISIONS.md.
-- Stop conditions: Pause and surface to Lead Product if realizedPnl
-                   requires a new analytics computation not already
-                   present in the FIFO engine output. Confirm before
-                   adding new database queries.
-```
-
-> After both epics complete: Lead Engineering and Lead Product conduct joint review per the protocol above before Epic 3 session contract is issued.
+> After Epic 3 completes: Lead Engineering and Lead Product conduct joint review per the protocol above before Epic 4 session contract is issued.
 
 ---
 

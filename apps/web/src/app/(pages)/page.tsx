@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState, useCallback, useMemo } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { DashboardEmpty } from "@/components/empty-states/DashboardEmpty";
 import { HeroMetric } from "@/components/dashboard/HeroMetric";
 import { SummaryCards } from "@/components/dashboard/SummaryCards";
@@ -17,10 +17,39 @@ import { useHoldings } from "@/lib/hooks/useHoldings";
 import { useInstruments } from "@/lib/hooks/useInstruments";
 import { DEFAULT_WINDOW, type WindowOption } from "@/lib/window-utils";
 import { Skeleton } from "@/components/ui/Skeleton";
-import type { Holding } from "@/lib/holdings-utils";
+import type { Holding, SortColumn, SortDirection } from "@/lib/holdings-utils";
+
+const VALID_SORT_COLUMNS: ReadonlySet<string> = new Set([
+  "symbol", "name", "firstBuyDate", "qty", "avgCost", "price",
+  "value", "costBasis", "unrealizedPnl", "unrealizedPnlPct", "allocation",
+]);
+
+function parseSortParams(searchParams: URLSearchParams): {
+  column: SortColumn;
+  direction: SortDirection;
+} {
+  const sort = searchParams.get("sort");
+  const dir = searchParams.get("dir");
+  const column = sort && VALID_SORT_COLUMNS.has(sort) ? (sort as SortColumn) : "symbol";
+  const direction = dir === "desc" ? "desc" : "asc";
+  return { column, direction };
+}
 
 export default function PortfolioPage() {
+  return (
+    <Suspense>
+      <PortfolioPageContent />
+    </Suspense>
+  );
+}
+
+function PortfolioPageContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const { column: initialSortColumn, direction: initialSortDirection } = useMemo(
+    () => parseSortParams(searchParams),
+    [searchParams],
+  );
   const [selectedWindow, setSelectedWindow] = useState<WindowOption>(DEFAULT_WINDOW);
   const { data: snapshot, isLoading: snapshotLoading, isRebuilding } = usePortfolioSnapshot(selectedWindow);
   const { data: timeseries, isLoading: timeseriesLoading } = usePortfolioTimeseries(selectedWindow);
@@ -44,6 +73,13 @@ export default function PortfolioPage() {
   const handleBulkImportSuccess = useCallback(() => {
     refetchHoldings();
   }, [refetchHoldings]);
+
+  const handleSortChange = useCallback((column: SortColumn, direction: SortDirection) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("sort", column);
+    params.set("dir", direction);
+    router.replace(`/?${params.toString()}`, { scroll: false });
+  }, [router, searchParams]);
 
   // Show empty state only when no instruments exist at all
   const hasInstruments = instruments !== null && instruments.length > 0;
@@ -113,6 +149,9 @@ export default function PortfolioPage() {
           holdings={allHoldings}
           onRowClick={handleRowClick}
           onDeleteSuccess={handleDeleteSuccess}
+          initialSortColumn={initialSortColumn}
+          initialSortDirection={initialSortDirection}
+          onSortChange={handleSortChange}
         />
       ) : null}
 

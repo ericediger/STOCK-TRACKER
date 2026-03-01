@@ -1,6 +1,6 @@
 # KNOWN-LIMITATIONS.md — STALKER Known Gaps
 
-**Last Updated:** 2026-02-27 (Session 19)
+**Last Updated:** 2026-03-01 (Phase II Session 1 / S22)
 
 This document catalogues known limitations in STALKER. Each entry includes the impact assessment and any existing mitigations.
 
@@ -44,3 +44,4 @@ This document catalogues known limitations in STALKER. Each entry includes the i
 | KL-4 | Bulk paste date conversion uses noon UTC | Timezone-specific trading session times not captured | Matches existing single-transaction pattern; acceptable for daily-resolution data |
 | KL-5 | Single provider dependency for historical bars | Tiingo is the sole history provider; no fallback if Tiingo is down | FMP free tier has no history support; AV free tier too limited. If Tiingo is unreachable, `getHistory()` returns empty array. Existing price bars in the database are unaffected. |
 | KL-6 | Rate limiter is in-process only | Scheduler and Next.js maintain separate rate limiter states | Single user, manual refresh is rare, providers have tolerance. Post-MVP: track call counts in SQLite `ProviderCallLog` table. |
+| KL-PB | PriceBar fallback route has zero unit test coverage | The S21 fallback logic in `GET /api/portfolio/holdings/[symbol]` that returns a synthetic `latestQuote` from the most recent PriceBar when no LatestQuote exists has no Prisma-mocked unit tests | Prisma mocking required. Deferred from S21. Add coverage in a future session. |

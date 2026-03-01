@@ -44,11 +44,23 @@ function Metric({ label, children }: MetricProps) {
 export function PositionSummary({ detail }: PositionSummaryProps) {
   const hasPrice = detail.markPrice != null && detail.markPrice !== "";
   const avgCost = computeAvgCost(detail.totalCostBasis, detail.totalQty);
+  const isPriceHistoryFallback = detail.latestQuote?.provider === "price-history";
 
   return (
     <div className="bg-bg-secondary rounded-lg border border-border-primary p-card">
       <div className="grid grid-cols-4 gap-6">
-        {/* Row 1 */}
+        {/* Row 1: Current Price | Shares | Avg Cost | Market Value */}
+        <Metric label="Current Price">
+          <span className="font-mono tabular-nums">
+            {hasPrice ? formatCurrency(detail.markPrice) : "\u2014"}
+          </span>
+          {hasPrice && isPriceHistoryFallback && detail.latestQuote && (
+            <span className="text-xs text-accent-warning mt-0.5">
+              As of {formatRelativeTime(detail.latestQuote.asOf)}
+            </span>
+          )}
+        </Metric>
+
         <Metric label="Shares">
           <span className="font-mono tabular-nums">
             {formatQuantity(detail.totalQty)}
@@ -67,6 +79,7 @@ export function PositionSummary({ detail }: PositionSummaryProps) {
           </span>
         </Metric>
 
+        {/* Row 2: Unrealized P&L | Day Change | Allocation % | Cost Basis */}
         <Metric label="Unrealized P&L">
           {hasPrice ? (
             <span className="flex items-center gap-2">
@@ -82,53 +95,6 @@ export function PositionSummary({ detail }: PositionSummaryProps) {
               {"\u2014"}
             </span>
           )}
-        </Metric>
-
-        {/* Row 2 */}
-        <Metric label="Cost Basis">
-          <span className="font-mono tabular-nums">
-            {formatCurrency(detail.totalCostBasis)}
-          </span>
-        </Metric>
-
-        <Metric label="Realized P&L">
-          <ValueChange value={detail.realizedPnl} format="currency" />
-        </Metric>
-
-        <Metric label="Mark Price">
-          <span className="font-mono tabular-nums">
-            {hasPrice ? formatCurrency(detail.markPrice) : "\u2014"}
-          </span>
-        </Metric>
-
-        <Metric label="Quote Time">
-          <span
-            className={cn(
-              "text-base",
-              detail.latestQuote
-                ? "text-text-secondary"
-                : "text-text-tertiary",
-            )}
-          >
-            {detail.latestQuote
-              ? formatRelativeTime(detail.latestQuote.asOf)
-              : "\u2014"}
-          </span>
-        </Metric>
-
-        {/* Row 3 */}
-        <Metric label="Allocation">
-          <span className="font-mono tabular-nums">
-            {formatPercent(detail.allocation)}
-          </span>
-        </Metric>
-
-        <Metric label="First Buy">
-          <span className="text-base text-text-secondary">
-            {detail.firstBuyDate
-              ? formatMonthYear(detail.firstBuyDate)
-              : "\u2014"}
-          </span>
         </Metric>
 
         <Metric label="Day Change">
@@ -148,11 +114,36 @@ export function PositionSummary({ detail }: PositionSummaryProps) {
           )}
         </Metric>
 
-        <Metric label="Source">
+        <Metric label="Allocation">
+          <span className="font-mono tabular-nums">
+            {formatPercent(detail.allocation)}
+          </span>
+        </Metric>
+
+        <Metric label="Cost Basis">
+          <span className="font-mono tabular-nums">
+            {formatCurrency(detail.totalCostBasis)}
+          </span>
+        </Metric>
+
+        {/* Row 3: Realized PnL | First Buy | Data Source | (reserved — empty) */}
+        <Metric label="Realized P&L">
+          <ValueChange value={detail.realizedPnl} format="currency" />
+        </Metric>
+
+        <Metric label="First Buy">
+          <span className="text-base text-text-secondary">
+            {detail.firstBuyDate
+              ? formatMonthYear(detail.firstBuyDate)
+              : "\u2014"}
+          </span>
+        </Metric>
+
+        <Metric label="Data Source">
           <span
             className={cn(
               "text-base",
-              detail.latestQuote?.provider === "price-history"
+              isPriceHistoryFallback
                 ? "text-accent-warning"
                 : "text-text-secondary",
             )}
@@ -160,6 +151,9 @@ export function PositionSummary({ detail }: PositionSummaryProps) {
             {detail.latestQuote?.provider ?? "\u2014"}
           </span>
         </Metric>
+
+        {/* Reserved — empty 16th cell */}
+        <div />
       </div>
     </div>
   );

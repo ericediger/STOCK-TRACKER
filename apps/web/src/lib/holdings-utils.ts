@@ -50,10 +50,11 @@ export function sortHoldings(
   column: SortColumn,
   direction: SortDirection,
 ): Holding[] {
+  type HoldingKey = keyof Holding;
   const sorted = [...holdings].sort((a, b) => {
-    if (STRING_COLUMNS.has(column)) {
-      const aVal = (a[column] as string).toLowerCase();
-      const bVal = (b[column] as string).toLowerCase();
+    if (column === "symbol" || column === "name") {
+      const aVal = a[column].toLowerCase();
+      const bVal = b[column].toLowerCase();
       return aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
     }
     if (column === "firstBuyDate") {
@@ -72,8 +73,9 @@ export function sortHoldings(
       if (bVal === null) return -1;
       return new Decimal(aVal).cmp(new Decimal(bVal));
     }
-    const aVal = new Decimal(a[column]);
-    const bVal = new Decimal(b[column]);
+    const key = column as HoldingKey;
+    const aVal = new Decimal(a[key] as string);
+    const bVal = new Decimal(b[key] as string);
     return aVal.cmp(bVal);
   });
   if (direction === "desc") sorted.reverse();

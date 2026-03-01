@@ -18,6 +18,9 @@ interface PortfolioTableProps {
   holdings: Holding[];
   onRowClick?: (symbol: string) => void;
   onDeleteSuccess?: () => void;
+  initialSortColumn?: SortColumn;
+  initialSortDirection?: SortDirection;
+  onSortChange?: (column: SortColumn, direction: SortDirection) => void;
 }
 
 interface ColumnDef {
@@ -166,10 +169,13 @@ export function PortfolioTable({
   holdings,
   onRowClick,
   onDeleteSuccess,
+  initialSortColumn,
+  initialSortDirection,
+  onSortChange,
 }: PortfolioTableProps) {
-  // Sort state — default: allocation descending
-  const [sortColumn, setSortColumn] = useState<SortColumn>("allocation");
-  const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
+  // Sort state — default: symbol ascending (Epic 1, AC-F-01)
+  const [sortColumn, setSortColumn] = useState<SortColumn>(initialSortColumn ?? "symbol");
+  const [sortDirection, setSortDirection] = useState<SortDirection>(initialSortDirection ?? "asc");
 
   // Filter state
   const [searchText, setSearchText] = useState("");
@@ -233,23 +239,29 @@ export function PortfolioTable({
     setCurrentPage(1);
   }, []);
 
-  // Sort handler: click → desc → asc → default (allocation desc)
+  // Sort handler: click → desc → asc → default (symbol asc)
   const handleHeaderClick = useCallback((col: ColumnDef) => {
     if (!col.sortable || col.key === "actions") return;
     const colKey = col.key as SortColumn;
+    let newCol: SortColumn;
+    let newDir: SortDirection;
     if (sortColumn === colKey) {
       if (sortDirection === "desc") {
-        setSortDirection("asc");
+        newCol = colKey;
+        newDir = "asc";
       } else {
         // Reset to default
-        setSortColumn("allocation");
-        setSortDirection("desc");
+        newCol = "symbol";
+        newDir = "asc";
       }
     } else {
-      setSortColumn(colKey);
-      setSortDirection("desc");
+      newCol = colKey;
+      newDir = "desc";
     }
-  }, [sortColumn, sortDirection]);
+    setSortColumn(newCol);
+    setSortDirection(newDir);
+    onSortChange?.(newCol, newDir);
+  }, [sortColumn, sortDirection, onSortChange]);
 
   const handleDeleteClick = useCallback((e: React.MouseEvent, holding: Holding) => {
     e.stopPropagation();

@@ -16,7 +16,7 @@ import { cn } from "@/lib/cn";
 
 interface ToastOptions {
   message: string;
-  variant?: "success" | "error" | "info";
+  variant?: "success" | "error" | "info" | "warning";
   duration?: number;
 }
 
@@ -51,12 +51,14 @@ const variantClasses: Record<NonNullable<ToastOptions["variant"]>, string> = {
   success: "border-accent-positive/40 text-accent-positive",
   error: "border-accent-negative/40 text-accent-negative",
   info: "border-accent-info/40 text-accent-info",
+  warning: "border-accent-warning/40 text-accent-warning",
 };
 
 const variantIcons: Record<NonNullable<ToastOptions["variant"]>, string> = {
   success: "\u2713",
   error: "\u2717",
   info: "\u2139",
+  warning: "\u26A0",
 };
 
 /* -------------------------------------------------------------------------- */

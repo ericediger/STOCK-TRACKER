@@ -69,7 +69,7 @@ export function useHoldingDetail(symbol: string) {
     setIsLoading(true);
     setError(null);
 
-    const doFetch = async (retriesLeft: number): Promise<void> => {
+    const doFetch = async (retriesLeft: number): Promise<unknown> => {
       const res = await fetch(`/api/portfolio/holdings/${encodeURIComponent(symbol)}`);
       if (!res.ok) {
         // Retry once on 500 (transient SQLite contention)

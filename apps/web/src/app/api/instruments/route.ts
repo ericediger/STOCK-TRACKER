@@ -64,8 +64,31 @@ export async function POST(request: NextRequest): Promise<Response> {
     const exchangeTz = EXCHANGE_TIMEZONE_MAP[effectiveExchange] ?? DEFAULT_TIMEZONE;
 
     // Build provider symbol map — crypto uses coingecko ID, equities use FMP + Tiingo
+    let resolvedCoinId = providerSymbol ?? symbol.toLowerCase();
+
+    // CoinGecko coin IDs are lowercase alphabetic (e.g., "bitcoin", "ripple", "ethereum").
+    // If the providerSymbol looks like a ticker (has uppercase, digits, or "USD" suffix),
+    // it likely came from a non-CoinGecko search result — resolve the correct coin ID.
+    if (isCrypto && (/[A-Z]/.test(resolvedCoinId) || /USD$/i.test(resolvedCoinId))) {
+      const service = getMarketDataService();
+      try {
+        // Strip "USD" suffix for the search query (e.g., XRPUSD → XRP)
+        const searchTerm = symbol.replace(/USD$/i, '');
+        const searchResults = await service.searchSymbols(searchTerm);
+        const cryptoMatch = searchResults.find(
+          (r) => r.type === 'CRYPTO' && r.providerSymbol,
+        );
+        if (cryptoMatch?.providerSymbol) {
+          resolvedCoinId = cryptoMatch.providerSymbol;
+          console.log(`Resolved CoinGecko ID for ${symbol}: ${resolvedCoinId}`);
+        }
+      } catch (err: unknown) {
+        console.warn(`CoinGecko ID resolution failed for ${symbol}, using fallback:`, err);
+      }
+    }
+
     const providerSymbolMap: Record<string, string> = isCrypto
-      ? { coingecko: providerSymbol ?? symbol.toLowerCase() }
+      ? { coingecko: resolvedCoinId }
       : { fmp: symbol, tiingo: buildTiingoSymbol(symbol) };
 
     const id = generateUlid();
@@ -91,6 +114,14 @@ export async function POST(request: NextRequest): Promise<Response> {
     triggerBackfill(instrument).catch((err: unknown) => {
       console.error(`Backfill failed for ${symbol}:`, err);
     });
+
+    // For crypto instruments, immediately fetch a quote so LatestQuote is available
+    // before the next scheduler poll (prevents $0 value on first transaction)
+    if (isCrypto) {
+      fetchImmediateQuote(instrument).catch((err: unknown) => {
+        console.error(`Immediate quote fetch failed for ${symbol}:`, err);
+      });
+    }
 
     return response;
   } catch (err: unknown) {
@@ -167,6 +198,63 @@ async function triggerBackfill(prismaInst: {
   console.log(
     `Backfill complete for ${prismaInst.symbol}: ${bars.length} bars, firstBarDate=${firstBarDate}`
   );
+}
+
+/**
+ * Fetch a single quote immediately after creating a crypto instrument.
+ * This ensures LatestQuote exists before the user adds transactions,
+ * preventing the $0 value issue (scheduler polls every 30 min).
+ */
+async function fetchImmediateQuote(prismaInst: {
+  id: string;
+  symbol: string;
+  name: string;
+  type: string;
+  currency: string;
+  exchange: string;
+  exchangeTz: string;
+  providerSymbolMap: string;
+  firstBarDate: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}): Promise<void> {
+  const service = getMarketDataService();
+  const domainInstrument: Instrument = {
+    ...prismaInst,
+    type: prismaInst.type as InstrumentType,
+    providerSymbolMap: JSON.parse(prismaInst.providerSymbolMap) as Record<string, string>,
+  };
+
+  const quote = await service.getQuote(domainInstrument);
+  if (!quote) {
+    console.warn(`No quote returned for ${prismaInst.symbol}`);
+    return;
+  }
+
+  await prisma.latestQuote.upsert({
+    where: {
+      instrumentId_provider: {
+        instrumentId: prismaInst.id,
+        provider: quote.provider,
+      },
+    },
+    create: {
+      instrumentId: prismaInst.id,
+      provider: quote.provider,
+      price: quote.price.toString(),
+      asOf: quote.asOf,
+      fetchedAt: new Date(),
+      rebuiltAt: new Date(),
+    },
+    update: {
+      price: quote.price.toString(),
+      asOf: quote.asOf,
+      fetchedAt: new Date(),
+      rebuiltAt: new Date(),
+    },
+  });
+
+  console.log(`Immediate quote for ${prismaInst.symbol}: ${quote.price.toString()}`);
 }
 
 export async function GET(): Promise<Response> {

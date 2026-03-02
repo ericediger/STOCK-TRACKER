@@ -2,14 +2,14 @@
 
 > **Purpose:** Session transition artifact. Written by the lead at the end of every session. Read first by the lead at the start of the next session — before AGENTS.md, before any code.
 > **Replaces reading:** Do not re-read prior session plans or chat history. If it is not in this document, it is not guaranteed to be current.
-> **Last Updated:** 2026-03-01 (Post-S24, Epic 5 verified)
-> **Session:** Phase II Session 3 (S24 / Epics 4+5) → M_UAT
+> **Last Updated:** 2026-03-01 (Post-S24, M_UAT defect remediation)
+> **Session:** Phase II Session 3 (S24 / Epics 4+5) → M_UAT defect fixes
 
 ---
 
 ## 1) Current State (One Paragraph)
 
-Phase II Session 3 (S24) completed Epic 4 — Crypto Asset Support. CRYPTO is now a first-class instrument type. CoinGeckoProvider (`packages/market-data/src/providers/coingecko.ts`) implements search, quote, history, and batch quotes against CoinGecko's unauthenticated free tier. MarketCalendar returns `true` unconditionally for CRYPTO (24/7 trading). The scheduler partitions instruments into equity (NYSE-gated Tiingo batch) and crypto (unconditional CoinGecko batch) polling paths. MarketDataService routes CRYPTO instruments to the crypto provider for quotes and history, and merges FMP + CoinGecko results in search. Instrument creation handles CRYPTO type (exchange forced to 'CRYPTO', exchangeTz='UTC', providerSymbolMap with coingecko key). The holding detail chart conditionally renders AreaSeries (indigo) for CRYPTO and CandlestickSeries for equities. PositionSummary shows "24h Change" for CRYPTO, "Day Change" for equities. The holdings list API and PortfolioTable now include `instrumentType` with a working type filter dropdown (ALL/STOCK/ETF/FUND/CRYPTO). The `instrument.type` audit is complete — all switch/if branches handle CRYPTO correctly. KL-7 (CoinGecko single-provider dependency) logged. Quality gates green: 0 tsc errors, 770 tests passing across 64 files.
+Phase II Session 3 (S24) completed Epics 4+5, all 5 epics verified complete. M_UAT was conducted with ES performing 15 UAT flows — 10 passed, 5 failed. All 5 defects have been remediated in this continuation: (1) Sort now resets to A-Z on page refresh (removed URL sort state persistence), (2) News search improved — GNews queries now use cleaned company names without legal suffixes, greatly improving hit rate (ISRG: 0→4 articles), (3) Crypto holdings now show correct values via recomputed totalValue from fresh LatestQuotes in the holdings API, (4) Immediate quote fetch added to crypto instrument creation (prevents $0 on first transaction), (5) CoinGecko coin ID resolution auto-corrects when users select non-CoinGecko search results for CRYPTO instruments. XRPUSD data fixed in production DB. Quality gates green: 0 tsc errors, 770 tests, build clean.
 
 ---
 
@@ -65,7 +65,34 @@ Epic 5 was resolved as a verification task (ES inputs: system prompt updated in 
 
 No code changes required. Epic 5 status: **Complete (verification only)**.
 
-### 2.5 What Was Not Completed
+### 2.5 M_UAT Defect Remediation
+
+ES conducted 15 UAT flows. 10 passed, 5 failed. All 5 defects remediated:
+
+**UAT #3 — Sort doesn't revert on refresh (FIXED)**
+- Root cause: Sort state was persisted in URL params (`/?sort=value&dir=desc`). On refresh, `parseSortParams` restored the sort from URL.
+- Fix: Removed URL sort state. Sort is now pure component state, defaults to symbol/asc on every mount. Removed `parseSortParams`, `handleSortChange`, and `useSearchParams` from `page.tsx`. Removed `initialSortColumn`, `initialSortDirection`, `onSortChange` props from `PortfolioTable`.
+- Files: `apps/web/src/app/(pages)/page.tsx`, `apps/web/src/components/dashboard/PortfolioTable.tsx`
+
+**UAT #6 — News missing for instruments with coverage (FIXED)**
+- Root cause: GNews query construction was too narrow. First query `"Intuitive Surgical, Inc." financial` (exact quoted match + "financial") returned 0 results. Second query `ISRG` (ticker-only) also returned 0.
+- Fix: Added `stripLegalSuffixes()` to remove Inc., Corp., Ltd., etc. from company names. Primary query is now cleaned name without quotes (e.g., "Intuitive Surgical"). Fallback is `{SYMBOL} stock`.
+- Result: ISRG went from 0 to 4 articles. AAPL, MSFT, TSLA all return 10.
+- File: `apps/web/src/app/api/holdings/[symbol]/news/route.ts`
+
+**UAT #10/#11/#13 — Crypto display issues (FIXED)**
+Three related crypto issues:
+
+1. **Holdings API stale totalValue** — Holdings API used `latest.totalValue` from snapshot (stale for crypto). Fixed: recompute `totalValue` as sum of all `currentValue` (which uses fresh LatestQuote prices). Two-pass algorithm: first pass computes per-holding values, second pass computes allocations.
+   - File: `apps/web/src/app/api/portfolio/holdings/route.ts`
+
+2. **No LatestQuote for new crypto instruments** — Scheduler polls every 30 min. After instrument creation, no LatestQuote exists until first poll. Fixed: Added `fetchImmediateQuote()` that calls `service.getQuote()` and upserts to `LatestQuote` immediately after creating a CRYPTO instrument.
+   - File: `apps/web/src/app/api/instruments/route.ts`
+
+3. **CoinGecko coin ID resolution** — XRPUSD was created with `coingecko: "XRPUSD"` instead of `coingecko: "ripple"` (user selected FMP search result, manually set type to CRYPTO). CoinGecko needs lowercase coin IDs. Fixed: Added auto-resolution — when creating a CRYPTO instrument, if providerSymbol contains uppercase or "USD" suffix, search CoinGecko to resolve the correct coin ID. Also fixed XRPUSD data in production DB.
+   - File: `apps/web/src/app/api/instruments/route.ts`
+
+### 2.6 What Was Not Completed
 
 - **PriceBar fallback unit tests (KL-PB)** — Still deferred. No unit test coverage for the S21 PriceBar fallback route.
 
@@ -132,7 +159,7 @@ Recommend starting with M_UAT, then Epic 5 if time permits.
 | Epic 4 — Crypto Asset Support | ✅ Complete | S24 |
 | Epic 5 — Advisor Enhancements | ✅ Complete (verification) | S24 |
 
-**All epics complete. Next milestone: M_UAT (requires ES participation).**
+**All epics complete. M_UAT defects remediated. Ready for ES re-verification of the 5 failed UAT flows.**
 
 ---
 

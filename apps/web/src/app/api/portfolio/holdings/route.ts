@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma';
 import { apiError } from '@/lib/errors';
 import { PrismaSnapshotStore } from '@/lib/prisma-snapshot-store';
 import { toDecimal, ZERO, add, div, mul } from '@stalker/shared';
+import type { Decimal } from '@stalker/shared';
 import type { HoldingSnapshot } from '@stalker/shared';
 
 export async function GET(): Promise<Response> {
@@ -52,8 +53,22 @@ export async function GET(): Promise<Response> {
       }
     }
 
-    const totalValue = latest.totalValue;
-    const holdings: Array<Record<string, unknown>> = [];
+    // First pass: compute current value for each holding using fresh quotes
+    const holdingsData: Array<{
+      symbol: string;
+      name: string;
+      instrumentId: string | null;
+      instrumentType: string;
+      qty: string;
+      price: string;
+      currentValue: Decimal;
+      costBasis: string;
+      unrealizedPnl: string;
+      unrealizedPnlPct: string;
+      firstBuyDate: string | null;
+    }> = [];
+
+    let computedTotalValue = ZERO;
 
     for (const [symbol, entry] of Object.entries(latest.holdingsJson) as Array<[string, HoldingSnapshot]>) {
       const inst = instrumentBySymbol.get(symbol);
@@ -62,31 +77,47 @@ export async function GET(): Promise<Response> {
 
       // Use latest quote price to compute current value if available, otherwise use snapshot value
       const currentValue = latestPrice ? mul(entry.qty, latestPrice) : entry.value;
+      computedTotalValue = add(computedTotalValue, currentValue);
+
       const unrealizedPnl = currentValue.minus(entry.costBasis);
       const unrealizedPnlPct = entry.costBasis.isZero()
         ? '0'
         : div(unrealizedPnl, entry.costBasis).times(100).toFixed(2);
-      const allocation = totalValue.isZero()
-        ? '0'
-        : div(currentValue, totalValue).times(100).toFixed(2);
 
       const firstBuyDate = inst ? firstBuyByInstrumentId.get(inst.id) ?? null : null;
 
-      holdings.push({
+      holdingsData.push({
         symbol,
         name: inst?.name ?? symbol,
         instrumentId: inst?.id ?? null,
         instrumentType: inst?.type ?? 'STOCK',
         qty: entry.qty.toString(),
-        price: latestPrice ? latestPrice.toString() : entry.value.dividedBy(entry.qty).toString(),
-        value: currentValue.toString(),
+        price: latestPrice ? latestPrice.toString() : (entry.qty.isZero() ? '0' : entry.value.dividedBy(entry.qty).toString()),
+        currentValue,
         costBasis: entry.costBasis.toString(),
         unrealizedPnl: unrealizedPnl.toString(),
         unrealizedPnlPct,
-        allocation,
         firstBuyDate: firstBuyDate ? firstBuyDate.toISOString() : null,
       });
     }
+
+    // Second pass: compute allocation using recomputed total value
+    const holdings = holdingsData.map((h) => ({
+      symbol: h.symbol,
+      name: h.name,
+      instrumentId: h.instrumentId,
+      instrumentType: h.instrumentType,
+      qty: h.qty,
+      price: h.price,
+      value: h.currentValue.toString(),
+      costBasis: h.costBasis,
+      unrealizedPnl: h.unrealizedPnl,
+      unrealizedPnlPct: h.unrealizedPnlPct,
+      allocation: computedTotalValue.isZero()
+        ? '0'
+        : div(h.currentValue, computedTotalValue).times(100).toFixed(2),
+      firstBuyDate: h.firstBuyDate,
+    }));
 
     return Response.json(holdings);
   } catch (error: unknown) {

@@ -59,6 +59,25 @@ function setCache(symbol: string, data: NewsResponse): void {
 
 // ── Helpers ──────────────────────────────────────────────────────────
 
+/**
+ * Strip common legal suffixes from company names so GNews searches
+ * match how journalists actually write about companies.
+ * e.g. "Intuitive Surgical, Inc." → "Intuitive Surgical"
+ */
+const LEGAL_SUFFIXES = /,?\s*\b(Inc\.?|Corp\.?|Corporation|Ltd\.?|Limited|Co\.?|Company|LLC|L\.?P\.?|N\.?V\.?|PLC|S\.?A\.?|AG|SE|Holdings?|Group|Bancorp|Brands?)\s*$/gi;
+
+function stripLegalSuffixes(name: string): string {
+  // Repeatedly strip suffixes since names can have multiple (e.g. "Foo Holdings, Inc.")
+  let cleaned = name;
+  let prev = '';
+  while (cleaned !== prev) {
+    prev = cleaned;
+    cleaned = cleaned.replace(LEGAL_SUFFIXES, '').trim();
+  }
+  // Remove trailing commas, periods, or whitespace
+  return cleaned.replace(/[,.\s]+$/, '').trim();
+}
+
 function truncate(text: string | null | undefined, maxLen: number): string | null {
   if (!text) return null;
   if (text.length <= maxLen) return text;
@@ -166,12 +185,13 @@ export async function GET(
   }
 
   try {
-    // Try with company name first
-    let articles = await fetchGNews(`"${instrument.name}" financial`, apiKey);
+    // Try with cleaned company name (strip legal suffixes for broader matching)
+    const cleanName = stripLegalSuffixes(instrument.name);
+    let articles = await fetchGNews(cleanName, apiKey);
 
-    // Retry with symbol if no results
+    // Retry with ticker + "stock" keyword for financial context
     if (articles.length === 0) {
-      articles = await fetchGNews(instrument.symbol, apiKey);
+      articles = await fetchGNews(`${instrument.symbol} stock`, apiKey);
     }
 
     const response: NewsResponse = {

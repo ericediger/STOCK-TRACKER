@@ -2,8 +2,8 @@
 
 > **Purpose:** Session transition artifact. Written by the lead at the end of every session. Read first by the lead at the start of the next session — before AGENTS.md, before any code.
 > **Replaces reading:** Do not re-read prior session plans or chat history. If it is not in this document, it is not guaranteed to be current.
-> **Last Updated:** 2026-03-01 (Post-S24)
-> **Session:** Phase II Session 3 (S24 / Epic 4) → Phase II Session 4 (Epic 5 or M_UAT)
+> **Last Updated:** 2026-03-01 (Post-S24, Epic 5 verified)
+> **Session:** Phase II Session 3 (S24 / Epics 4+5) → M_UAT
 
 ---
 
@@ -52,11 +52,22 @@ Phase II Session 3 (S24) completed Epic 4 — Crypto Asset Support. CRYPTO is no
 | PortfolioTable type filter made functional | Was a no-op placeholder. Now uses `instrumentType` from API to filter holdings including CRYPTO. | Lead Engineering |
 | Search results merge FMP + CoinGecko | Parallel merge, not fallback. Users see both equity and crypto results in symbol search. | Lead Engineering |
 
-### 2.4 What Was Not Completed
+### 2.4 Epic 5 — Advisor Enhancements (Verified)
 
-- **Build verification** — `pnpm build` not yet run this session. Must pass before final commit.
+Epic 5 was resolved as a verification task (ES inputs: system prompt updated in S21, model unchanged, placement unchanged). PM review confirmed all exit criteria are already satisfied:
+- System prompt in `system-prompt.ts` matches reference doc (`ADVISOR-SYSTEM-PROMPT.md`)
+- Model default is `claude-sonnet-4-6` in `anthropic-adapter.ts`
+- Placement is FAB → slide-out panel (unchanged from Phase I)
+- All 5 advisor tools exported with proper definitions (verified by `exports.test.ts`)
+- System prompt covers all 5 intent categories (verified by existing test)
+- Context windowing and rolling summaries operational (verified by existing tests)
+- All 8 advisor test files pass (56 tests)
+
+No code changes required. Epic 5 status: **Complete (verification only)**.
+
+### 2.5 What Was Not Completed
+
 - **PriceBar fallback unit tests (KL-PB)** — Still deferred. No unit test coverage for the S21 PriceBar fallback route.
-- **Epic 5 (Advisor Enhancements)** — Unblocked per S22 resolution but not started this session. Next scope item.
 
 ---
 
@@ -119,7 +130,9 @@ Recommend starting with M_UAT, then Epic 5 if time permits.
 | Epic 2 — Column Parity | ✅ Complete | S22 |
 | Epic 3 — News Feed | ✅ Complete | S23 |
 | Epic 4 — Crypto Asset Support | ✅ Complete | S24 |
-| Epic 5 — Advisor Enhancements | Unblocked, not started | — |
+| Epic 5 — Advisor Enhancements | ✅ Complete (verification) | S24 |
+
+**All epics complete. Next milestone: M_UAT (requires ES participation).**
 
 ---
 

@@ -7,6 +7,7 @@ import {
   formatDate,
   formatMonthYear,
   formatRelativeTime,
+  formatNewsRelativeTime,
 } from '../format';
 
 // ── formatCurrency ──────────────────────────────────────────────────
@@ -269,5 +270,88 @@ describe('formatRelativeTime', () => {
 
   it('shows weeks ago', () => {
     expect(formatRelativeTime('2026-02-08T12:00:00Z')).toBe('2 weeks ago');
+  });
+});
+
+// ── formatNewsRelativeTime ────────────────────────────────────────────
+
+describe('formatNewsRelativeTime', () => {
+  beforeEach(() => {
+    // Fix the current time to 2026-02-22T12:00:00Z
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-02-22T12:00:00Z'));
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('shows "1 minute ago" for very recent times', () => {
+    expect(formatNewsRelativeTime('2026-02-22T11:59:30Z')).toBe('1 minute ago');
+  });
+
+  it('shows singular "1 minute ago"', () => {
+    expect(formatNewsRelativeTime('2026-02-22T11:59:00Z')).toBe('1 minute ago');
+  });
+
+  it('shows plural minutes ago', () => {
+    expect(formatNewsRelativeTime('2026-02-22T11:55:00Z')).toBe('5 minutes ago');
+  });
+
+  it('shows 30 minutes ago', () => {
+    expect(formatNewsRelativeTime('2026-02-22T11:30:00Z')).toBe('30 minutes ago');
+  });
+
+  it('shows singular "1 hour ago"', () => {
+    expect(formatNewsRelativeTime('2026-02-22T11:00:00Z')).toBe('1 hour ago');
+  });
+
+  it('shows plural hours ago', () => {
+    expect(formatNewsRelativeTime('2026-02-22T09:00:00Z')).toBe('3 hours ago');
+  });
+
+  it('shows 23 hours ago', () => {
+    expect(formatNewsRelativeTime('2026-02-21T13:00:00Z')).toBe('23 hours ago');
+  });
+
+  it('shows singular "1 day ago"', () => {
+    expect(formatNewsRelativeTime('2026-02-21T12:00:00Z')).toBe('1 day ago');
+  });
+
+  it('shows plural days ago', () => {
+    expect(formatNewsRelativeTime('2026-02-19T12:00:00Z')).toBe('3 days ago');
+  });
+
+  it('shows 6 days ago', () => {
+    expect(formatNewsRelativeTime('2026-02-16T12:00:00Z')).toBe('6 days ago');
+  });
+
+  it('shows formatted date without year for 7+ days in same year', () => {
+    // 7 days ago → Feb 15, 2026 (same year as fake "now")
+    expect(formatNewsRelativeTime('2026-02-15T12:00:00Z')).toBe('Feb 15');
+  });
+
+  it('shows formatted date without year for older same-year dates', () => {
+    expect(formatNewsRelativeTime('2026-01-10T12:00:00Z')).toBe('Jan 10');
+  });
+
+  it('shows formatted date with year for prior year', () => {
+    expect(formatNewsRelativeTime('2025-12-15T12:00:00Z')).toBe('Dec 15, 2025');
+  });
+
+  it('shows formatted date with year for much older dates', () => {
+    expect(formatNewsRelativeTime('2024-06-01T12:00:00Z')).toBe('Jun 1, 2024');
+  });
+
+  it('returns em dash for empty string', () => {
+    expect(formatNewsRelativeTime('')).toBe('\u2014');
+  });
+
+  it('returns em dash for invalid date', () => {
+    expect(formatNewsRelativeTime('not-a-date')).toBe('\u2014');
+  });
+
+  it('returns em dash for future dates', () => {
+    expect(formatNewsRelativeTime('2026-02-23T12:00:00Z')).toBe('\u2014');
   });
 });

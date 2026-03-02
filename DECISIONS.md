@@ -136,7 +136,65 @@ None. This is the existing pattern applied to a new provider.
 
 ## Category: API Layer
 
-*No decisions recorded yet.*
+### AD-S23-1 — News API Route at `/api/holdings/[symbol]/news`, Separate from Portfolio Holdings
+
+**Date:** 2026-03-01
+**Session / Epic:** S23 / Epic 3
+**Status:** Active
+
+**Context:**
+The news route needs a path. The spec says `/api/holdings/[symbol]/news`. The existing holdings detail route is at `/api/portfolio/holdings/[symbol]`. These are in different directory trees.
+
+**Decision:**
+The news route is at `/api/holdings/[symbol]/news/route.ts`, a new directory tree separate from `/api/portfolio/holdings/`. This matches the spec path exactly.
+
+**Rationale:**
+News is not a portfolio analytics concern — it's an external data fetch. Keeping it outside `/api/portfolio/` maintains the conceptual separation: portfolio routes serve computed financial data, holdings news routes serve external content.
+
+**Consequences and tradeoffs:**
+Two directory trees contain `[symbol]` routes. Future cleanup could consolidate, but is not warranted now.
+
+**Owner:** Lead Engineering
+
+### AD-S23-2 — Spec CSS Tokens Mapped to Existing Theme Tokens
+
+**Date:** 2026-03-01
+**Session / Epic:** S23 / Epic 3
+**Status:** Active
+
+**Context:**
+The SPEC_S22_Enhancement_PRD.md references CSS tokens (`bg-surface-raised`, `text-subtle`, etc.) not defined in the Tailwind `@theme` config. The existing theme uses a different naming convention.
+
+**Decision:**
+Mapped spec tokens to existing theme: `bg-surface-raised` → `bg-bg-secondary`, `border-surface-border` → `border-border-primary`, `bg-surface-overlay` → `bg-bg-tertiary`, `text-heading` → `text-text-primary`, `text-muted` → `text-text-secondary`, `text-subtle` → `text-text-tertiary`.
+
+**Rationale:**
+The existing theme tokens are semantically equivalent. Adding new aliases would create unnecessary duplication in the CSS layer.
+
+**Consequences and tradeoffs:**
+None. Visual output matches the spec intent.
+
+**Owner:** Lead Engineering
+
+### AD-S23-3 — GNews Free Tier: 30-Day Historical Limit
+
+**Date:** 2026-03-01
+**Session / Epic:** S23 / Epic 3
+**Status:** Active
+
+**Context:**
+The spec requests a 90-day news window. Testing revealed that GNews free tier only returns articles from the last 30 days (older articles are removed from the response with a message about paid plans). The `from` parameter is still sent as 90 days ago, but GNews silently filters.
+
+**Decision:**
+Accept the 30-day effective window on the free tier. The route sends `from=<90 days ago>` to maximize results. The section header still reads "90 days" to match the spec. If the user upgrades to a paid GNews plan, the full 90-day window will automatically work without code changes.
+
+**Rationale:**
+No code change can override the provider's free-tier limitation. The forward-compatible request means a plan upgrade immediately expands coverage.
+
+**Consequences and tradeoffs:**
+Users see fewer articles than the spec implies. Documented as a known external constraint, not a bug.
+
+**Owner:** Lead Engineering
 
 ---
 
@@ -287,6 +345,7 @@ All changes to existing decision entries after their initial recording must be l
 | Date | Decision ID | What changed | Reason | Approved by |
 |------|------------|-------------|--------|-------------|
 | 2026-03-01 | — | Initial population | AD-S22-1 through AD-S22-5 recorded from Phase II planning. AD-S22-6 and AD-S22-7 recorded from S22 Epic 1 and Epic 2 implementation. AD-S22-10 recorded for Decimal conversion pattern. | Lead Engineering |
+| 2026-03-01 | — | S23 additions | AD-S23-1 (news route path), AD-S23-2 (CSS token mapping), AD-S23-3 (GNews 30-day free-tier limit). | Lead Engineering |
 
 ---
 

@@ -2,14 +2,14 @@
 
 > **Purpose:** Session transition artifact. Written by the lead at the end of every session. Read first by the lead at the start of the next session — before AGENTS.md, before any code.
 > **Replaces reading:** Do not re-read prior session plans or chat history. If it is not in this document, it is not guaranteed to be current.
-> **Last Updated:** 2026-03-01 (Post-S22)
-> **Session:** Phase II Session 1 (S22) → Phase II Session 2 (Epic 3)
+> **Last Updated:** 2026-03-01 (Post-S23)
+> **Session:** Phase II Session 2 (S23 / Epic 3) → Phase II Session 3 (Epic 4)
 
 ---
 
 ## 1) Current State (One Paragraph)
 
-Phase II Session 1 (S22) completed Epics 1 and 2 — default sort (symbol A-Z) and column parity (canonical PositionSummary layout). All four HANDOFF.md §6 escalations were resolved by the Executive Sponsor before coding began: S21 UAT confirmed pass, XRP instrument deleted (re-add after Epic 4), GNEWS_API_KEY provided, and Epic 5 inputs received. Three pre-existing build issues were fixed (Toast warning variant, holdings-utils type indexing, useHoldingDetail return type). DECISIONS.md was established with 8 formal decisions (AD-S22-1 through AD-S22-10). Quality gates green: 0 tsc errors, 720 tests passing across 62 files, build success. Joint lead review verified all 12 exit criteria across both epics — no downstream scope amendments required. Epic 3 (News Feed) session contract issued and ready for immediate execution.
+Phase II Session 2 (S23) completed Epic 3 — News Feed. The existing single Google News link component (`LatestNews.tsx`) has been replaced with a full "Recent News" card/list section on the holding detail page. A new API route (`GET /api/holdings/[symbol]/news`) fetches articles from GNews API with 30-minute in-memory caching, company name query with symbol fallback, and graceful degradation to a Google News link card when `GNEWS_API_KEY` is absent. The `NewsSection` component renders loading skeletons, article cards (headline, excerpt, source, relative time), empty state, and error state. A new `formatNewsRelativeTime` function implements spec-compliant relative time formatting (full words, date at 7+ days). `.env.example` created with all environment variables. Three decisions recorded (AD-S23-1 through AD-S23-3). Quality gates green: 0 tsc errors, 745 tests passing across 63 files, build success. Epic 4 (Crypto Asset Support) is the next session.
 
 ---
 
@@ -107,67 +107,70 @@ Phase II Session 1 (S22) completed Epics 1 and 2 — default sort (symbol A-Z) a
 
 ### 5.1 Recommended Scope
 
-**Phase II Session 2 objective:** Execute Epic 3 (News Feed) in full. This is a single-epic session with one external dependency (GNews API) and no schema changes. The `GNEWS_API_KEY` has been provided by the ES and is ready to configure.
+**Phase II Session 3 objective:** Execute Epic 4 (Crypto Asset Support) in full. This is the highest-risk epic in Phase II — it involves a schema migration, a new provider package, scheduler partitioning, search API extension, chart adaptation, and a mandatory `instrument.type` audit. Estimated 1–2 sessions.
 
-At session open: add `GNEWS_API_KEY` to `apps/web/.env.local`. Update `.env.example` with the `GNEWS_API_KEY` entry (with comment) and clean up stale entries (Stooq reference, outdated LLM_MODEL).
-
-Do not begin Epic 4 in this session unless Epic 3 is fully complete, all exit criteria verified, and all quality gates are passing. If capacity remains after Epic 3, the lead may begin Epic 4 scoping (review CoinGecko API documentation, audit `instrument.type` branches) but should not write code until the joint lead review of Epic 3 is complete.
+At session open: read `PROJECT-SPEC.md §3` (Epic 4), `SPEC_S22_Enhancement_PRD.md` Section 4, and all AD-S22-1 through AD-S22-5 decisions in `DECISIONS.md`. Verify CoinGecko API accessibility via `curl`. Review the `instrument.type` enum usage across the codebase before writing any code.
 
 ### 5.2 Roles to Staff
 
 | Role | Required / Optional | Notes |
 |------|---------------------|-------|
-| Lead Engineering | Required | Owns all Epic 3 execution. Solo mode is appropriate — single epic, no parallelism benefit. |
-| Lead Product | Required at epic close | Conducts joint review with Lead Engineering after Epic 3 closes to verify exit criteria and issue the Epic 4 session contract. |
+| Lead Engineering | Required | Owns all Epic 4 execution. Solo or subagent mode depending on scope partitioning. |
+| Lead Product | Required at epic close | Conducts joint review with Lead Engineering after Epic 4 closes. |
 
 ### 5.3 Context to Load
 
 1. This file (done).
-2. `PROJECT-SPEC.md` — read §3 (Epic 3 scope and exit criteria), §4 (AC-F-04, AC-NF-01, AC-NF-02, AC-NF-05, AC-Q-01, AC-Q-05).
-3. `DECISIONS.md` — read in full before writing any code.
-4. `SPEC_S22_Enhancement_PRD.md` — Section 1 (news feed) for engineering-level implementation detail.
-5. `AGENTS.md` (project) — operating rules, guardrails, quality gate commands.
-6. `KNOWN-LIMITATIONS.md` — review current state.
-7. `apps/web/src/components/holding-detail/LatestNews.tsx` — existing S21 Google News link component (to be replaced/extended).
-8. `apps/web/src/app/(pages)/holdings/[symbol]/page.tsx` — holding detail page layout; news section must move below HoldingTransactions.
-9. `apps/web/src/app/api/portfolio/holdings/[symbol]/route.ts` — reference for API route patterns in the holdings path.
+2. `PROJECT-SPEC.md` — read §3 (Epic 4 scope and exit criteria), §4 (AC-F-05 through AC-F-09, AC-NF-03, AC-NF-04, AC-Q-01 through AC-Q-04).
+3. `DECISIONS.md` — AD-S22-1 through AD-S22-5 (crypto architecture decisions).
+4. `SPEC_S22_Enhancement_PRD.md` — Section 4 (crypto provider, schema, scheduler, UI adaptations).
+5. `AGENTS.md` — operating rules, quality gates.
+6. `KNOWN-LIMITATIONS.md` — KL-5 (single provider pattern), KL-PB (test gap).
+7. `packages/market-data/src/providers/` — existing provider implementations for reference.
+8. `packages/market-data/src/market-calendar.ts` — `isTradingDay()` function to extend.
+9. `packages/scheduler/src/poller.ts` — existing polling logic to partition.
+10. `apps/web/prisma/schema.prisma` — `Instrument.type` enum to expand.
 
 ### 5.4 Session Contract Starting Points
 
-> **Epic close protocol:** When Epic 3 exit criteria are satisfied, Lead Engineering and Lead Product conduct a joint review before the Epic 4 session contract is issued. They verify exit criteria against `PROJECT-SPEC.md §3`, assess whether any discovery or technical debt requires amendment to Epic 4 scope, record any decisions in `DECISIONS.md`, and update HANDOFF.md §5 before the next session contract is issued.
+> **Epic close protocol:** When Epic 4 exit criteria are satisfied, Lead Engineering and Lead Product conduct a joint review. The `instrument.type` audit must be documented in the session report before the epic can close.
 
 ```
-Epic 3 — News Feed
+Epic 4 — Crypto Asset Support
 
-- Objective:       Replace the existing single Google News link with a "Recent
-                   News" card/list section on the holding detail page. GNews API
-                   integration with 30-minute cache. Graceful fallback when
-                   GNEWS_API_KEY is absent.
+- Objective:       Add first-class crypto support. New CRYPTO instrument type,
+                   CoinGecko provider, scheduler partitioning, chart adaptation,
+                   and instrument.type audit.
 - Role:            Lead Engineering
-- Mode:            Solo
-- Comms policy:    Direct (single agent, no coordination overhead)
+- Mode:            Solo (or subagent for parallel provider + scheduler work)
+- Comms policy:    Direct
 - File scope:
-    Allowed:       apps/web/src/app/api/holdings/[symbol]/news/ (new route)
-                   apps/web/src/components/holding-detail/ (LatestNews replacement,
-                     new components as needed)
-                   apps/web/src/app/(pages)/holdings/[symbol]/page.tsx
-                   apps/web/src/lib/hooks/ (new useNews hook if needed)
-                   .env.example
-    Forbidden:     packages/*, apps/web/prisma/schema.prisma,
-                   apps/web/src/app/api/portfolio/*,
-                   apps/web/src/components/dashboard/*
-- Deliverables:    GET /api/holdings/[symbol]/news route with GNews + cache.
-                   NewsSection component with card list, loading, empty, fallback.
-                   Holding detail layout updated (news below transactions).
-                   .env.example updated with GNEWS_API_KEY.
-                   pnpm test passes. TypeScript 0 errors. Build succeeds.
-                   Any new decisions recorded in DECISIONS.md.
-- Stop conditions: Pause and surface to Lead Product if GNews API response
-                   shape cannot be normalized. Pause if free-tier rate limit
-                   binds during development.
+    Allowed:       packages/market-data/ (new CoinGecko provider, calendar update)
+                   packages/shared/src/types.ts (InstrumentType enum)
+                   packages/scheduler/ (polling partitioning)
+                   apps/web/prisma/schema.prisma (type enum expansion)
+                   apps/web/src/app/api/ (instruments, market/search extensions)
+                   apps/web/src/components/holding-detail/ (chart + label adaptations)
+                   apps/web/src/components/instruments/ (search result badge)
+                   .env.example (COINGECKO_RPM)
+                   KNOWN-LIMITATIONS.md (KL-7)
+    Forbidden:     apps/web/src/components/dashboard/PortfolioTable.tsx (no layout changes)
+                   packages/advisor/ (no advisor changes in Epic 4)
+- Deliverables:    CoinGeckoProvider (search, quote, history, batch quotes).
+                   Schema migration: CRYPTO type. MarketCalendar update.
+                   Scheduler partitioning: equity vs. crypto paths.
+                   Search API: merged FMP + CoinGecko results.
+                   Instrument creation: CRYPTO type with CoinGecko backfill.
+                   Chart: area/line for CRYPTO. Label: "24h Change" for CRYPTO.
+                   instrument.type audit documented in session report.
+                   Tests for all new code. pnpm test passes. tsc 0 errors. Build succeeds.
+                   AD-S22-1 through AD-S22-5 recorded. KL-7 added.
+- Stop conditions: Pause if CoinGecko API changes authentication requirements.
+                   Pause if Prisma migration generates destructive SQL.
+                   Pause if instrument.type audit reveals > 5 unhandled branches.
 ```
 
-> After Epic 3 completes: Lead Engineering and Lead Product conduct joint review per the protocol above before Epic 4 session contract is issued.
+> After Epic 4 completes: Lead Engineering and Lead Product conduct joint review. If all epics 1–4 are complete, proceed to M_UAT preparation.
 
 ---
 

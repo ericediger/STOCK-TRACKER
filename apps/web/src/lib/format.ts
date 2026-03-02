@@ -221,6 +221,56 @@ export function formatMonthYear(isoString: string): string {
 }
 
 /**
+ * Format an ISO date string as news-specific relative time.
+ *
+ * Rules (per SPEC_S22_Enhancement_PRD.md §1.5):
+ * - Less than 1 hour: "X minutes ago" (singular for 1)
+ * - 1–23 hours: "X hours ago" (singular for 1)
+ * - 1–6 days: "X days ago" (singular for 1)
+ * - 7+ days, current year: "Feb 22" (no year)
+ * - 7+ days, prior year: "Feb 22, 2025" (with year)
+ * - Invalid -> em dash
+ */
+export function formatNewsRelativeTime(isoString: string): string {
+  if (!isoString || typeof isoString !== 'string') return EM_DASH;
+  try {
+    const date = new Date(isoString);
+    if (isNaN(date.getTime())) return EM_DASH;
+
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+
+    // Future dates
+    if (diffMs < 0) return EM_DASH;
+
+    const diffMin = Math.floor(diffMs / 60_000);
+    const diffHr = Math.floor(diffMin / 60);
+    const diffDays = Math.floor(diffHr / 24);
+
+    if (diffMin < 1) return '1 minute ago';
+    if (diffMin === 1) return '1 minute ago';
+    if (diffMin < 60) return `${diffMin} minutes ago`;
+    if (diffHr === 1) return '1 hour ago';
+    if (diffHr < 24) return `${diffHr} hours ago`;
+    if (diffDays === 1) return '1 day ago';
+    if (diffDays < 7) return `${diffDays} days ago`;
+
+    // 7+ days — use formatted date
+    const currentYear = now.getUTCFullYear();
+    const dateYear = date.getUTCFullYear();
+    const month = date.toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' });
+    const day = date.getUTCDate();
+
+    if (dateYear === currentYear) {
+      return `${month} ${day}`;
+    }
+    return `${month} ${day}, ${dateYear}`;
+  } catch {
+    return EM_DASH;
+  }
+}
+
+/**
  * Format an ISO date string as relative time from now.
  *
  * - Recent -> `"5 min ago"`, `"2 hr ago"`, `"3 days ago"`

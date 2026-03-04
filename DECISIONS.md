@@ -320,6 +320,76 @@ Column parity between table and detail eliminates the context-drop friction. "Cu
 
 ---
 
+### AD-S25-1 — Snapshot API Recomputes endValue from Live Quotes
+
+**Date:** 2026-03-03
+**Session / Epic:** S25 / UAT Round 2
+**Status:** Active
+
+**Context:**
+The snapshot API (`GET /api/portfolio/snapshot`) returned `totalValue` and `unrealizedPnl` from cached `PortfolioValueSnapshot` rows built during rebuild from PriceBar data. The holdings API (`GET /api/portfolio/holdings`) used fresh `LatestQuote` prices. When LatestQuotes updated between rebuilds, the two APIs diverged — snapshot showed ~$220K while holdings showed ~$251K. This caused the 1D gain/loss to show $0 (stale endValue = stale startValue) and the dashboard P&L cards to show incorrect math.
+
+**Options considered:**
+- Rebuild snapshots more frequently: Expensive (4s rebuild), still stale between rebuilds.
+- Recompute endValue at read time using live quotes: Cheap (iterate holdings × quote lookup), always fresh.
+
+**Decision:**
+`buildResponseFromSnapshots()` accepts an optional `liveQuotesByInstrumentId` map. When provided, it recomputes `endValue` and `unrealizedPnl` from live quote prices for the last snapshot's holdings. The GET handler fetches all `LatestQuote` rows and builds this map.
+
+**Rationale:**
+Read-time recomputation is O(n) where n = number of holdings (~87). This adds <10ms to the response. The snapshot cache still provides the time-series structure and historical values; only the endpoint values are refreshed with live data.
+
+**Consequences and tradeoffs:**
+Any new API or view that surfaces portfolio total value should use the same live-quote recomputation pattern to avoid divergence. The startValue for window calculations still uses snapshot cache (correct — it represents a historical point in time).
+
+**Owner:** Lead Engineering
+
+### AD-S25-2 — Day Change Computed Server-Side in Holdings API
+
+**Date:** 2026-03-03
+**Session / Epic:** S25 / UAT Round 2
+**Status:** Active
+
+**Context:**
+The ES requested day change (dollar and percentage) columns in the dashboard table. The computation requires the current price and the previous trading day's close price.
+
+**Options considered:**
+- Client-side computation: Would require shipping PriceBar data to the client and using JavaScript number arithmetic (violates Decimal.js rule).
+- Server-side in holdings API: Keeps financial math in Decimal.js on the server. Client receives pre-computed string values.
+
+**Decision:**
+`GET /api/portfolio/holdings` queries the 2nd most recent PriceBar per instrument (`skip: 1, orderBy: date desc`) to get previous close. Computes `dayChange = latestPrice - prevClose` and `dayChangePct = (change / prevClose) * 100`. Returns both as nullable string fields.
+
+**Rationale:**
+Consistent with the project's rule that all financial arithmetic uses Decimal.js server-side. The skip:1 query pattern was already established in the holding detail API (S21).
+
+**Consequences and tradeoffs:**
+N+1 query pattern (one PriceBar query per instrument, currently 87). Adds ~200ms to the response. Acceptable for current scale but should be batch-optimized if portfolio size grows significantly.
+
+**Owner:** Lead Engineering
+
+### AD-S25-3 — Sort URL State Removed (Amends AD-S22-6)
+
+**Date:** 2026-03-03
+**Session / Epic:** S25 / UAT Round 2
+**Status:** Active (amends AD-S22-6)
+
+**Context:**
+AD-S22-6 specified URL state for sort persistence (`?sort=symbol&dir=asc`). UAT Round 1 revealed that this caused sort to not revert to A-Z on page refresh — the URL params persisted the last-used sort, which was the opposite of the user's expectation.
+
+**Decision:**
+Sort state is pure React component state (not URL params). The table always defaults to symbol ascending (A-Z) on mount. No URL persistence.
+
+**Rationale:**
+The user's mental model is that refreshing the page resets the view. URL persistence broke this expectation. Deep-link sort state is not a requirement.
+
+**Consequences and tradeoffs:**
+Sort state is lost on page navigation or refresh. This is the desired behavior per UAT feedback.
+
+**Owner:** Lead Engineering
+
+---
+
 ## Category: Advisor (LLM)
 
 *No decisions recorded yet.*
@@ -346,6 +416,8 @@ All changes to existing decision entries after their initial recording must be l
 |------|------------|-------------|--------|-------------|
 | 2026-03-01 | — | Initial population | AD-S22-1 through AD-S22-5 recorded from Phase II planning. AD-S22-6 and AD-S22-7 recorded from S22 Epic 1 and Epic 2 implementation. AD-S22-10 recorded for Decimal conversion pattern. | Lead Engineering |
 | 2026-03-01 | — | S23 additions | AD-S23-1 (news route path), AD-S23-2 (CSS token mapping), AD-S23-3 (GNews 30-day free-tier limit). | Lead Engineering |
+| 2026-03-03 | AD-S22-6 | Amended by AD-S25-3 | URL sort state removed; sort is now pure component state defaulting to symbol/asc on mount. UAT showed URL persistence broke user expectation. | Lead Engineering |
+| 2026-03-03 | — | S25 additions | AD-S25-1 (snapshot live recomputation), AD-S25-2 (day change server-side), AD-S25-3 (sort URL state removed). | Lead Engineering |
 
 ---
 

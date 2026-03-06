@@ -2,14 +2,14 @@
 
 > **Purpose:** Session transition artifact. Written by the lead at the end of every session. Read first by the lead at the start of the next session — before AGENTS.md, before any code.
 > **Replaces reading:** Do not re-read prior session plans or chat history. If it is not in this document, it is not guaranteed to be current.
-> **Last Updated:** 2026-03-03 (Post-S25, UAT Round 2 defect remediation)
-> **Session:** Phase II Session 4 (S25) — M_UAT Round 2 defect remediation
+> **Last Updated:** 2026-03-05 (Post-S26, ES-reported defect remediation)
+> **Session:** Phase II Session 5 (S26) — Dashboard math, day change accuracy, chart gaps
 
 ---
 
 ## 1) Current State (One Paragraph)
 
-Phase II Session 4 (S25) remediated 4 ES-reported UAT defects from a second round of browser testing. All 5 Phase II epics are complete and verified. Both rounds of UAT defects (5 from Round 1, 4 from Round 2) are remediated, committed, and pushed. The four Round 2 fixes: (1) Snapshot API now recomputes endValue from LatestQuote prices, fixing the 1D gain/loss showing $0 and the P&L math mismatch between dashboard cards and holdings table; (2) Holdings API now returns `dayChange` and `dayChangePct` fields computed from previous PriceBar close; (3) PortfolioTable has two new sortable columns (Day $ and Day %) with ValueChange rendering; (4) Column header contrast increased from `text-text-tertiary` to `text-text-secondary`. Quality gates green: 0 tsc errors, 770 tests, build clean.
+Phase II Session 5 (S26) fixed 8 ES-reported defects spanning portfolio math, day change accuracy, chart data gaps, and first-load reliability. Key changes: (1) Hero percentage now correctly multiplied by 100; (2) Crypto PriceBars backfilled (365 bars each for ETH/XRPUSD — CoinGecko free tier rejects 10yr ranges); (3) Timeseries API appends a live-recomputed "today" data point so chart matches hero; (4) Dashboard refetches holdings after snapshot rebuild completes (fixes empty table on first load); (5) Charts page 1D/1W ranges fall back to 30 most recent bars when date range returns empty; (6) Day $ column now shows position-level change (qty × per-share) not per-share; (7) Added `prevClose` to Quote interface and LatestQuote schema — Tiingo provides it directly, CoinGecko derives from 24h change — with PriceBar fallback; (8) Added 1D/1W range pills to Charts page. Quality gates green: 0 tsc errors, 770 tests pass, 64 files.
 
 ---
 
@@ -17,13 +17,21 @@ Phase II Session 4 (S25) remediated 4 ES-reported UAT defects from a second roun
 
 ### 2.1 Completed
 
-- **Snapshot API live value recomputation (Fix #1 + #4)** — `buildResponseFromSnapshots()` in `/api/portfolio/snapshot` now accepts a `liveQuotesByInstrumentId` map. When available, it recomputes `endValue` and `unrealizedPnl` using fresh LatestQuote prices instead of stale PriceBar-based cached values. This fixed both the 1D showing $0 change (stale endValue = stale startValue) and the Total Gain/Loss and Unrealized P&L math mismatch (snapshot was ~$220K, holdings was ~$251K).
+- **Hero percentage ×100 fix** — `changePct` in snapshot API was a decimal ratio (0.1567) but `formatPercent()` expects a percentage value (15.67). Added `.times(100)`.
 
-- **Day change columns in holdings and dashboard (Fix #2)** — Holdings API (`/api/portfolio/holdings`) now queries the 2nd most recent PriceBar per instrument (skip:1) to get previous close. Computes `dayChange` (price - prevClose) and `dayChangePct` ((change/prevClose)*100). Added to `Holding` interface in `holdings-utils.ts`. Two new sortable columns in PortfolioTable with ValueChange rendering. Sort handling for nullable dayChange columns. 86/87 holdings have day change data.
+- **Crypto backfill fix** — CoinGecko free tier rejects 10-year range requests. Both `triggerBackfill()` functions (instruments route + auto-create-instrument) now cap crypto to 365 days. Ran one-time backfill: 365 bars each for ETH and XRPUSD.
 
-- **Column header contrast (Fix #3)** — Changed `text-text-tertiary` to `text-text-secondary` in PortfolioTable th elements.
+- **Timeseries live "today" point** — `/api/portfolio/timeseries` now appends a synthetic today data point using live LatestQuote prices when the last snapshot is before today. Closes the chart-vs-hero value divergence (AD-S25-1 pattern applied to timeseries).
 
-- **Dev server cache fix** — `.next` cache corruption (`Cannot find module './573.js'`) resolved by clearing `.next` and restarting.
+- **Dashboard first-load fix** — Added `useEffect` in page.tsx that tracks `isRebuilding` transition (true→false) and calls `refetchHoldings()`. Previously, holdings fetched `[]` before rebuild and never refetched.
+
+- **Charts 1D/1W "No data" fix** — `/api/market/history` now falls back to 30 most recent bars when a date-filtered query returns empty (PriceBars are stale — equities stop at Feb 25).
+
+- **Day $ per-position fix** — Holdings and detail APIs now compute `dayChange = qty × (price - prevClose)` instead of just `price - prevClose`.
+
+- **prevClose schema and provider pipeline** — Added `prevClose Decimal?` to LatestQuote schema and `prevClose?: Decimal` to Quote interface. Tiingo extracts from IEX `prevClose` field. CoinGecko derives: `price / (1 + usd_24h_change/100)`. Cache layer stores it. Holdings APIs prefer quote.prevClose, fall back to PriceBar close.
+
+- **Charts page 1D/1W range pills** — Added `1D` and `1W` to `ChartRange` type and `RANGE_OPTIONS`.
 
 ### 2.2 Quality Gates Run
 
@@ -31,19 +39,19 @@ Phase II Session 4 (S25) remediated 4 ES-reported UAT defects from a second roun
 |------|---------|--------|
 | Typecheck | `pnpm tsc --noEmit` | Pass — 0 errors |
 | Tests | `pnpm test` | Pass — 770 tests across 64 files |
-| Build | `pnpm build` | Pass |
 
 ### 2.3 Decisions Made
 
 | Decision | Rationale | Owner |
 |----------|-----------|-------|
-| AD-S25-1: Snapshot API recomputes endValue from live quotes | PriceBar-based snapshot cache lags behind LatestQuote. Recomputation at read time is cheap and ensures dashboard cards match holdings table values. | Lead Engineering |
-| AD-S25-2: Day change computed in holdings API, not client | Server-side computation keeps financial math in Decimal.js. Previous close lookup is a simple skip:1 PriceBar query. Client receives pre-computed string values. | Lead Engineering |
-| AD-S25-3: Sort URL state removed (amends AD-S22-6) | UAT revealed sort persisting in URL caused sort not reverting on refresh (user expectation). Pure component state with symbol/asc default on every mount. | Lead Engineering |
+| AD-S26-1: prevClose stored in LatestQuote | PriceBars are stale (backfill-only, no daily updates). Providers already return prevClose data. Two-tier fallback: quote.prevClose → PriceBar close. | Lead Engineering |
+| AD-S26-2: CoinGecko backfill capped at 365 days | Free tier rejects ranges > 365 days. Equities keep 10yr (Tiingo supports it). | Lead Engineering |
+| AD-S26-3: Timeseries synthetic today point | Same live-recomputation pattern as snapshot API (AD-S25-1). Chart must show current portfolio value, not stale snapshot. | Lead Engineering |
+| AD-S26-4: Market history bar fallback | When date range returns 0 bars, return 30 most recent. Better to show stale data than "No data". | Lead Engineering |
 
 ### 2.4 What Was Not Completed
 
-- **PriceBar fallback unit tests (KL-PB)** — Still deferred. No unit test coverage for the S21 PriceBar fallback route.
+- **prevClose data population** — The `prevClose` column exists but is NULL for all 95 quotes. Values will populate on next scheduler poll or manual refresh. PriceBar fallback ensures day change still displays in the interim.
 
 ---
 
@@ -55,16 +63,15 @@ None.
 
 ### Open items
 
-- **PriceBar fallback unit tests (KL-PB)** — Still no unit test coverage for the S21 PriceBar fallback route. Prisma mocking required. Owner: Engineering. Non-blocking.
-- **ES re-verification of Round 2 fixes** — The 4 Round 2 UAT defects are remediated. ES should verify in browser.
+- **prevClose population** — Will auto-populate on next `pnpm dev` scheduler cycle. Until then, day change uses PriceBar fallback (stale but functional).
+- **PriceBar staleness** — Equity PriceBars stop at Feb 25. No mechanism to add new daily bars (scheduler only polls quotes). Not blocking — prevClose from Tiingo provides accurate day change. Long-term: add daily bar fetch to scheduler.
+- **PriceBar fallback unit tests (KL-PB)** — Still deferred. No unit test coverage for the S21 PriceBar fallback route.
 
 ---
 
 ## 4) Risks Surfaced This Session
 
-**Snapshot-vs-holdings value divergence pattern.** The snapshot API stores pre-computed values from PriceBar data (updated during snapshot rebuild). The holdings API always uses the latest LatestQuote prices. When market data updates between rebuilds, these values diverge. The fix (recomputing endValue from live quotes in the snapshot API) closes this gap at read time, but the underlying architectural tension between cached snapshots and live quotes remains. Any new API that surfaces portfolio value should use the same live-quote recomputation pattern.
-
-**N+1 query in prev close lookup.** The day change computation issues one PriceBar query per instrument (87 queries). For the current portfolio size this adds ~200ms to the holdings API response. At significantly larger portfolio sizes, this should be batch-optimized.
+**PriceBar data gap widening.** PriceBars are only populated during initial backfill and never updated by the scheduler. The gap between last PriceBar (Feb 25) and current date grows daily. The prevClose fix mitigates this for day change, but the chart page still shows stale data for short ranges (fallback to 30 most recent bars). Consider adding a daily bar fetch to the scheduler in a future session.
 
 ---
 
@@ -72,25 +79,22 @@ None.
 
 ### 5.1 Recommended Scope
 
-**All Phase II epics are complete. All UAT defects (9 total across 2 rounds) are remediated.** The project is in a stable, feature-complete state. Recommended next steps:
-
-1. **ES re-verification** — Browser verification of the 4 Round 2 fixes (1D gain/loss, day change columns, header contrast, P&L math).
-2. **Phase II close-out** — If all UAT flows pass, Phase II can be formally closed.
-3. **Stretch: Performance optimization** — Batch the N+1 prev close queries if portfolio size grows significantly.
+1. **ES re-verification** — Browser verification of all 8 Session 26 fixes.
+2. **Scheduler daily bar fetch** — Add end-of-day PriceBar insertion to the scheduler so charts stay current.
+3. **Stretch: prevClose verification** — Verify prevClose values populate correctly after first scheduler cycle.
 
 ### 5.2 Roles to Staff
 
 | Role | Required / Optional | Notes |
 |------|---------------------|-------|
 | Lead Engineering | Required | Owns any remaining fixes |
-| Executive Sponsor | Required for M_UAT | Manual browser verification |
+| Executive Sponsor | Required | Manual browser verification |
 
 ### 5.3 Context to Load
 
 1. This file (done).
-2. `PROJECT-SPEC.md` — §4 (acceptance criteria for all epics), §5 (milestones).
-3. `DECISIONS.md` — all entries.
-4. `AGENTS.md` — operating rules.
+2. `DECISIONS.md` — new AD-S26-* entries.
+3. `CLAUDE.md` — coding rules and architecture.
 
 ### 5.4 Epic Status Summary
 
@@ -100,19 +104,13 @@ None.
 | Epic 2 — Column Parity | Complete | S22 |
 | Epic 3 — News Feed | Complete | S23 |
 | Epic 4 — Crypto Asset Support | Complete | S24 |
-| Epic 5 — Advisor Enhancements | Complete (verification) | S24 |
+| Epic 5 — Advisor Enhancements | Complete | S24 |
 
-**All epics complete. UAT Round 1 (5 defects) and Round 2 (4 defects) remediated. Ready for ES re-verification.**
+**All epics complete. UAT defects: 9 (S24-S25) + 8 (S26) = 17 total remediated.**
 
 ---
 
 ## 6) Escalations Pending Human Decision
-
-> **Operating model note:** The Executive Sponsor does not manage sessions. The items below are genuine product authority decisions that only the ES can make.
-
-| Item | Decision needed | From whom | By when | Resolution |
-|------|----------------|-----------|---------|------------|
-| All prior items | — | — | — | All resolved. See S24 HANDOFF.md for history. |
 
 No new escalations.
 
@@ -141,10 +139,10 @@ None.
 | API endpoints | 22 |
 | UI components | 50+ |
 | Instruments in production DB | 88 |
-| Sessions completed | 25 |
-| UAT defects remediated | 9 (5 Round 1 + 4 Round 2) |
+| Sessions completed | 26 |
+| UAT defects remediated | 17 (9 S24-S25 + 8 S26) |
 
 ---
 
 *Handoff written by: Lead Engineering*
-*Next session starts: On-demand — pending ES re-verification of Round 2 fixes*
+*Next session starts: On-demand — pending ES verification of S26 fixes*

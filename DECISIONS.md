@@ -5,7 +5,7 @@
 > **Authors:** Lead Engineering agent and Lead Product agent (joint custodians). Any agent may propose a decision entry; both leads must agree before it is recorded.
 > **Authorized amendments:** Amendments to existing entries require the same joint lead approval. If the amendment carries product authority implications (scope, user-facing behavior, release criteria), escalate to the Executive Sponsor before recording.
 > **Status:** Active
-> **Last Updated:** 2026-03-01
+> **Last Updated:** 2026-03-05
 > **Read by:** All agents at session start, after HANDOFF.md and before writing any code that touches a decided area.
 
 ---
@@ -402,6 +402,68 @@ Sort state is lost on page navigation or refresh. This is the desired behavior p
 
 ---
 
+### AD-S26-1 — prevClose Stored in LatestQuote for Day Change
+
+**Date:** 2026-03-05
+**Session / Epic:** S26 — Defect remediation
+**Status:** Active
+
+**Context:**
+Day change was computed from PriceBars, but PriceBars are only populated during initial instrument backfill and never updated by the scheduler. Equity bars stopped at Feb 25 (8+ days stale), causing wildly incorrect day change values (e.g., NVDA showing -$1,222 instead of +$30).
+
+**Decision:**
+Add `prevClose Decimal?` to LatestQuote schema and `prevClose?: Decimal` to Quote interface. Tiingo IEX provides `prevClose` directly. CoinGecko: derive as `price / (1 + usd_24h_change/100)`. Holdings APIs use two-tier lookup: quote.prevClose → PriceBar close fallback.
+
+**Rationale:**
+Providers already supply previous close data with every quote. Storing it alongside the price is zero-cost and provides accurate day change without requiring the scheduler to fetch daily bars.
+
+### AD-S26-2 — CoinGecko Backfill Capped at 365 Days
+
+**Date:** 2026-03-05
+**Session / Epic:** S26 — Defect remediation
+**Status:** Active
+
+**Context:**
+Crypto instrument backfill silently failed because the 10-year range (AD-S18-1) exceeds CoinGecko free tier limits. Both ETH and XRPUSD had 0 PriceBars.
+
+**Decision:**
+Cap crypto backfill to 365 days. Equity backfill remains at 10 years (Tiingo supports it).
+
+**Rationale:**
+CoinGecko free tier rejects `/market_chart/range` requests exceeding ~365 days. 365 days of daily bars provides sufficient chart history for crypto assets.
+
+### AD-S26-3 — Timeseries API Appends Live "Today" Point
+
+**Date:** 2026-03-05
+**Session / Epic:** S26 — Defect remediation
+**Status:** Active
+
+**Context:**
+The portfolio chart showed cached snapshot value (~$220K) while the hero metric showed live-recomputed value (~$255K). The timeseries API returned only cached snapshots, creating a visual gap.
+
+**Decision:**
+When the last snapshot date is before today and the requested endDate includes today, append a synthetic data point with values recomputed from LatestQuote prices. Same recomputation pattern as AD-S25-1.
+
+**Rationale:**
+The chart must reflect the same live portfolio value as the hero metric. The recomputation cost is minimal (one pass over holdings × quotes).
+
+### AD-S26-4 — Market History Falls Back to Recent Bars
+
+**Date:** 2026-03-05
+**Session / Epic:** S26 — Defect remediation
+**Status:** Active
+
+**Context:**
+Charts page 1D and 1W ranges showed "No data for selected range" because PriceBars for equities stop at Feb 25 and the date filter excluded all available bars.
+
+**Decision:**
+When a date-filtered PriceBar query returns 0 results, fall back to the 30 most recent bars (no date filter).
+
+**Rationale:**
+Showing slightly stale chart data is strictly better than showing nothing. The user understands the data may not be real-time; an empty chart provides zero value.
+
+---
+
 ## Category: Process and Operations
 
 *No decisions recorded yet.*
@@ -418,6 +480,7 @@ All changes to existing decision entries after their initial recording must be l
 | 2026-03-01 | — | S23 additions | AD-S23-1 (news route path), AD-S23-2 (CSS token mapping), AD-S23-3 (GNews 30-day free-tier limit). | Lead Engineering |
 | 2026-03-03 | AD-S22-6 | Amended by AD-S25-3 | URL sort state removed; sort is now pure component state defaulting to symbol/asc on mount. UAT showed URL persistence broke user expectation. | Lead Engineering |
 | 2026-03-03 | — | S25 additions | AD-S25-1 (snapshot live recomputation), AD-S25-2 (day change server-side), AD-S25-3 (sort URL state removed). | Lead Engineering |
+| 2026-03-05 | — | S26 additions | AD-S26-1 (prevClose in LatestQuote), AD-S26-2 (CoinGecko 365-day cap), AD-S26-3 (timeseries live today point), AD-S26-4 (market history bar fallback). | Lead Engineering |
 
 ---
 

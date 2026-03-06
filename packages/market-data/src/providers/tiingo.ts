@@ -105,6 +105,7 @@ export class TiingoProvider implements MarketDataProvider {
           price: toDecimal(String(price)),
           asOf: asOfStr ? new Date(asOfStr) : new Date(),
           provider: this.name,
+          prevClose: raw.prevClose != null ? toDecimal(String(raw.prevClose)) : undefined,
         });
       }
     }
@@ -136,6 +137,7 @@ export class TiingoProvider implements MarketDataProvider {
       price: toDecimal(String(price)),
       asOf: asOfStr ? new Date(asOfStr) : new Date(),
       provider: this.name,
+      prevClose: item.prevClose != null ? toDecimal(String(item.prevClose)) : undefined,
     };
   }
 

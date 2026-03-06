@@ -38,10 +38,20 @@ export async function GET(request: NextRequest): Promise<Response> {
       if (endDate) where.date.lte = endDate;
     }
 
-    const bars = await prisma.priceBar.findMany({
+    let bars = await prisma.priceBar.findMany({
       where,
       orderBy: { date: 'asc' },
     });
+
+    // If date filter returned no bars (stale data), fall back to most recent bars
+    if (bars.length === 0 && startDate) {
+      bars = await prisma.priceBar.findMany({
+        where: { instrumentId: instrument.id, resolution: '1D' },
+        orderBy: { date: 'desc' },
+        take: 30,
+      });
+      bars.reverse();
+    }
 
     const result = bars.map((bar) => ({
       date: bar.date,

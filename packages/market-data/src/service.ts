@@ -440,7 +440,8 @@ export class MarketDataService {
         instrumentId,
         quote.provider,
         quote.price,
-        quote.asOf
+        quote.asOf,
+        quote.prevClose
       );
     } catch {
       // Cache failures should not prevent returning the quote to the caller

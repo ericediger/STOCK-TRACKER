@@ -2,6 +2,15 @@ import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { apiError } from '@/lib/errors';
 import { PrismaSnapshotStore } from '@/lib/prisma-snapshot-store';
+import { toDecimal, ZERO, add, sub, mul } from '@stalker/shared';
+import type { HoldingSnapshot } from '@stalker/shared';
+
+function toDateStr(d: Date): string {
+  const year = d.getUTCFullYear();
+  const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(d.getUTCDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
 
 export async function GET(request: NextRequest): Promise<Response> {
   try {
@@ -33,6 +42,54 @@ export async function GET(request: NextRequest): Promise<Response> {
       unrealizedPnl: s.unrealizedPnl.toString(),
       realizedPnl: s.realizedPnl.toString(),
     }));
+
+    // If the last snapshot is before today, append a live-recomputed "today" point
+    // so the chart reflects current prices (AD-S25-1)
+    const todayStr = toDateStr(new Date());
+    const lastSnapshotDate = snapshots.length > 0 ? snapshots[snapshots.length - 1]!.date : null;
+
+    if (lastSnapshotDate && lastSnapshotDate < todayStr && endDate >= todayStr && snapshots.length > 0) {
+      const lastSnapshot = snapshots[snapshots.length - 1]!;
+      const holdingsJson = lastSnapshot.holdingsJson as Record<string, HoldingSnapshot>;
+
+      // Build instrument lookup and fetch live quotes
+      const instruments = await prisma.instrument.findMany();
+      const instrumentBySymbol = new Map<string, typeof instruments[number]>();
+      for (const inst of instruments) {
+        instrumentBySymbol.set(inst.symbol, inst);
+      }
+
+      const quotes = await prisma.latestQuote.findMany();
+      const quoteByInstrumentId = new Map<string, typeof quotes[number]>();
+      for (const q of quotes) {
+        const existing = quoteByInstrumentId.get(q.instrumentId);
+        if (!existing || q.fetchedAt > existing.fetchedAt) {
+          quoteByInstrumentId.set(q.instrumentId, q);
+        }
+      }
+
+      // Recompute total value from live quotes
+      let liveTotal = ZERO;
+      let liveCostBasis = ZERO;
+      for (const [symbol, entry] of Object.entries(holdingsJson)) {
+        const inst = instrumentBySymbol.get(symbol);
+        const quote = inst ? quoteByInstrumentId.get(inst.id) : undefined;
+        const livePrice = quote ? toDecimal(quote.price.toString()) : null;
+        const currentValue = livePrice ? mul(entry.qty, livePrice) : entry.value;
+        liveTotal = add(liveTotal, currentValue);
+        liveCostBasis = add(liveCostBasis, entry.costBasis);
+      }
+
+      const liveUnrealizedPnl = sub(liveTotal, liveCostBasis);
+
+      series.push({
+        date: todayStr,
+        totalValue: liveTotal.toString(),
+        totalCostBasis: liveCostBasis.toString(),
+        unrealizedPnl: liveUnrealizedPnl.toString(),
+        realizedPnl: lastSnapshot.realizedPnl.toString(),
+      });
+    }
 
     return Response.json(series);
   } catch (error: unknown) {

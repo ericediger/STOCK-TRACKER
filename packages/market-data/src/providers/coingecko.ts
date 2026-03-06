@@ -84,11 +84,21 @@ export class CoinGeckoProvider implements MarketDataProvider {
       ? new Date(coinData.last_updated_at * 1000)
       : new Date();
 
+    const price = toDecimal(String(coinData.usd));
+
+    // Derive prevClose from 24h change percentage: prevClose = price / (1 + pctChange/100)
+    let prevClose: import('@stalker/shared').Decimal | undefined;
+    if (coinData.usd_24h_change != null && coinData.usd_24h_change !== 0) {
+      const changePct = coinData.usd_24h_change;
+      prevClose = price.dividedBy(toDecimal(String(1 + changePct / 100)));
+    }
+
     return {
       symbol: coinId,
-      price: toDecimal(String(coinData.usd)),
+      price,
       asOf,
       provider: this.name,
+      prevClose,
     };
   }
 
@@ -175,11 +185,18 @@ export class CoinGeckoProvider implements MarketDataProvider {
         ? new Date(coinData.last_updated_at * 1000)
         : new Date();
 
+      const price = toDecimal(String(coinData.usd));
+      let prevClose: import('@stalker/shared').Decimal | undefined;
+      if (coinData.usd_24h_change != null && coinData.usd_24h_change !== 0) {
+        prevClose = price.dividedBy(toDecimal(String(1 + coinData.usd_24h_change / 100)));
+      }
+
       quotes.push({
         symbol: coinId,
-        price: toDecimal(String(coinData.usd)),
+        price,
         asOf,
         provider: this.name,
+        prevClose,
       });
     }
 

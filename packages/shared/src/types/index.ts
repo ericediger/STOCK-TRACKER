@@ -136,6 +136,7 @@ export interface Quote {
   price: Decimal;
   asOf: Date;
   provider: string;
+  prevClose?: Decimal;
 }
 
 export interface SymbolSearchResult {

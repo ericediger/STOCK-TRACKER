@@ -66,6 +66,7 @@ model LatestQuote {
   instrumentId String
   provider     String
   price        Decimal
+  prevClose    Decimal?
   asOf         DateTime
   fetchedAt    DateTime
   rebuiltAt    DateTime

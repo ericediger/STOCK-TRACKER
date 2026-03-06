@@ -94,7 +94,7 @@ export async function GET(
     }
 
     // Phase 4: Compute allocation, firstBuyDate, dayChange
-    const [latestSnapshot, firstBuyTx, prevBar] = await Promise.all([
+    const [latestSnapshot, firstBuyTx] = await Promise.all([
       prisma.portfolioValueSnapshot.findFirst({
         orderBy: { date: 'desc' },
         select: { totalValue: true },
@@ -103,12 +103,6 @@ export async function GET(
         where: { instrumentId: instrument.id, type: 'BUY' },
         orderBy: { tradeAt: 'asc' },
         select: { tradeAt: true },
-      }),
-      // Get second-most-recent PriceBar for day change calculation
-      prisma.priceBar.findFirst({
-        where: { instrumentId: instrument.id, resolution: '1D' },
-        orderBy: { date: 'desc' },
-        skip: 1,
       }),
     ]);
 
@@ -133,15 +127,30 @@ export async function GET(
       ? ZERO
       : marketValue.dividedBy(totalPortfolioValue).times(100);
 
-    // Compute day change from previous bar close
+    // Compute day change: prefer quote.prevClose, fall back to most recent PriceBar
     let dayChange: string | null = null;
     let dayChangePct: string | null = null;
-    if (prevBar && !markPrice.isZero()) {
-      const prevClose = toDecimal(prevBar.close.toString());
-      if (!prevClose.isZero()) {
-        const change = markPrice.minus(prevClose);
-        dayChange = change.toString();
-        dayChangePct = change.dividedBy(prevClose).times(100).toFixed(2);
+    if (!markPrice.isZero()) {
+      let prevCloseStr: string | null = null;
+      if (latestQuote?.prevClose != null) {
+        prevCloseStr = latestQuote.prevClose.toString();
+      } else {
+        const fallbackBar = await prisma.priceBar.findFirst({
+          where: { instrumentId: instrument.id, resolution: '1D' },
+          orderBy: { date: 'desc' },
+          select: { close: true },
+        });
+        if (fallbackBar) {
+          prevCloseStr = fallbackBar.close.toString();
+        }
+      }
+      if (prevCloseStr) {
+        const prevClose = toDecimal(prevCloseStr);
+        if (!prevClose.isZero()) {
+          const perShareChange = markPrice.minus(prevClose);
+          dayChange = totalQty.times(perShareChange).toString();
+          dayChangePct = perShareChange.dividedBy(prevClose).times(100).toFixed(2);
+        }
       }
     }
 

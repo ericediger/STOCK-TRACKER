@@ -10,6 +10,7 @@ export interface LatestQuoteRecord {
   instrumentId: string;
   provider: string;
   price: Decimal;
+  prevClose: Decimal | null;
   asOf: Date;
   fetchedAt: Date;
   rebuiltAt: Date;
@@ -22,12 +23,14 @@ export interface PrismaLatestQuoteDelegate {
       instrumentId: string;
       provider: string;
       price: Decimal;
+      prevClose?: Decimal | null;
       asOf: Date;
       fetchedAt: Date;
       rebuiltAt: Date;
     };
     update: {
       price: Decimal;
+      prevClose?: Decimal | null;
       asOf: Date;
       fetchedAt: Date;
       rebuiltAt: Date;
@@ -53,7 +56,8 @@ export async function upsertQuote(
   instrumentId: string,
   provider: string,
   price: Decimal,
-  asOf: Date
+  asOf: Date,
+  prevClose?: Decimal | null
 ): Promise<LatestQuoteRecord> {
   const now = new Date();
   return prisma.latestQuote.upsert({
@@ -64,12 +68,14 @@ export async function upsertQuote(
       instrumentId,
       provider,
       price,
+      prevClose: prevClose ?? null,
       asOf,
       fetchedAt: now,
       rebuiltAt: now,
     },
     update: {
       price,
+      prevClose: prevClose ?? null,
       asOf,
       fetchedAt: now,
       rebuiltAt: now,

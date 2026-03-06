@@ -156,10 +156,16 @@ async function triggerBackfill(prismaInst: {
     providerSymbolMap: JSON.parse(prismaInst.providerSymbolMap) as Record<string, string>,
   };
 
-  // Fetch ~10 years of daily bars (AD-S18-1)
+  // Fetch historical daily bars: 10 years for equities (AD-S18-1),
+  // 365 days for crypto (CoinGecko free tier range limit)
   const end = new Date();
   const start = new Date();
-  start.setFullYear(start.getFullYear() - 10);
+  const isCryptoInst = prismaInst.type === 'CRYPTO';
+  if (isCryptoInst) {
+    start.setDate(start.getDate() - 365);
+  } else {
+    start.setFullYear(start.getFullYear() - 10);
+  }
 
   const bars = await service.getHistory(domainInstrument, start, end);
 
@@ -242,12 +248,14 @@ async function fetchImmediateQuote(prismaInst: {
       instrumentId: prismaInst.id,
       provider: quote.provider,
       price: quote.price.toString(),
+      prevClose: quote.prevClose ? quote.prevClose.toString() : null,
       asOf: quote.asOf,
       fetchedAt: new Date(),
       rebuiltAt: new Date(),
     },
     update: {
       price: quote.price.toString(),
+      prevClose: quote.prevClose ? quote.prevClose.toString() : null,
       asOf: quote.asOf,
       fetchedAt: new Date(),
       rebuiltAt: new Date(),

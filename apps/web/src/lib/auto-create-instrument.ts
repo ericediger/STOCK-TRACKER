@@ -171,9 +171,14 @@ export async function triggerBackfill(prismaInst: PrismaInstrument): Promise<voi
     providerSymbolMap: JSON.parse(prismaInst.providerSymbolMap) as Record<string, string>,
   };
 
+  // 10 years for equities (AD-S18-1), 365 days for crypto (CoinGecko free tier limit)
   const end = new Date();
   const start = new Date();
-  start.setFullYear(start.getFullYear() - 10);
+  if (prismaInst.type === 'CRYPTO') {
+    start.setDate(start.getDate() - 365);
+  } else {
+    start.setFullYear(start.getFullYear() - 10);
+  }
 
   const bars = await service.getHistory(domainInstrument, start, end);
 

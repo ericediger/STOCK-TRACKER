@@ -133,7 +133,7 @@ function buildResponseFromSnapshots(
   const absoluteChange = sub(endValue, startValue);
   const percentageChange = isZero(startValue)
     ? ZERO
-    : toDecimal(div(absoluteChange, startValue).toFixed(4));
+    : toDecimal(div(absoluteChange, startValue).times(100).toFixed(2));
 
   // Compute realized PnL within the window from transactions
   const windowStartDate = parseDateStr(startDateStr);

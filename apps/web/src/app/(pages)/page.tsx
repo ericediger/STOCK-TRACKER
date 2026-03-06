@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { DashboardEmpty } from "@/components/empty-states/DashboardEmpty";
 import { HeroMetric } from "@/components/dashboard/HeroMetric";
@@ -31,6 +31,17 @@ function PortfolioPageContent() {
   const { data: holdings, isLoading: holdingsLoading, refetch: refetchHoldings } = useHoldings();
   const { data: instruments, isLoading: instrumentsLoading, refetch: refetchInstruments } = useInstruments();
   const [showAddInstrument, setShowAddInstrument] = useState(false);
+
+  // Refetch holdings after a snapshot rebuild completes (fixes empty table on first load)
+  const wasRebuilding = useRef(false);
+  useEffect(() => {
+    if (isRebuilding) {
+      wasRebuilding.current = true;
+    } else if (wasRebuilding.current) {
+      wasRebuilding.current = false;
+      refetchHoldings();
+    }
+  }, [isRebuilding, refetchHoldings]);
 
   const handleRowClick = useCallback((symbol: string) => {
     router.push(`/holdings/${encodeURIComponent(symbol)}`);

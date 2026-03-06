@@ -22,9 +22,11 @@ import {
 import { PillToggle } from "@/components/ui/PillToggle";
 import { Skeleton } from "@/components/ui/Skeleton";
 
-type ChartRange = "1M" | "3M" | "6M" | "1Y" | "ALL";
+type ChartRange = "1D" | "1W" | "1M" | "3M" | "6M" | "1Y" | "ALL";
 
 const RANGE_OPTIONS: { label: string; value: ChartRange }[] = [
+  { label: "1D", value: "1D" },
+  { label: "1W", value: "1W" },
   { label: "1M", value: "1M" },
   { label: "3M", value: "3M" },
   { label: "6M", value: "6M" },
@@ -38,6 +40,12 @@ function getStartDate(range: ChartRange): string | undefined {
   if (range === "ALL") return undefined;
   const now = new Date();
   switch (range) {
+    case "1D":
+      now.setDate(now.getDate() - 1);
+      break;
+    case "1W":
+      now.setDate(now.getDate() - 7);
+      break;
     case "1M":
       now.setMonth(now.getMonth() - 1);
       break;

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { PrismaClient } from '@prisma/client';
-import { isMarketOpen, isQuoteFresh } from '@stalker/market-data';
+import { isMarketOpen, isQuoteFresh } from '@stocker/market-data';
 import path from 'node:path';
 
 const DB_PATH = path.resolve(import.meta.dirname, '..', '..', '..', 'data', 'portfolio.db');

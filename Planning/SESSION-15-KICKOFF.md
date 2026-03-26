@@ -2,18 +2,18 @@
 
 ## Agent Instructions
 
-You are starting Session 15 of the STALKER project. Read these documents in order before writing any code:
+You are starting Session 15 of the STOCKER project. Read these documents in order before writing any code:
 
 1. `CLAUDE.md` — Architecture overview, coding rules, agent protocol
 2. `AGENTS.md` — Package inventory, coordination patterns
-3. `STALKER_PHASE-II_ADDENDUM.md` — **Critical:** Provider architecture overrides. Tiingo is already implemented for history. You're extending it for batch quotes.
+3. `STOCKER_PHASE-II_ADDENDUM.md` — **Critical:** Provider architecture overrides. Tiingo is already implemented for history. You're extending it for batch quotes.
 4. `SESSION-15-PLAN.md` — Full implementation spec for this session
 5. `HANDOFF.md` — Current system state post-Session 14
 6. `SESSION-14-REPORT.md` — What changed last session
 
 ## Context
 
-STALKER is functionally correct (11/11 UAT, 602 tests) but has a critical operational problem: only 3 of 83 instruments have live quotes because the scheduler polls FMP one instrument at a time and FMP allows only 250 calls/day. At 83 instruments, this means ~3 polls/day and a full day to populate all quotes initially.
+STOCKER is functionally correct (11/11 UAT, 602 tests) but has a critical operational problem: only 3 of 83 instruments have live quotes because the scheduler polls FMP one instrument at a time and FMP allows only 250 calls/day. At 83 instruments, this means ~3 polls/day and a full day to populate all quotes initially.
 
 **Your job:** Wire Tiingo IEX batch endpoint as the primary quote source. One API call fetches all 83 instruments. Then fix the dashboard UX that breaks at 83-instrument scale.
 

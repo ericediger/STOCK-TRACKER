@@ -298,7 +298,7 @@ This is the heaviest integration pass in the project so far. Session 7 has more 
 | 1 | Holding detail page renders at `/holdings/[symbol]` with position summary, lots table, transaction history | detail-engineer |
 | 2 | Candlestick chart renders with TradingView for any held instrument | detail-engineer |
 | 3 | Candlestick chart responds to date range selector (at minimum 3M, 1Y, ALL) | detail-engineer |
-| 4 | Candlestick chart uses dark theme consistent with STALKER design tokens | detail-engineer |
+| 4 | Candlestick chart uses dark theme consistent with STOCKER design tokens | detail-engineer |
 | 5 | Lots table shows FIFO lots with per-lot unrealized PnL and ValueChange coloring | detail-engineer |
 | 6 | Unpriced warning renders when instrument has no price data | detail-engineer |
 | 7 | Holding detail redirects to dashboard when symbol not found | detail-engineer |

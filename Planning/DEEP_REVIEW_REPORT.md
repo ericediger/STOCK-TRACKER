@@ -1,12 +1,12 @@
 # Deep Technical Review Report (SWAT)
 
 Date: 2026-02-23  
-Repository: `STALKER`  
+Repository: `STOCKER`  
 Requested playbook reference: `DEEP_CODE_REVIEW_PLAN.md`
 
 ## 1) Review Scope and Reality Check
 
-The referenced playbook (`DEEP_CODE_REVIEW_PLAN.md`) is written for a Chrome extension repository ("SPEAKEASY"), but the inspected repository is a Next.js + pnpm monorepo for STALKER.
+The referenced playbook (`DEEP_CODE_REVIEW_PLAN.md`) is written for a Chrome extension repository ("SPEAKEASY"), but the inspected repository is a Next.js + pnpm monorepo for STOCKER.
 
 Adjusted in-scope end-to-end boundaries for this repo:
 

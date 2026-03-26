@@ -7,7 +7,7 @@ import {
   SESSION_OPEN_MINUTE,
   SESSION_CLOSE_HOUR,
   SESSION_CLOSE_MINUTE,
-} from '@stalker/shared';
+} from '@stocker/shared';
 import { isNYSEHoliday } from './nyse-holidays.js';
 
 function getTimezone(exchange: string): string {

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { toDecimal } from '@stalker/shared';
+import { toDecimal } from '@stocker/shared';
 import { MarketDataService } from '../src/service.js';
 import type { MarketDataServiceConfig } from '../src/service.js';
 import { ProviderError } from '../src/types.js';

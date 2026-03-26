@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { processTransactions } from '../src/lot-engine.js';
-import { Decimal, toDecimal, generateUlid } from '@stalker/shared';
-import type { Transaction, TransactionType } from '@stalker/shared';
+import { Decimal, toDecimal, generateUlid } from '@stocker/shared';
+import type { Transaction, TransactionType } from '@stocker/shared';
 
 function makeTx(
   overrides: Omit<Partial<Transaction>, 'quantity' | 'price' | 'fees'> & {

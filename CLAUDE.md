@@ -1,17 +1,15 @@
-# CLAUDE.md — STALKER Architecture & Agent Rules
+# CLAUDE.md — STOCKER Architecture & Agent Rules
 
-**Project:** STALKER — Stock & Portfolio Tracker + LLM Advisor
+**Project:** STOCKER — Stock & Portfolio Tracker + LLM Advisor
 **Last Updated:** 2026-02-28 (Post-Session 20 — Hardening & Project Close-Out)
 **Local repo path:** ~/Desktop/_LOCAL APP DEVELOPMENT/STOCKER
-**GitHub:** https://github.com/ericediger/STALKER
-
-> **Note:** The codename and GitHub repo are **STALKER**; the local working directory is **STOCKER**. These refer to the same project.
+**GitHub:** https://github.com/ericediger/STOCKER
 
 ---
 
 ## Architecture Overview
 
-STALKER is a local-first, single-user portfolio tracker. No auth, no cloud, no multi-tenancy. It runs entirely on a Mac dev machine.
+STOCKER is a local-first, single-user portfolio tracker. No auth, no cloud, no multi-tenancy. It runs entirely on a Mac dev machine.
 
 ### Process Model
 
@@ -68,7 +66,7 @@ UI (Next.js/React) → API Layer (App Router) → Analytics Engine + Market Data
 ├── CLAUDE.md                    # This file
 ├── AGENTS.md                    # Tech stack, design decisions
 ├── HANDOFF.md                   # Current state (updated every session)
-└── STALKER_MASTER-PLAN.md       # Roadmap, sessions, strategic decisions
+└── STOCKER_MASTER-PLAN.md       # Roadmap, sessions, strategic decisions
 ```
 
 ### Package Dependency Direction

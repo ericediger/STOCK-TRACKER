@@ -10,7 +10,7 @@
 
 ## Session Overview
 
-Session 8 delivered the last major feature of the STALKER MVP: the LLM portfolio advisor. Before building the advisor, five hardening fixes from a SWAT code review were implemented to stabilize the foundation. The session completed all 4 phases: hardening, advisor backend, system prompt verification, and advisor frontend. The project now has 469 tests across 39 files, all passing, with `pnpm build` and `tsc --noEmit` clean.
+Session 8 delivered the last major feature of the STOCKER MVP: the LLM portfolio advisor. Before building the advisor, five hardening fixes from a SWAT code review were implemented to stabilize the foundation. The session completed all 4 phases: hardening, advisor backend, system prompt verification, and advisor frontend. The project now has 469 tests across 39 files, all passing, with `pnpm build` and `tsc --noEmit` clean.
 
 ---
 

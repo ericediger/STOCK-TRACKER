@@ -1,5 +1,5 @@
-import { Decimal, toDecimal, sub, mul, add, div, ZERO, isZero, min } from '@stalker/shared';
-import type { Transaction, Lot, RealizedTrade } from '@stalker/shared';
+import { Decimal, toDecimal, sub, mul, add, div, ZERO, isZero, min } from '@stocker/shared';
+import type { Transaction, Lot, RealizedTrade } from '@stocker/shared';
 
 export interface LotEngineResult {
   lots: Lot[];

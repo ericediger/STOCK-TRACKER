@@ -1,5 +1,5 @@
 {
-  "name": "@stalker/analytics",
+  "name": "@stocker/analytics",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -10,7 +10,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@stalker/shared": "workspace:*"
+    "@stocker/shared": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.3.0",

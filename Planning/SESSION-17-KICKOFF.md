@@ -6,7 +6,7 @@
 
 ## Context
 
-You are the **Lead Engineer** for STALKER Session 17 — the final engineering session before production. Session 16 consolidated navigation (5 tabs → 3) and built the unified Portfolio table. However, it created a UX gap: the standalone Transactions page was deleted, but individual transaction Add/Edit/Delete was **not relocated** to Holding Detail. This means the user currently has no UI path to record a single trade.
+You are the **Lead Engineer** for STOCKER Session 17 — the final engineering session before production. Session 16 consolidated navigation (5 tabs → 3) and built the unified Portfolio table. However, it created a UX gap: the standalone Transactions page was deleted, but individual transaction Add/Edit/Delete was **not relocated** to Holding Detail. This means the user currently has no UI path to record a single trade.
 
 Session 17 closes this gap, tunes the advisor for 83-instrument scale, and fixes visual UAT findings.
 

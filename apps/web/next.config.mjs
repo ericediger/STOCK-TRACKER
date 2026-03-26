@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   transpilePackages: [
-    '@stalker/shared',
-    '@stalker/analytics',
-    '@stalker/market-data',
-    '@stalker/advisor',
+    '@stocker/shared',
+    '@stocker/analytics',
+    '@stocker/market-data',
+    '@stocker/advisor',
   ],
   webpack: (config) => {
     // Resolve .js imports to .ts source files for workspace packages

@@ -10,8 +10,8 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { toDecimal } from '@stalker/shared';
-import { MarketDataService, ProviderError } from '@stalker/market-data';
+import { toDecimal } from '@stocker/shared';
+import { MarketDataService, ProviderError } from '@stocker/market-data';
 import type {
   MarketDataProvider,
   Quote,
@@ -20,8 +20,8 @@ import type {
   PriceBar,
   Instrument,
   Resolution,
-} from '@stalker/market-data';
-import type { PrismaClientForCache, LatestQuoteRecord } from '@stalker/market-data';
+} from '@stocker/market-data';
+import type { PrismaClientForCache, LatestQuoteRecord } from '@stocker/market-data';
 
 // ---------------------------------------------------------------------------
 // Mock Helpers

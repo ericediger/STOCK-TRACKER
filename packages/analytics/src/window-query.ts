@@ -1,5 +1,5 @@
-import { Decimal, ZERO, add, sub, div, isZero, toDecimal } from '@stalker/shared';
-import type { Transaction, Instrument, PortfolioValueSnapshot } from '@stalker/shared';
+import { Decimal, ZERO, add, sub, div, isZero, toDecimal } from '@stocker/shared';
+import type { Transaction, Instrument, PortfolioValueSnapshot } from '@stocker/shared';
 import type { PriceLookup, SnapshotStore, HoldingSnapshotEntry } from './interfaces.js';
 import { buildPortfolioValueSeries } from './value-series.js';
 import type { CalendarFns } from './value-series.js';

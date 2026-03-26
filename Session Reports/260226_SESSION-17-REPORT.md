@@ -8,7 +8,7 @@
 
 ## Summary
 
-Session 17 closed the transaction CRUD UX gap created by Session 16's navigation consolidation, tuned the advisor for 83-instrument scale with a new `getTopHoldings` tool, and added NYSE holiday awareness to the market calendar. All three planned features plus the stretch goal shipped. **STALKER is now production-ready.**
+Session 17 closed the transaction CRUD UX gap created by Session 16's navigation consolidation, tuned the advisor for 83-instrument scale with a new `getTopHoldings` tool, and added NYSE holiday awareness to the market calendar. All three planned features plus the stretch goal shipped. **STOCKER is now production-ready.**
 
 ---
 
@@ -130,7 +130,7 @@ Phase 1 (S16 completion) was skipped entirely.
 
 ## Production Readiness Assessment
 
-STALKER is **production-ready** for daily use:
+STOCKER is **production-ready** for daily use:
 
 - **Functionally complete:** All CRUD flows accessible from the UI. No orphaned capabilities.
 - **Operationally stable:** Quote pipeline running at 83-instrument scale with batch polling.

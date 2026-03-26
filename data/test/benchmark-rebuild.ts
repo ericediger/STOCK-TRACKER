@@ -18,19 +18,19 @@ import {
   toDecimal,
   add,
   ZERO,
-} from '@stalker/shared';
+} from '@stocker/shared';
 import type {
   Transaction,
   Instrument,
   InstrumentType,
   TransactionType,
-} from '@stalker/shared';
+} from '@stocker/shared';
 import {
   buildPortfolioValueSeries,
   MockPriceLookup,
   MockSnapshotStore,
-} from '@stalker/analytics';
-import type { CalendarFns } from '@stalker/analytics';
+} from '@stocker/analytics';
+import type { CalendarFns } from '@stocker/analytics';
 
 // ---------------------------------------------------------------------------
 // Configuration
@@ -241,7 +241,7 @@ function generateTransactions(
 // ---------------------------------------------------------------------------
 
 async function main(): Promise<void> {
-  console.log('STALKER Snapshot Rebuild Performance Benchmark');
+  console.log('STOCKER Snapshot Rebuild Performance Benchmark');
   console.log('='.repeat(60));
 
   // Generate data

@@ -2,9 +2,9 @@ import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { apiError } from '@/lib/errors';
 import { transactionInputSchema } from '@/lib/validators/transactionInput';
-import { toDecimal } from '@stalker/shared';
-import type { Transaction as AnalyticsTransaction } from '@stalker/shared';
-import { validateTransactionSet } from '@stalker/analytics';
+import { toDecimal } from '@stocker/shared';
+import type { Transaction as AnalyticsTransaction } from '@stocker/shared';
+import { validateTransactionSet } from '@stocker/analytics';
 import { triggerSnapshotRebuild } from '@/lib/snapshot-rebuild-helper';
 
 function prismaToAnalyticsTransaction(

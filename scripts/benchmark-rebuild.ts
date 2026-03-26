@@ -5,10 +5,10 @@
 import { PrismaClient } from '@prisma/client';
 import { BatchPriceLookup } from '../apps/web/src/lib/batch-price-lookup.js';
 import { PrismaSnapshotStore } from '../apps/web/src/lib/prisma-snapshot-store.js';
-import { rebuildSnapshotsFrom } from '@stalker/analytics';
-import { getNextTradingDay, isTradingDay } from '@stalker/market-data';
-import { toDecimal } from '@stalker/shared';
-import type { Instrument, Transaction, InstrumentType, TransactionType } from '@stalker/shared';
+import { rebuildSnapshotsFrom } from '@stocker/analytics';
+import { getNextTradingDay, isTradingDay } from '@stocker/market-data';
+import { toDecimal } from '@stocker/shared';
+import type { Instrument, Transaction, InstrumentType, TransactionType } from '@stocker/shared';
 
 import path from 'path';
 import { fileURLToPath } from 'url';

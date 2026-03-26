@@ -1,4 +1,4 @@
-import { toDecimal } from '@stalker/shared';
+import { toDecimal } from '@stocker/shared';
 import type { MarketDataProvider, Quote, SymbolSearchResult, ProviderLimits, PriceBar, Resolution } from '../types.js';
 import { ProviderError } from '../types.js';
 import { fetchWithTimeout } from '../fetch-with-timeout.js';

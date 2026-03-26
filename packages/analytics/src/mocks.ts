@@ -1,5 +1,5 @@
-import type { Decimal } from '@stalker/shared';
-import type { PortfolioValueSnapshot } from '@stalker/shared';
+import type { Decimal } from '@stocker/shared';
+import type { PortfolioValueSnapshot } from '@stocker/shared';
 import type { PriceLookup, SnapshotStore } from './interfaces.js';
 
 /**

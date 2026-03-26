@@ -9,7 +9,7 @@
 
 ## Context
 
-A deep technical review of the STALKER codebase was conducted after Session 7. The review identified 10 findings (R-001 through R-010). This addendum documents the findings that were validated and agreed upon by the engineering architecture review, assigns them to specific session phases, and defines acceptance criteria for each.
+A deep technical review of the STOCKER codebase was conducted after Session 7. The review identified 10 findings (R-001 through R-010). This addendum documents the findings that were validated and agreed upon by the engineering architecture review, assigns them to specific session phases, and defines acceptance criteria for each.
 
 Findings **not** accepted for remediation are documented with rationale in the updated Master Plan (Section 9 "Not in Roadmap" and Section 7 "Risk Register").
 

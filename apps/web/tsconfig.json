@@ -10,10 +10,10 @@
     "moduleResolution": "bundler",
     "paths": {
       "@/*": ["./src/*"],
-      "@stalker/shared": ["../../packages/shared/src"],
-      "@stalker/analytics": ["../../packages/analytics/src"],
-      "@stalker/market-data": ["../../packages/market-data/src"],
-      "@stalker/advisor": ["../../packages/advisor/src"]
+      "@stocker/shared": ["../../packages/shared/src"],
+      "@stocker/analytics": ["../../packages/analytics/src"],
+      "@stocker/market-data": ["../../packages/market-data/src"],
+      "@stocker/advisor": ["../../packages/advisor/src"]
     },
     "plugins": [
       {

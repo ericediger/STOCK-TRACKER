@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { generateUlid } from '@stalker/shared';
+import { generateUlid } from '@stocker/shared';
 
 const prisma = new PrismaClient();
 

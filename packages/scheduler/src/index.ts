@@ -1,12 +1,12 @@
 import { PrismaClient } from '@prisma/client';
-import type { Instrument, InstrumentType } from '@stalker/shared';
+import type { Instrument, InstrumentType } from '@stocker/shared';
 import {
   MarketDataService,
   FmpProvider,
   TiingoProvider,
   AlphaVantageProvider,
   CoinGeckoProvider,
-} from '@stalker/market-data';
+} from '@stocker/market-data';
 import { loadConfig } from './config.js';
 import { checkBudget } from './budget.js';
 import { Poller } from './poller.js';

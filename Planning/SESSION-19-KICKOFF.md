@@ -6,7 +6,7 @@
 
 ## Context
 
-You are the **Lead Engineer** for STALKER Session 19. This is a **solo session** — no teammates. You will implement advisor context window management, resolving the last two functional limitations in the system (KL-2 and KL-3).
+You are the **Lead Engineer** for STOCKER Session 19. This is a **solo session** — no teammates. You will implement advisor context window management, resolving the last two functional limitations in the system (KL-2 and KL-3).
 
 ## Document Reading Order
 

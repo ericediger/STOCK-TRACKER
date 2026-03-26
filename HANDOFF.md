@@ -1,4 +1,4 @@
-# HANDOFF.md — STALKER
+# HANDOFF.md — STOCKER
 
 > **Purpose:** Session transition artifact. Written by the lead at the end of every session. Read first by the lead at the start of the next session — before AGENTS.md, before any code.
 > **Replaces reading:** Do not re-read prior session plans or chat history. If it is not in this document, it is not guaranteed to be current.

@@ -1,6 +1,6 @@
 import { cn } from "@/lib/cn";
 import { formatCurrency, formatPercent } from "@/lib/format";
-import { toDecimal } from "@stalker/shared";
+import { toDecimal } from "@stocker/shared";
 
 interface ValueChangeProps {
   value: string;

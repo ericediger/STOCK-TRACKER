@@ -11,7 +11,7 @@
 
 ## 1. Session Objective
 
-Validate that STALKER functions correctly end-to-end with live market data providers and real portfolio data. This session has no code deliverables. The deliverable is a signed-off system or a defect list that blocks signoff.
+Validate that STOCKER functions correctly end-to-end with live market data providers and real portfolio data. This session has no code deliverables. The deliverable is a signed-off system or a defect list that blocks signoff.
 
 **Entry state:** 598 tests passing, 0 TypeScript errors, 0 API stubs, 3 live providers wired (FMP, Tiingo, Alpha Vantage), 21/21 MVP acceptance criteria met against seed data, 749/749 PnL cross-validation checks passing.
 
@@ -203,7 +203,7 @@ Navigate to VTI holding detail (the instrument with multiple lots and a partial 
 
 **Context:** This is the core UAT activity. The business stakeholder enters their actual holdings and historical transactions.
 
-**Objective:** Load real portfolio data and verify STALKER's calculations match the brokerage statement.
+**Objective:** Load real portfolio data and verify STOCKER's calculations match the brokerage statement.
 
 #### 2A: Preparation
 
@@ -245,7 +245,7 @@ Enter instruments and transactions via the UI. For each instrument:
 **Tiingo adjusted price consideration (from Phase II Addendum §5):**
 - Tiingo returns adjusted prices (`adjClose`) that account for splits and dividends
 - This may differ slightly from unadjusted prices shown by a brokerage
-- Small per-share price discrepancies (< $0.05) in historical data are a data source difference, not a STALKER bug
+- Small per-share price discrepancies (< $0.05) in historical data are a data source difference, not a STOCKER bug
 - Cost basis and realized PnL should match exactly (computed from user-entered transaction prices, not provider prices)
 - Unrealized PnL may differ slightly due to current quote timing
 
@@ -448,7 +448,7 @@ Regardless of whether issues are found, the session report should document these
 | SESSION-13-REPORT.md | Markdown | Lead |
 | Defect log (if any) | Section in report | Lead |
 | Signoff decision (PASS/FAIL) | Section in report | Lead + Stakeholder |
-| Updated STALKER_MASTER-PLAN.md | Markdown | Lead |
+| Updated STOCKER_MASTER-PLAN.md | Markdown | Lead |
 | Updated HANDOFF.md | Markdown | Lead |
 | Known limitations document | Section in report | Lead |
 | API budget summary | Section in report | Lead |
@@ -515,7 +515,7 @@ The Session 13 report should follow this structure:
 | # | Description | Files Changed | Tests Affected |
 
 ## Cross-Validation Detail
-[Detailed comparison of STALKER values vs brokerage values]
+[Detailed comparison of STOCKER values vs brokerage values]
 
 ## API Budget Summary
 | Provider | Calls Used | Limit | % |

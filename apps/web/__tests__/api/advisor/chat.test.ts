@@ -22,7 +22,7 @@ vi.mock('@/lib/prisma', () => ({
   prisma: mockPrismaClient,
 }));
 
-vi.mock('@stalker/advisor', () => ({
+vi.mock('@stocker/advisor', () => ({
   AnthropicAdapter: vi.fn(),
   executeToolLoop: mockExecuteToolLoop,
   SYSTEM_PROMPT: 'Test system prompt',
@@ -44,11 +44,11 @@ vi.mock('@/lib/prisma-price-lookup', () => ({
 vi.mock('@/lib/prisma-snapshot-store', () => ({
   PrismaSnapshotStore: vi.fn(),
 }));
-vi.mock('@stalker/analytics', () => ({
+vi.mock('@stocker/analytics', () => ({
   queryPortfolioWindow: vi.fn(),
   processTransactions: vi.fn(),
 }));
-vi.mock('@stalker/market-data', () => ({
+vi.mock('@stocker/market-data', () => ({
   getNextTradingDay: vi.fn(),
   isTradingDay: vi.fn(),
   getPriorTradingDay: vi.fn(),

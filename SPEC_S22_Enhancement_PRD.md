@@ -1,4 +1,4 @@
-# STALKER — S22 Enhancement Specification
+# STOCKER — S22 Enhancement Specification
 ## Product Requirements Document
 
 **Version:** 1.0
@@ -6,7 +6,7 @@
 **Status:** Approved for Engineering
 **Author:** Product (Senior PM)
 **Sponsor:** Executive Sponsor
-**Inputs:** SPEC v4.0, STALKER-ux-ui-plan v1.0, AGENTS.md, HANDOFF.md (Post-S21), S21 Product Summary Report, UAT Findings (2026-03-01)
+**Inputs:** SPEC v4.0, STOCKER-ux-ui-plan v1.0, AGENTS.md, HANDOFF.md (Post-S21), S21 Product Summary Report, UAT Findings (2026-03-01)
 
 ---
 

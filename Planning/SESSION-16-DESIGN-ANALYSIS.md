@@ -59,7 +59,7 @@ The single portfolio view combines what was split across Dashboard and Holdings:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  [STALKER]   Portfolio │ Charts                          [⚙]    │
+│  [STOCKER]   Portfolio │ Charts                          [⚙]    │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                   │
 │  ┌─── Hero Metric ────────────────────────────────────────────┐  │

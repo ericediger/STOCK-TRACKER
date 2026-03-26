@@ -3,7 +3,7 @@
  * Stooq CSV endpoints have no formal API, IP-rate-limiting, and CAPTCHA risk.
  * This file is kept for reference only. Do not use in active provider chains.
  */
-import { toDecimal } from '@stalker/shared';
+import { toDecimal } from '@stocker/shared';
 import type { MarketDataProvider, Quote, SymbolSearchResult, ProviderLimits, PriceBar, Resolution } from '../types.js';
 import { ProviderError, NotSupportedError } from '../types.js';
 import { fetchWithTimeout } from '../fetch-with-timeout.js';

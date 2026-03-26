@@ -5,10 +5,10 @@ export const vitestConfig = defineConfig({
   resolve: {
     alias: {
       '@/': path.resolve(__dirname, 'apps/web/src') + '/',
-      '@stalker/shared': path.resolve(__dirname, 'packages/shared/src/index.ts'),
-      '@stalker/analytics': path.resolve(__dirname, 'packages/analytics/src/index.ts'),
-      '@stalker/market-data': path.resolve(__dirname, 'packages/market-data/src/index.ts'),
-      '@stalker/advisor': path.resolve(__dirname, 'packages/advisor/src/index.ts'),
+      '@stocker/shared': path.resolve(__dirname, 'packages/shared/src/index.ts'),
+      '@stocker/analytics': path.resolve(__dirname, 'packages/analytics/src/index.ts'),
+      '@stocker/market-data': path.resolve(__dirname, 'packages/market-data/src/index.ts'),
+      '@stocker/advisor': path.resolve(__dirname, 'packages/advisor/src/index.ts'),
     },
   },
   test: {

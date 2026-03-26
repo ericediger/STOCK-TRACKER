@@ -1,6 +1,6 @@
-# PROJECT-SPEC.md — STALKER Phase II
+# PROJECT-SPEC.md — STOCKER Phase II
 
-> **Role:** Anchor document. The single source of product truth for STALKER Phase II. All epics, sessions, and deliverables are derived from and validated against this specification. No session output can contradict this document without a formal amendment (§10).
+> **Role:** Anchor document. The single source of product truth for STOCKER Phase II. All epics, sessions, and deliverables are derived from and validated against this specification. No session output can contradict this document without a formal amendment (§10).
 >
 > **Author:** Executive Sponsor
 > **Custodians:** PM and BA lead agents (maintain traceability; flag drift; propose amendments)
@@ -39,11 +39,11 @@ The authoritative record of Phase I state is `HANDOFF.md` (Post-Session 21). Age
 
 ### 1.1 Product Vision
 
-STALKER Phase II expands a production portfolio tracker from equities-only coverage into a multi-asset, information-rich platform — adding crypto asset support, a real-time news feed embedded in the holding detail experience, and consistency improvements that eliminate friction when navigating between views. When Phase II is complete, the user has a single local-first tool that accurately tracks and contextualizes an 83-instrument portfolio spanning stocks, ETFs, and crypto, without leaving the application to find relevant information.
+STOCKER Phase II expands a production portfolio tracker from equities-only coverage into a multi-asset, information-rich platform — adding crypto asset support, a real-time news feed embedded in the holding detail experience, and consistency improvements that eliminate friction when navigating between views. When Phase II is complete, the user has a single local-first tool that accurately tracks and contextualizes an 83-instrument portfolio spanning stocks, ETFs, and crypto, without leaving the application to find relevant information.
 
 ### 1.2 Problem Statement
 
-UAT conducted on 2026-03-01 against the Phase I application validated four gaps that the user encounters in daily use. The holdings table has no enforced default sort order, requiring a user managing 83 instruments to reorient on every page load. The holding detail page is missing fields that are visible on the holdings table, creating a discontinuity when drilling into a position — the user loses context mid-flow rather than gaining depth. News about a holding requires leaving the application entirely; the current implementation is a single external link that opens a raw Google News search page, providing no scannable feed within STALKER. And the portfolio contains at least one intended crypto asset (XRP) that cannot be correctly tracked because no crypto provider, asset type, or scheduler logic exists for non-equity instruments.
+UAT conducted on 2026-03-01 against the Phase I application validated four gaps that the user encounters in daily use. The holdings table has no enforced default sort order, requiring a user managing 83 instruments to reorient on every page load. The holding detail page is missing fields that are visible on the holdings table, creating a discontinuity when drilling into a position — the user loses context mid-flow rather than gaining depth. News about a holding requires leaving the application entirely; the current implementation is a single external link that opens a raw Google News search page, providing no scannable feed within STOCKER. And the portfolio contains at least one intended crypto asset (XRP) that cannot be correctly tracked because no crypto provider, asset type, or scheduler logic exists for non-equity instruments.
 
 A fifth gap — specific enhancements to the LLM advisor's system prompt, model configuration, and placement UI — is blocked pending Executive Sponsor input and is scoped as Epic 5 (Advisor Enhancements), with work deferred until the ES provides the required inputs.
 
@@ -58,13 +58,13 @@ Phase I delivered a complete and correct foundation. The agentic team is now bei
 ### 2.1 Primary User
 
 - **Role / persona name:** Individual investor, technical practitioner
-- **Context:** Runs STALKER locally on a Mac at desktop resolution. Checks the portfolio daily or weekly. Not day-trading. Has 83 instruments including ETFs, individual equities, and at least one intended crypto asset. All historical trades are imported; ongoing use is monitoring and occasional transaction entry.
+- **Context:** Runs STOCKER locally on a Mac at desktop resolution. Checks the portfolio daily or weekly. Not day-trading. Has 83 instruments including ETFs, individual equities, and at least one intended crypto asset. All historical trades are imported; ongoing use is monitoring and occasional transaction entry.
 - **Job to be done:** When I open my portfolio tracker, I want to understand where each position stands and what is happening with it — without navigating to external tools or re-orienting the interface on every visit — so that I can make informed decisions about my holdings efficiently.
 - **Current pain:** The table re-sorts unpredictably. Navigating to a holding detail page drops context that was visible in the table. Checking news requires leaving the app. XRP cannot be tracked correctly because it was added as an ETF. The daily workflow involves unnecessary friction at each of these points.
 
 ### 2.2 Secondary Users
 
-None. STALKER is a single-user, local-first application. There are no secondary users, no shared access, and no multi-tenant considerations.
+None. STOCKER is a single-user, local-first application. There are no secondary users, no shared access, and no multi-tenant considerations.
 
 ### 2.3 Out-of-Scope Users
 
@@ -207,7 +207,7 @@ Row 3: Realized PnL  | First Buy    | Data Source  | (reserved — empty)
 **Depends on:** Epics 1, 2, and 3 complete (crypto is highest-risk; execute last to avoid blocking earlier epics)
 **Estimated sessions:** 1–2
 
-**What this epic delivers:** STALKER gains first-class support for crypto assets. A new `CRYPTO` instrument type is added to the schema. A new CoinGecko provider (free public API, no key required) handles crypto symbol search, real-time price quotes, and historical price bars. The scheduler polls crypto instruments on a 24/7 basis, bypassing NYSE market calendar gating. The holding detail chart for crypto instruments uses a line/area series rather than a candlestick series, reflecting that CoinGecko's free tier provides close price only. The user can add any CoinGecko-listed coin through the existing Add Instrument flow. All existing equity instrument behavior is unaffected.
+**What this epic delivers:** STOCKER gains first-class support for crypto assets. A new `CRYPTO` instrument type is added to the schema. A new CoinGecko provider (free public API, no key required) handles crypto symbol search, real-time price quotes, and historical price bars. The scheduler polls crypto instruments on a 24/7 basis, bypassing NYSE market calendar gating. The holding detail chart for crypto instruments uses a line/area series rather than a candlestick series, reflecting that CoinGecko's free tier provides close price only. The user can add any CoinGecko-listed coin through the existing Add Instrument flow. All existing equity instrument behavior is unaffected.
 
 **In scope:**
 - Schema migration: `Instrument.type` enum expanded to include `CRYPTO`. Additive, backwards-compatible. All existing records unaffected.
@@ -338,7 +338,7 @@ No credentials, API keys, or secrets are committed to version control under any 
 
 ### 5.3 Accessibility
 
-All Phase II UI additions follow the existing design system conventions (Bookworm dark theme, Tailwind semantic tokens, Lucide icons) as specified in `STALKER-ux-ui-plan.md`. The `prefers-reduced-motion` CSS support gate established in Phase I applies to any new animations (news card skeleton pulse, loading states).
+All Phase II UI additions follow the existing design system conventions (Bookworm dark theme, Tailwind semantic tokens, Lucide icons) as specified in `STOCKER-ux-ui-plan.md`. The `prefers-reduced-motion` CSS support gate established in Phase I applies to any new animations (news card skeleton pulse, loading states).
 
 ### 5.4 Reliability and Availability
 

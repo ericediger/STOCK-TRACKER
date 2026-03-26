@@ -7,8 +7,8 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { toDecimal, Decimal, ZERO } from '@stalker/shared';
-import type { PriceBar, Resolution } from '@stalker/shared';
+import { toDecimal, Decimal, ZERO } from '@stocker/shared';
+import type { PriceBar, Resolution } from '@stocker/shared';
 
 // ---------------------------------------------------------------------------
 // Mock Data Generators — Match Tiingo Response Shape

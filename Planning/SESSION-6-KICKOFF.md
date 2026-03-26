@@ -194,7 +194,7 @@ Implementation checklist:
 - [ ] Dark theme applied: background, grid, text, crosshair colors
 - [ ] Crosshair with value tooltip
 - [ ] Empty state: if no data points, show centered "No data for selected window" text
-- [ ] **Theming validation:** After initial render, verify colors match STALKER dark theme. If TradingView can't match within 30 minutes, implement custom tooltip as overlay div.
+- [ ] **Theming validation:** After initial render, verify colors match STOCKER dark theme. If TradingView can't match within 30 minutes, implement custom tooltip as overlay div.
 
 Chart configuration reference:
 ```typescript

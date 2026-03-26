@@ -1,10 +1,10 @@
 import { prisma } from '@/lib/prisma';
 import { BatchPriceLookup } from '@/lib/batch-price-lookup';
 import { PrismaSnapshotStore } from '@/lib/prisma-snapshot-store';
-import { rebuildSnapshotsFrom } from '@stalker/analytics';
-import { getNextTradingDay, isTradingDay } from '@stalker/market-data';
-import { toDecimal } from '@stalker/shared';
-import type { Instrument, Transaction, InstrumentType, TransactionType } from '@stalker/shared';
+import { rebuildSnapshotsFrom } from '@stocker/analytics';
+import { getNextTradingDay, isTradingDay } from '@stocker/market-data';
+import { toDecimal } from '@stocker/shared';
+import type { Instrument, Transaction, InstrumentType, TransactionType } from '@stocker/shared';
 
 function toSharedInstrument(prismaInst: {
   id: string;

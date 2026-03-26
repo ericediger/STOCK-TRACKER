@@ -1,4 +1,4 @@
-import { toDecimal, Decimal } from '@stalker/shared';
+import { toDecimal, Decimal } from '@stocker/shared';
 
 const EM_DASH = '\u2014';
 

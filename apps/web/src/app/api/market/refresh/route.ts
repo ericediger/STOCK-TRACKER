@@ -1,8 +1,8 @@
 import { prisma } from '@/lib/prisma';
 import { apiError } from '@/lib/errors';
 import { getMarketDataService } from '@/lib/market-data-service';
-import type { Instrument, InstrumentType } from '@stalker/shared';
-import { ProviderError } from '@stalker/market-data';
+import type { Instrument, InstrumentType } from '@stocker/shared';
+import { ProviderError } from '@stocker/market-data';
 
 function toDomainInstrument(prismaInst: {
   id: string;

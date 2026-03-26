@@ -155,7 +155,7 @@ import { useRef, useEffect } from "react";
 // 4. ResizeObserver on container div for responsive width
 ```
 
-**Chart theming** must use the STALKER dark theme tokens:
+**Chart theming** must use the STOCKER dark theme tokens:
 - Background: `bg-base-1` equivalent hex
 - Grid lines: `bg-base-3` equivalent hex
 - Area fill: accent color with opacity gradient
@@ -249,7 +249,7 @@ If time pressure hits, cut in this order (last item cut first):
 - [ ] Dashboard renders hero metric: total portfolio value, day change ($, %)
 - [ ] Portfolio area chart renders with TradingView Lightweight Charts
 - [ ] Chart responds to window selector (at minimum 1M, 1Y, ALL)
-- [ ] Chart uses dark theme consistent with STALKER design tokens
+- [ ] Chart uses dark theme consistent with STOCKER design tokens
 - [ ] Summary cards show total gain/loss, realized PnL, unrealized PnL
 - [ ] Dashboard holdings table renders with correct columns (see §6.6)
 - [ ] Holdings table numeric columns use `font-mono`, right-aligned

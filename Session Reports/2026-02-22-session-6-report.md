@@ -85,7 +85,7 @@ Build the two most important data-wired pages: the dashboard (portfolio overview
 - [x] Dashboard renders hero metric: total portfolio value, day change ($, %)
 - [x] Portfolio area chart renders with TradingView Lightweight Charts
 - [x] Chart responds to window selector (at minimum 1M, 1Y, ALL)
-- [x] Chart uses dark theme consistent with STALKER design tokens
+- [x] Chart uses dark theme consistent with STOCKER design tokens
 - [x] Summary cards show total gain/loss, realized PnL, unrealized PnL
 - [x] Dashboard holdings table renders with correct columns
 - [x] Holdings table numeric columns use `font-mono`, right-aligned

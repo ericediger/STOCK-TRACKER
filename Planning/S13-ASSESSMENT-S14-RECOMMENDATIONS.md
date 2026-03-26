@@ -41,7 +41,7 @@ No dedup guard on bulk import. This is a data integrity violation — the most i
 
 #### 3. SQLite Under Concurrent Load
 
-SQLite's single-writer lock is fine for the read-heavy workload STALKER was designed for. But bulk operations that trigger many fire-and-forget writes (backfills) overwhelm it. The S13 fix (sequential backfills) is correct but reveals that any future feature involving concurrent writes needs careful sequencing.
+SQLite's single-writer lock is fine for the read-heavy workload STOCKER was designed for. But bulk operations that trigger many fire-and-forget writes (backfills) overwhelm it. The S13 fix (sequential backfills) is correct but reveals that any future feature involving concurrent writes needs careful sequencing.
 
 **Recommendation:** Add a write queue abstraction if more bulk operations are planned. For now, the sequential-backfill pattern is sufficient.
 

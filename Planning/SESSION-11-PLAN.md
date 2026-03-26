@@ -1,6 +1,6 @@
 # SESSION 11 — Provider Integration Testing
 
-**Project:** STALKER (Stock & Portfolio Tracker + LLM Advisor)
+**Project:** STOCKER (Stock & Portfolio Tracker + LLM Advisor)
 **Phase:** II (Pre-MVP Integration & Acceptance)
 **Epic:** 10 — Provider Integration Testing
 **Date:** 2026-02-24

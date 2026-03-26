@@ -6,7 +6,7 @@
 
 ## Context
 
-You are the **Lead Engineer** for STALKER Session 16 — a UX consolidation and enhancement session triggered by product stakeholder feedback during visual UAT. The user observed that the Dashboard, Holdings, and Transactions tabs show redundant data at 83-instrument scale.
+You are the **Lead Engineer** for STOCKER Session 16 — a UX consolidation and enhancement session triggered by product stakeholder feedback during visual UAT. The user observed that the Dashboard, Holdings, and Transactions tabs show redundant data at 83-instrument scale.
 
 ## Document Reading Order
 
@@ -14,7 +14,7 @@ Read these documents in this exact order:
 
 1. `CLAUDE.md` — Architecture + coding rules
 2. `AGENTS.md` — Package inventory
-3. `STALKER_PHASE-II_ADDENDUM.md` — Provider overrides (Tiingo, FMP stable)
+3. `STOCKER_PHASE-II_ADDENDUM.md` — Provider overrides (Tiingo, FMP stable)
 4. `HANDOFF.md` — Current state (post-Session 15)
 5. `SESSION-16-PLAN.md` — **This session's full spec**
 6. `SESSION-15-REPORT.md` — Previous session context
@@ -66,13 +66,13 @@ apps/web/src/hooks/useHoldings.ts (or equivalent)
 ### TEAMMATE 1 PROMPT: `navigation-charts-engineer`
 
 ```
-You are `navigation-charts-engineer` on Session 16 of STALKER. Your scope: navigation consolidation (5 tabs → 3 tabs) and chart transaction markers.
+You are `navigation-charts-engineer` on Session 16 of STOCKER. Your scope: navigation consolidation (5 tabs → 3 tabs) and chart transaction markers.
 
 READ FIRST:
 - CLAUDE.md
 - AGENTS.md
 - SESSION-16-PLAN.md (Sections 5, 7 — your full spec)
-- STALKER-ux-ui-plan.md Section 2.1 (current navigation model)
+- STOCKER-ux-ui-plan.md Section 2.1 (current navigation model)
 
 PHASE 1 — Navigation Consolidation (45 min):
 

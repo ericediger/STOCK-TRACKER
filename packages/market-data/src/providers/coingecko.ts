@@ -1,4 +1,4 @@
-import { toDecimal } from '@stalker/shared';
+import { toDecimal } from '@stocker/shared';
 import type { MarketDataProvider, Quote, SymbolSearchResult, ProviderLimits, PriceBar, Resolution } from '../types.js';
 import { ProviderError } from '../types.js';
 import { fetchWithTimeout } from '../fetch-with-timeout.js';
@@ -87,7 +87,7 @@ export class CoinGeckoProvider implements MarketDataProvider {
     const price = toDecimal(String(coinData.usd));
 
     // Derive prevClose from 24h change percentage: prevClose = price / (1 + pctChange/100)
-    let prevClose: import('@stalker/shared').Decimal | undefined;
+    let prevClose: import('@stocker/shared').Decimal | undefined;
     if (coinData.usd_24h_change != null && coinData.usd_24h_change !== 0) {
       const changePct = coinData.usd_24h_change;
       prevClose = price.dividedBy(toDecimal(String(1 + changePct / 100)));
@@ -186,7 +186,7 @@ export class CoinGeckoProvider implements MarketDataProvider {
         : new Date();
 
       const price = toDecimal(String(coinData.usd));
-      let prevClose: import('@stalker/shared').Decimal | undefined;
+      let prevClose: import('@stocker/shared').Decimal | undefined;
       if (coinData.usd_24h_change != null && coinData.usd_24h_change !== 0) {
         prevClose = price.dividedBy(toDecimal(String(1 + coinData.usd_24h_change / 100)));
       }

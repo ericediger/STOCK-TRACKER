@@ -1,8 +1,8 @@
-# KNOWN-LIMITATIONS.md — STALKER Known Gaps
+# KNOWN-LIMITATIONS.md — STOCKER Known Gaps
 
 **Last Updated:** 2026-03-01 (Phase II Session 1 / S22)
 
-This document catalogues known limitations in STALKER. Each entry includes the impact assessment and any existing mitigations.
+This document catalogues known limitations in STOCKER. Each entry includes the impact assessment and any existing mitigations.
 
 ---
 

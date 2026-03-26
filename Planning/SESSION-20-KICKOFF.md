@@ -174,7 +174,7 @@ pnpm test            # Same count, 0 failures
 
 ## Phase 5: Documentation Sync (Project Close-Out)
 
-### 5.1 STALKER_MASTER-PLAN.md → v5.0
+### 5.1 STOCKER_MASTER-PLAN.md → v5.0
 
 This is the largest single artifact. The Master Plan is at v4.0 (covers through Session 11). Update to v5.0:
 
@@ -250,7 +250,7 @@ pnpm test            # 719-720 tests, 0 failures
 
 - [ ] Single message conversion pipeline (no dual converters)
 - [ ] Token calibration log emits in development mode
-- [ ] `STALKER_MASTER-PLAN.md` updated to v5.0
+- [ ] `STOCKER_MASTER-PLAN.md` updated to v5.0
 - [ ] `HANDOFF.md` reflects post-S20 state
 - [ ] `CLAUDE.md` includes S20 section
 - [ ] `AGENTS.md` test count and package descriptions current

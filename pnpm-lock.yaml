@@ -26,13 +26,13 @@ importers:
       '@prisma/client':
         specifier: ^6.4.1
         version: 6.19.2(prisma@6.19.2(typescript@5.9.3))(typescript@5.9.3)
-      '@stalker/analytics':
+      '@stocker/analytics':
         specifier: workspace:*
         version: link:../../packages/analytics
-      '@stalker/market-data':
+      '@stocker/market-data':
         specifier: workspace:*
         version: link:../../packages/market-data
-      '@stalker/shared':
+      '@stocker/shared':
         specifier: workspace:*
         version: link:../../packages/shared
       '@tailwindcss/postcss':
@@ -90,7 +90,7 @@ importers:
       '@anthropic-ai/sdk':
         specifier: 0.78.0
         version: 0.78.0(zod@4.3.6)
-      '@stalker/shared':
+      '@stocker/shared':
         specifier: workspace:*
         version: link:../shared
     devDependencies:
@@ -100,7 +100,7 @@ importers:
 
   packages/analytics:
     dependencies:
-      '@stalker/shared':
+      '@stocker/shared':
         specifier: workspace:*
         version: link:../shared
     devDependencies:
@@ -113,7 +113,7 @@ importers:
 
   packages/market-data:
     dependencies:
-      '@stalker/shared':
+      '@stocker/shared':
         specifier: workspace:*
         version: link:../shared
       date-fns:
@@ -135,10 +135,10 @@ importers:
       '@prisma/client':
         specifier: ^6.19.2
         version: 6.19.2(prisma@6.19.2(typescript@5.9.3))(typescript@5.9.3)
-      '@stalker/market-data':
+      '@stocker/market-data':
         specifier: workspace:*
         version: link:../market-data
-      '@stalker/shared':
+      '@stocker/shared':
         specifier: workspace:*
         version: link:../shared
       dotenv:

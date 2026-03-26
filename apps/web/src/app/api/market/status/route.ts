@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { apiError } from '@/lib/errors';
-import { isMarketOpen } from '@stalker/market-data';
+import { isMarketOpen } from '@stocker/market-data';
 
 export async function GET(): Promise<Response> {
   try {

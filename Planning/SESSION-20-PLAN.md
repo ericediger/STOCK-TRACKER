@@ -1,7 +1,7 @@
 # SESSION-20-PLAN.md — Hardening, Bug Fixes & Project Close-Out
 
 **Date:** 2026-02-27
-**Input:** SESSION-19-REPORT.md, SESSION-19-PLAN.md, HANDOFF.md, KNOWN-LIMITATIONS.md, STALKER_MASTER-PLAN.md, CLAUDE.md, AGENTS.md
+**Input:** SESSION-19-REPORT.md, SESSION-19-PLAN.md, HANDOFF.md, KNOWN-LIMITATIONS.md, STOCKER_MASTER-PLAN.md, CLAUDE.md, AGENTS.md
 **Session Type:** Hardening + Documentation (Backend + Docs)
 **Team Shape:** Solo
 **Estimated Duration:** ~2–3 hours
@@ -10,7 +10,7 @@
 
 ## 0. Session 19 Assessment
 
-Session 19 was a clean sweep — all 6 phases, 35 new tests, zero scope cuts, zero TypeScript errors. KL-2 and KL-3 are resolved. STALKER now has **zero open functional limitations**. The remaining backlog is item 14 (responsive refinements), which has been deferred since S15 and the user is on desktop.
+Session 19 was a clean sweep — all 6 phases, 35 new tests, zero scope cuts, zero TypeScript errors. KL-2 and KL-3 are resolved. STOCKER now has **zero open functional limitations**. The remaining backlog is item 14 (responsive refinements), which has been deferred since S15 and the user is on desktop.
 
 However, the S19 assessment identified **four issues** that should be addressed before the project is declared complete:
 
@@ -273,7 +273,7 @@ No tests needed — this is a development-only log line.
 
 This is the largest phase by artifact count but the most mechanical. Every document gets updated to reflect the true state of the system through Session 20.
 
-### 7.1 STALKER_MASTER-PLAN.md → v5.0
+### 7.1 STOCKER_MASTER-PLAN.md → v5.0
 
 The Master Plan is at v4.0 (covers through Session 11). It needs a major update.
 
@@ -380,7 +380,7 @@ pnpm test                # 719+ tests (718 current + 1-2 new)
 |---|-----------|-------|
 | EC-6 | Single message conversion pipeline (no dual converters) | P3 |
 | EC-7 | Token calibration log emits in development mode | P4 |
-| EC-8 | STALKER_MASTER-PLAN.md updated to v5.0 | P5 |
+| EC-8 | STOCKER_MASTER-PLAN.md updated to v5.0 | P5 |
 | EC-9 | HANDOFF.md reflects post-S20 state | P5 |
 | EC-10 | CLAUDE.md includes S20 section | P5 |
 | EC-11 | AGENTS.md test count and package descriptions current | P5 |
@@ -415,7 +415,7 @@ pnpm tsc --noEmit
 pnpm test
 
 # Update docs (Phase 5)
-# STALKER_MASTER-PLAN.md, HANDOFF.md, CLAUDE.md, AGENTS.md
+# STOCKER_MASTER-PLAN.md, HANDOFF.md, CLAUDE.md, AGENTS.md
 
 # Commit
 git add -A

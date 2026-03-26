@@ -1,7 +1,7 @@
-import type { PriceLookup } from '@stalker/analytics';
+import type { PriceLookup } from '@stocker/analytics';
 import type { PrismaClient } from '@prisma/client';
-import { toDecimal } from '@stalker/shared';
-import type { Decimal } from '@stalker/shared';
+import { toDecimal } from '@stocker/shared';
+import type { Decimal } from '@stocker/shared';
 
 /**
  * Accepts PrismaClient or a Prisma interactive transaction client.

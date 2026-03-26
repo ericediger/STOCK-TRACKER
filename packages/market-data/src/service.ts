@@ -16,7 +16,7 @@ import {
   isQuoteFresh,
 } from './cache.js';
 import type { PrismaClientForCache, LatestQuoteRecord } from './cache.js';
-import { toDecimal } from '@stalker/shared';
+import { toDecimal } from '@stocker/shared';
 import type { TiingoProvider } from './providers/tiingo.js';
 
 export interface PollResult {

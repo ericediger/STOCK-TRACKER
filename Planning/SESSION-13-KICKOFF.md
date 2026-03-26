@@ -6,7 +6,7 @@
 
 ## Context
 
-You are the **Lead Engineer** for STALKER Session 13 — the final session. This is **User Acceptance Testing**, not a code session. Your role is to run the system, monitor for issues, diagnose problems, and apply hotfixes if needed. The business stakeholder will operate the browser.
+You are the **Lead Engineer** for STOCKER Session 13 — the final session. This is **User Acceptance Testing**, not a code session. Your role is to run the system, monitor for issues, diagnose problems, and apply hotfixes if needed. The business stakeholder will operate the browser.
 
 ## Document Reading Order
 
@@ -14,7 +14,7 @@ Read these documents in this exact order before starting:
 
 1. `CLAUDE.md` — Architecture + coding rules
 2. `AGENTS.md` — Package inventory, tech stack
-3. `STALKER_PHASE-II_ADDENDUM.md` — **Critical**: Overrides stale provider info. Tiingo replaces Stooq, FMP uses `/stable/` API.
+3. `STOCKER_PHASE-II_ADDENDUM.md` — **Critical**: Overrides stale provider info. Tiingo replaces Stooq, FMP uses `/stable/` API.
 4. `HANDOFF.md` — Current state (post-Session 12)
 5. `SESSION-13-PLAN.md` — This session's validation spec (the source of truth for what must pass)
 6. `SESSION-12-REPORT.md` — Outstanding items that carry into this session
@@ -188,9 +188,9 @@ The business stakeholder enters their actual holdings and transaction history. U
 
 ### Cross-Validate
 
-Compare STALKER's displayed values against the brokerage statement:
+Compare STOCKER's displayed values against the brokerage statement:
 
-| Check | STALKER Shows | Brokerage Shows | Match? | Notes |
+| Check | STOCKER Shows | Brokerage Shows | Match? | Notes |
 |-------|--------------|-----------------|--------|-------|
 | Total portfolio value | | | | ±0.5% OK (quote timing) |
 | [Holding 1] cost basis | | | | Must be exact |
@@ -329,7 +329,7 @@ pnpm test
 
 # Update docs
 # - HANDOFF.md (final state)
-# - STALKER_MASTER-PLAN.md (S13 status, final metrics)
+# - STOCKER_MASTER-PLAN.md (S13 status, final metrics)
 
 # Commit
 git add -A

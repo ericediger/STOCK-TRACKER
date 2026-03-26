@@ -1,4 +1,4 @@
-import { isMarketOpen } from '@stalker/market-data';
+import { isMarketOpen } from '@stocker/market-data';
 
 /**
  * Thin wrapper around market-data package for use in API routes.

@@ -10,7 +10,7 @@
 
 ## Session Overview
 
-Session 12 closed the last integration gap in STALKER by wiring the three remaining API stubs to live market data providers. The session used a Lead + 2 Parallel Teammates pattern: the lead completed Phase 0 (API wiring + live verification with real API calls), then launched a hardening-engineer and pipeline-soak-engineer in parallel. The session added 72 new tests (526 → 598), eliminated all API stubs, and verified the full data pipeline end-to-end with live provider calls.
+Session 12 closed the last integration gap in STOCKER by wiring the three remaining API stubs to live market data providers. The session used a Lead + 2 Parallel Teammates pattern: the lead completed Phase 0 (API wiring + live verification with real API calls), then launched a hardening-engineer and pipeline-soak-engineer in parallel. The session added 72 new tests (526 → 598), eliminated all API stubs, and verified the full data pipeline end-to-end with live provider calls.
 
 **This is the last engineering session before UAT.** After this session, the system can:
 1. Search for real ticker symbols via FMP
@@ -121,7 +121,7 @@ Session 12 closed the last integration gap in STALKER by wiring the three remain
 | `CLAUDE.md` | Search/refresh marked implemented |
 | `AGENTS.md` | Test count 598+ |
 | `KNOWN-LIMITATIONS.md` | Updated with resolved and new limitations |
-| `STALKER_MASTER-PLAN.md` | Updated to v4.0 |
+| `STOCKER_MASTER-PLAN.md` | Updated to v4.0 |
 
 ---
 
@@ -167,7 +167,7 @@ Session 12 closed the last integration gap in STALKER by wiring the three remain
 ## Next Steps (Session 13 — UAT)
 
 1. **Real portfolio data entry**: Add user's actual holdings via the UI
-2. **Cross-validation**: Compare STALKER portfolio values against brokerage statements
+2. **Cross-validation**: Compare STOCKER portfolio values against brokerage statements
 3. **Full browser walkthrough**: Search → Add instrument → Backfill → Add transaction → Dashboard → Advisor
 4. **Scheduler poll cycle**: Verify quotes update during market hours with real instruments
 5. **Budget monitoring**: Track total API calls consumed during UAT

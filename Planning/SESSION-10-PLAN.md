@@ -1,6 +1,6 @@
 # SESSION-10-PLAN.md — Hardening + Bulk Paste + CI
 
-**Project:** STALKER (Stock & Portfolio Tracker + LLM Advisor)
+**Project:** STOCKER (Stock & Portfolio Tracker + LLM Advisor)
 **Session:** 10 (Post-MVP Hardening)
 **Date:** 2026-02-24
 **Author:** Systems Architect
@@ -114,7 +114,7 @@ Add comments to locations where future contributors might "fix" intentional choi
 
 **Fix:** Add a block comment in `packages/advisor/src/anthropic-adapter.ts` at the point where tool results are translated, explaining:
 - What the Anthropic API expects for tool_result messages
-- What the internal STALKER message format looks like
+- What the internal STOCKER message format looks like
 - The specific transformation being applied
 - Why this workaround exists (API format mismatch)
 
@@ -437,7 +437,7 @@ jobs:
 | `AGENTS.md` | Update test count, file count, endpoint count (19 → 20 endpoints) |
 | `HANDOFF.md` | Post-Session 10 state. All known data-integrity issues resolved. |
 | `KNOWN-LIMITATIONS.md` | Remove W-3, W-4, W-5, W-8. Document any new items. |
-| `Planning/STALKER_MASTER-PLAN.md` | Session 10 row in status tracker, risk register updates (close R-1, R-6 if benchmark passes), lessons learned |
+| `Planning/STOCKER_MASTER-PLAN.md` | Session 10 row in status tracker, risk register updates (close R-1, R-6 if benchmark passes), lessons learned |
 
 ### 4.3 Architecture Decisions
 

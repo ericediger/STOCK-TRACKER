@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { computeUnrealizedPnL, computeRealizedPnL, computeHoldingSummary } from '../src/pnl.js';
-import { toDecimal, ZERO } from '@stalker/shared';
-import type { Lot, RealizedTrade } from '@stalker/shared';
+import { toDecimal, ZERO } from '@stocker/shared';
+import type { Lot, RealizedTrade } from '@stocker/shared';
 
 function makeLot(overrides: {
   remainingQty: string;

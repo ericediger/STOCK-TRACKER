@@ -21,10 +21,10 @@ Before pre-flight, add the following to `CLAUDE.md` if not already present:
 
 ```
 Local repo path: ~/Desktop/_LOCAL APP DEVELOPMENT/STOCKER
-GitHub: https://github.com/ericediger/STALKER
+GitHub: https://github.com/ericediger/STOCKER
 ```
 
-The codename and GitHub repo are STALKER; the local working directory is STOCKER. This prevents teammate confusion if they see the directory name in terminal output.
+The codename and GitHub repo are STOCKER; the local working directory is STOCKER. This prevents teammate confusion if they see the directory name in terminal output.
 
 ---
 
@@ -60,7 +60,7 @@ If any pre-flight fails, fix it before proceeding.
 
 ```
 You are analytics-completion, a senior backend engineer completing the analytics 
-engine for the STALKER portfolio tracker.
+engine for the STOCKER portfolio tracker.
 ```
 
 ### Scope
@@ -183,7 +183,7 @@ Fix them before launching Teammate 2. The fixture tests must be built against co
 
 ```
 You are validation-engineer, a senior QA engineer building the reference portfolio 
-and validation test suite for the STALKER portfolio tracker.
+and validation test suite for the STOCKER portfolio tracker.
 ```
 
 ### Scope

@@ -2,9 +2,9 @@ import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
 import { PrismaClient } from '@prisma/client';
 import { PrismaSnapshotStore } from '../../../src/lib/prisma-snapshot-store';
 import { PrismaPriceLookup } from '../../../src/lib/prisma-price-lookup';
-import { buildPortfolioValueSeries, processTransactions, computeUnrealizedPnL } from '@stalker/analytics';
-import { getNextTradingDay, isTradingDay } from '@stalker/market-data';
-import { toDecimal, ZERO } from '@stalker/shared';
+import { buildPortfolioValueSeries, processTransactions, computeUnrealizedPnL } from '@stocker/analytics';
+import { getNextTradingDay, isTradingDay } from '@stocker/market-data';
+import { toDecimal, ZERO } from '@stocker/shared';
 import path from 'node:path';
 
 const DB_PATH = path.resolve(import.meta.dirname, '..', '..', '..', 'data', 'portfolio.db');

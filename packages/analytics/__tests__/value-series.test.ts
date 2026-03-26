@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { buildPortfolioValueSeries } from '../src/value-series.js';
 import { MockPriceLookup, MockSnapshotStore } from '../src/mocks.js';
-import { toDecimal, generateUlid, ZERO } from '@stalker/shared';
-import type { Transaction, TransactionType, Instrument, InstrumentType } from '@stalker/shared';
+import { toDecimal, generateUlid, ZERO } from '@stocker/shared';
+import type { Transaction, TransactionType, Instrument, InstrumentType } from '@stocker/shared';
 import type { HoldingSnapshotEntry } from '../src/interfaces.js';
 import type { CalendarFns } from '../src/value-series.js';
 

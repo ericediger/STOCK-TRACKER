@@ -1,4 +1,4 @@
-# STALKER — Stock & Portfolio Tracker + LLM Advisor
+# STOCKER — Stock & Portfolio Tracker + LLM Advisor
 
 A local-first, event-sourced portfolio tracker built for a single user on macOS. No auth, no cloud, no multi-tenancy.
 
@@ -50,7 +50,7 @@ pnpm tsc --noEmit         # TypeScript type check (also available as `pnpm lint`
 | [HANDOFF.md](HANDOFF.md) | Current state, what exists, what's next |
 | [CLAUDE.md](CLAUDE.md) | Architecture, coding rules, API catalog, component inventory |
 | [AGENTS.md](AGENTS.md) | Tech stack, design decisions, environment setup |
-| [STALKER_MASTER-PLAN.md](STALKER_MASTER-PLAN.md) | Roadmap, epics, session history |
+| [STOCKER_MASTER-PLAN.md](STOCKER_MASTER-PLAN.md) | Roadmap, epics, session history |
 
 ## Environment
 

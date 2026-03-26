@@ -11,7 +11,7 @@ Read `SESSION-8-PLAN.md` first for full context, watchpoints, and exit criteria.
 Paste this to begin Phase 0.
 
 ```
-You are the lead engineer on STALKER, a local-first portfolio tracker (Next.js + SQLite + Prisma). Session 8 begins with hardening fixes from a SWAT code review before building the LLM advisor.
+You are the lead engineer on STOCKER, a local-first portfolio tracker (Next.js + SQLite + Prisma). Session 8 begins with hardening fixes from a SWAT code review before building the LLM advisor.
 
 Read these files first:
 - SESSION-8-PLAN.md (full session plan — especially Section 2 and Watchpoints W-1 through W-4)
@@ -79,12 +79,12 @@ Commit message: `Session 8 Phase 0: Code review hardening (H-1 through H-5)`
 Paste this after Phase 0 is complete and committed.
 
 ```
-You are advisor-backend, a teammate engineer on STALKER. Your job is to build the complete LLM advisor backend: adapter, tools, execution loop, system prompt, API routes, and example conversations.
+You are advisor-backend, a teammate engineer on STOCKER. Your job is to build the complete LLM advisor backend: adapter, tools, execution loop, system prompt, API routes, and example conversations.
 
 Read these files first:
 - SESSION-8-PLAN.md (Section 3 — your full deliverable spec, Watchpoints W-5 through W-11)
 - SPEC_v4.md §7.1–7.5 (Advisor spec), §8.5 (API endpoints), §11.3 (Error handling)
-- STALKER-ux-ui-plan.md §10 (System prompt UX guidance)
+- STOCKER-ux-ui-plan.md §10 (System prompt UX guidance)
 - CLAUDE.md, AGENTS.md, HANDOFF.md (project conventions)
 
 ## Current State
@@ -229,11 +229,11 @@ curl -s -X POST http://localhost:3000/api/advisor/chat \
 Paste this after Phase 2 verification is complete.
 
 ```
-You are advisor-frontend, a teammate engineer on STALKER. Your job is to build the advisor chat panel UI — the slide-out panel, message rendering, thread management, suggested prompts, and all empty/error states.
+You are advisor-frontend, a teammate engineer on STOCKER. Your job is to build the advisor chat panel UI — the slide-out panel, message rendering, thread management, suggested prompts, and all empty/error states.
 
 Read these files first:
 - SESSION-8-PLAN.md (Section 5 — your full deliverable spec, Watchpoint W-12)
-- STALKER-ux-ui-plan.md §3.6 (Advisor Chat panel specs), §10 (Prompt UX guidance)
+- STOCKER-ux-ui-plan.md §3.6 (Advisor Chat panel specs), §10 (Prompt UX guidance)
 - SPEC_v4.md §9.5 (Advisor Chat page spec), §9.6 (Empty states)
 - CLAUDE.md, AGENTS.md, HANDOFF.md (project conventions)
 
@@ -380,7 +380,7 @@ Commit message: `Session 8: Advisor frontend — chat panel, thread management, 
 Paste this after all phases are committed.
 
 ```
-You are the lead engineer on STALKER. Session 8 phases 0–3 are complete. Perform final integration and documentation.
+You are the lead engineer on STOCKER. Session 8 phases 0–3 are complete. Perform final integration and documentation.
 
 ## Integration Checklist
 

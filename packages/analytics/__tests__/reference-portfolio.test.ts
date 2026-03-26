@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll } from 'vitest';
-import { toDecimal, ZERO, add } from '@stalker/shared';
-import type { Transaction, Instrument, TransactionType, InstrumentType } from '@stalker/shared';
+import { toDecimal, ZERO, add } from '@stocker/shared';
+import type { Transaction, Instrument, TransactionType, InstrumentType } from '@stocker/shared';
 import {
   processTransactions,
   computeRealizedPnL,

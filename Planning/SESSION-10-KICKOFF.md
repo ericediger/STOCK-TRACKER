@@ -6,7 +6,7 @@
 
 ## Context
 
-You are the engineering lead for STALKER, a local-first stock portfolio tracker. The MVP shipped in Session 9 (469 tests, 21/21 acceptance criteria, 749/749 PnL cross-validation checks). This session closes data-integrity gaps, delivers bulk transaction paste (the spec's "Next" priority feature), and adds CI.
+You are the engineering lead for STOCKER, a local-first stock portfolio tracker. The MVP shipped in Session 9 (469 tests, 21/21 acceptance criteria, 749/749 PnL cross-validation checks). This session closes data-integrity gaps, delivers bulk transaction paste (the spec's "Next" priority feature), and adds CI.
 
 **Read these files first, in order:**
 1. `CLAUDE.md` — architecture rules, coding conventions, what NOT to do
@@ -75,7 +75,7 @@ Add protective comments:
 
 In `packages/advisor/src/anthropic-adapter.ts`, find where tool_result messages are translated for the Anthropic API. Add a block comment explaining:
 - What format Anthropic expects
-- What STALKER's internal format looks like
+- What STOCKER's internal format looks like
 - The transformation being applied
 - Why this workaround exists
 
@@ -102,7 +102,7 @@ After Phase 0 passes, spawn two teammates in parallel.
 
 **Launch prompt:**
 
-> You are `bulk-paste-engineer` working on STALKER, a portfolio tracking app. Your task is to build the bulk transaction paste feature — both the API endpoint and the UI components.
+> You are `bulk-paste-engineer` working on STOCKER, a portfolio tracking app. Your task is to build the bulk transaction paste feature — both the API endpoint and the UI components.
 >
 > **Read first:** `CLAUDE.md`, `AGENTS.md`, `Planning/SESSION-10-PLAN.md` (Section 3, Teammate 1).
 >
@@ -145,7 +145,7 @@ After Phase 0 passes, spawn two teammates in parallel.
 
 **Launch prompt:**
 
-> You are `ci-hardening-engineer` working on STALKER, a portfolio tracking app. Your task is to integrate the cross-validation script into CI, set up GitHub Actions, build a performance benchmark, and add `prefers-reduced-motion` support.
+> You are `ci-hardening-engineer` working on STOCKER, a portfolio tracking app. Your task is to integrate the cross-validation script into CI, set up GitHub Actions, build a performance benchmark, and add `prefers-reduced-motion` support.
 >
 > **Read first:** `CLAUDE.md`, `AGENTS.md`, `Planning/SESSION-10-PLAN.md` (Section 3, Teammate 2).
 >
@@ -228,7 +228,7 @@ Log the result. If > 1000ms, document as a known risk (not blocking).
 - `AGENTS.md`: Updated counts (tests, endpoints, files)
 - `HANDOFF.md`: Post-Session 10 state
 - `KNOWN-LIMITATIONS.md`: Remove W-3, W-4, W-5, W-8. Add any new items.
-- `Planning/STALKER_MASTER-PLAN.md`: Session 10 row
+- `Planning/STOCKER_MASTER-PLAN.md`: Session 10 row
 
 ### Step 6: Write Session Report
 Create `SESSION-10-REPORT.md` with:

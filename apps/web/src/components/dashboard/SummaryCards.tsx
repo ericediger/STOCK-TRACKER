@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/Card";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { ValueChange } from "@/components/ui/ValueChange";
 import { formatCurrency } from "@/lib/format";
-import { toDecimal, add } from "@stalker/shared";
+import { toDecimal, add } from "@stocker/shared";
 import type { PortfolioSnapshot } from "@/lib/hooks/usePortfolioSnapshot";
 
 interface SummaryCardsProps {

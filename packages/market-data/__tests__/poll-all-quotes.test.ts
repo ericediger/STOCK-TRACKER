@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { MarketDataService } from '../src/service.js';
 import type { MarketDataProvider, Quote, Instrument, InstrumentType } from '../src/types.js';
-import { toDecimal } from '@stalker/shared';
+import { toDecimal } from '@stocker/shared';
 
 function makeInstrument(symbol: string, overrides?: Partial<Instrument>): Instrument {
   return {

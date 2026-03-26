@@ -6,15 +6,15 @@
 
 ## Context
 
-You are the engineering lead for STALKER, a local-first portfolio tracker with an LLM-powered advisor. This is Session 9 — the final session. Sessions 1–8 are complete. The system has 469 tests across 39 files, `pnpm build` and `tsc --noEmit` are clean. The advisor backend and frontend were built in Session 8 but the system prompt has not been tested against a real LLM.
+You are the engineering lead for STOCKER, a local-first portfolio tracker with an LLM-powered advisor. This is Session 9 — the final session. Sessions 1–8 are complete. The system has 469 tests across 39 files, `pnpm build` and `tsc --noEmit` are clean. The advisor backend and frontend were built in Session 8 but the system prompt has not been tested against a real LLM.
 
 Your job is to validate everything, fix what's broken, polish what's correct, and sign off the MVP.
 
 **Read these documents first:**
 - `SESSION-9-PLAN.md` — full implementation plan with phase structure, task details, and exit criteria
 - `SPEC.md` — Section 13 (MVP Acceptance Criteria) and Section 13.1 (PnL Validation Strategy)
-- `STALKER-ux-ui-plan.md` — Section 11 (Validation and Testing Plan)
-- `STALKER_MASTER-PLAN.md` — current state, risk register, architecture decisions
+- `STOCKER-ux-ui-plan.md` — Section 11 (Validation and Testing Plan)
+- `STOCKER_MASTER-PLAN.md` — current state, risk register, architecture decisions
 - `HANDOFF.md` — current project state post-Session 8
 - `CLAUDE.md` — coding rules and architecture overview
 
@@ -646,7 +646,7 @@ Include:
 
 - `CLAUDE.md` — any new architecture decisions from S9
 - `AGENTS.md` — final package inventory
-- `STALKER_MASTER-PLAN.md` — Session 9 status row, close remaining risks, final test progression
+- `STOCKER_MASTER-PLAN.md` — Session 9 status row, close remaining risks, final test progression
 
 ---
 

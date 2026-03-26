@@ -8,7 +8,7 @@
 
 ## Context
 
-You are working on STALKER, a local-first portfolio tracker. This is Session 11 — the first time the application contacts real market data APIs. Sessions 1–10 built and tested everything against mocked HTTP responses. All 506+ tests pass against those mocks.
+You are working on STOCKER, a local-first portfolio tracker. This is Session 11 — the first time the application contacts real market data APIs. Sessions 1–10 built and tested everything against mocked HTTP responses. All 506+ tests pass against those mocks.
 
 **Phase 0 revealed that the mocks are wrong.** Specifically:
 1. FMP's entire `/api/v3/` API namespace is **dead** — discontinued for new accounts after Aug 2025. Every FMP URL in the codebase returns an error.

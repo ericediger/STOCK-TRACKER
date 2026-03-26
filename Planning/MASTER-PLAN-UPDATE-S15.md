@@ -1,6 +1,6 @@
 # MASTER-PLAN-UPDATE-S15.md — Changes to Apply
 
-When updating STALKER_MASTER-PLAN.md to v5.0, apply these changes:
+When updating STOCKER_MASTER-PLAN.md to v5.0, apply these changes:
 
 ## Session Status Tracker — Add Row
 

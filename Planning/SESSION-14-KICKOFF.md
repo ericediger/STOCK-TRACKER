@@ -6,11 +6,11 @@
 
 ## Context
 
-You are starting Session 14 of the STALKER project (Stock & Portfolio Tracker + LLM Advisor). Read these documents in order:
+You are starting Session 14 of the STOCKER project (Stock & Portfolio Tracker + LLM Advisor). Read these documents in order:
 
 1. `CLAUDE.md` — Architecture overview + coding rules
 2. `AGENTS.md` — Package inventory + coordination patterns
-3. `STALKER_PHASE-II_ADDENDUM.md` — Provider overrides (binding)
+3. `STOCKER_PHASE-II_ADDENDUM.md` — Provider overrides (binding)
 4. `SESSION-13-REPORT.md` — Previous session report (what changed, what's outstanding)
 5. `SESSION-14-PLAN.md` — This session's full plan
 

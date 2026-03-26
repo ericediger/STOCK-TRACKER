@@ -1,16 +1,16 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import type { Instrument, Quote } from '@stalker/shared';
-import { Decimal } from '@stalker/shared';
-import type { PollResult } from '@stalker/market-data';
+import type { Instrument, Quote } from '@stocker/shared';
+import { Decimal } from '@stocker/shared';
+import type { PollResult } from '@stocker/market-data';
 import { Poller } from '../src/poller.js';
 import type { MarketDataServiceLike, InstrumentFetcher } from '../src/poller.js';
 
-// Mock isMarketOpen from @stalker/market-data
-vi.mock('@stalker/market-data', () => ({
+// Mock isMarketOpen from @stocker/market-data
+vi.mock('@stocker/market-data', () => ({
   isMarketOpen: vi.fn(),
 }));
 
-import { isMarketOpen } from '@stalker/market-data';
+import { isMarketOpen } from '@stocker/market-data';
 const mockIsMarketOpen = vi.mocked(isMarketOpen);
 
 function createMockInstrument(symbol: string, exchange: string = 'NYSE'): Instrument {

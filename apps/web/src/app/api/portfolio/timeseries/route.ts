@@ -2,8 +2,8 @@ import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { apiError } from '@/lib/errors';
 import { PrismaSnapshotStore } from '@/lib/prisma-snapshot-store';
-import { toDecimal, ZERO, add, sub, mul } from '@stalker/shared';
-import type { HoldingSnapshot } from '@stalker/shared';
+import { toDecimal, ZERO, add, sub, mul } from '@stocker/shared';
+import type { HoldingSnapshot } from '@stocker/shared';
 
 function toDateStr(d: Date): string {
   const year = d.getUTCFullYear();

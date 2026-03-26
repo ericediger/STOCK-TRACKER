@@ -2,11 +2,11 @@ import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { apiError } from '@/lib/errors';
 import { PrismaSnapshotStore } from '@/lib/prisma-snapshot-store';
-import { processTransactions, computeRealizedPnL } from '@stalker/analytics';
-import type { HoldingSnapshotEntry } from '@stalker/analytics';
-import { getPriorTradingDay } from '@stalker/market-data';
-import { toDecimal, ZERO, add, sub, div, isZero } from '@stalker/shared';
-import type { Instrument, Transaction, InstrumentType, TransactionType, PortfolioValueSnapshot } from '@stalker/shared';
+import { processTransactions, computeRealizedPnL } from '@stocker/analytics';
+import type { HoldingSnapshotEntry } from '@stocker/analytics';
+import { getPriorTradingDay } from '@stocker/market-data';
+import { toDecimal, ZERO, add, sub, div, isZero } from '@stocker/shared';
+import type { Instrument, Transaction, InstrumentType, TransactionType, PortfolioValueSnapshot } from '@stocker/shared';
 
 const VALID_WINDOWS = ['1D', '1W', '1M', '3M', '1Y', 'ALL'] as const;
 type WindowParam = (typeof VALID_WINDOWS)[number];

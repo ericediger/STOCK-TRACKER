@@ -1,5 +1,5 @@
-import type { Decimal } from '@stalker/shared';
-import type { HoldingSnapshot, PortfolioValueSnapshot } from '@stalker/shared';
+import type { Decimal } from '@stocker/shared';
+import type { HoldingSnapshot, PortfolioValueSnapshot } from '@stocker/shared';
 
 /**
  * Extended holding snapshot that tracks price estimation state.

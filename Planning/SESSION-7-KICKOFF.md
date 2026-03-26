@@ -6,15 +6,15 @@
 
 ## Context
 
-You are the lead engineer for Session 7 of STALKER (Stock & Portfolio Tracker + LLM Advisor). Sessions 1–6 are complete: 363 tests passing, full API layer, dashboard + holdings pages live, TradingView v5 area chart working, enriched seed data (28 instruments, 30 transactions, 8300+ price bars, 3 stale quotes).
+You are the lead engineer for Session 7 of STOCKER (Stock & Portfolio Tracker + LLM Advisor). Sessions 1–6 are complete: 363 tests passing, full API layer, dashboard + holdings pages live, TradingView v5 area chart working, enriched seed data (28 instruments, 30 transactions, 8300+ price bars, 3 stale quotes).
 
 Session 7 builds the remaining core UI pages: holding detail, transactions, and charts. After this session, every page except the advisor chat is functional.
 
 **Read these before starting:**
 - `SESSION-7-PLAN.md` — Full specification, exit criteria, risk items
-- `STALKER_MASTER-PLAN.md` — Architecture decisions AD-S1 through AD-S7
+- `STOCKER_MASTER-PLAN.md` — Architecture decisions AD-S1 through AD-S7
 - `SPEC_v4.md` — Sections 5.2 (lots), 8.2 (transactions API), 9.2 (holding detail), 9.3 (transactions page)
-- `STALKER-ux-ui-plan.md` — Sections 3.3 (holding detail), 3.4 (transactions), 3.5 (charts), 4.3 (numeric formatting)
+- `STOCKER-ux-ui-plan.md` — Sections 3.3 (holding detail), 3.4 (transactions), 3.5 (charts), 4.3 (numeric formatting)
 
 ---
 
@@ -74,12 +74,12 @@ Record the file path. The detail-engineer needs it to extract the shared `useCha
 ## Teammate 1 Prompt: `detail-engineer`
 
 ```
-You are `detail-engineer` on Session 7 of STALKER. Your scope: holding detail page, charts page, and shared chart hook.
+You are `detail-engineer` on Session 7 of STOCKER. Your scope: holding detail page, charts page, and shared chart hook.
 
 READ FIRST:
 - SESSION-7-PLAN.md (Sections 4, 5 — your full spec)
-- STALKER-ux-ui-plan.md Section 3.3 (holding detail layout)
-- STALKER-ux-ui-plan.md Section 6 (chart configuration)
+- STOCKER-ux-ui-plan.md Section 3.3 (holding detail layout)
+- STOCKER-ux-ui-plan.md Section 6 (chart configuration)
 
 PHASE 1 — Build these first, before any page component:
 
@@ -174,13 +174,13 @@ RULES:
 ## Teammate 2 Prompt: `transactions-engineer`
 
 ```
-You are `transactions-engineer` on Session 7 of STALKER. Your scope: transactions page, add/edit/delete forms, sell validation error UX, and add instrument modal.
+You are `transactions-engineer` on Session 7 of STOCKER. Your scope: transactions page, add/edit/delete forms, sell validation error UX, and add instrument modal.
 
 READ FIRST:
 - SESSION-7-PLAN.md (Sections 4, 5 — your full spec)
-- STALKER-ux-ui-plan.md Section 3.4 (transactions layout)
-- STALKER-ux-ui-plan.md Section 5.1 (add instrument flow)
-- STALKER-ux-ui-plan.md Section 5.2 (transaction CRUD)
+- STOCKER-ux-ui-plan.md Section 3.4 (transactions layout)
+- STOCKER-ux-ui-plan.md Section 5.1 (add instrument flow)
+- STOCKER-ux-ui-plan.md Section 5.2 (transaction CRUD)
 
 PHASE 1 — Build these first, before any page component:
 

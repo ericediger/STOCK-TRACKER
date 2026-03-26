@@ -79,7 +79,7 @@ Logged only when `process.env.NODE_ENV === 'development'` and `result.usage?.inp
 
 | Document | Action |
 |----------|--------|
-| `STALKER_MASTER-PLAN.md` | Rewritten to v5.0. S12–S20 complete. All epics marked done. 36 architecture decisions documented. 17 lessons learned. All risks closed or accepted. Final metrics. |
+| `STOCKER_MASTER-PLAN.md` | Rewritten to v5.0. S12–S20 complete. All epics marked done. 36 architecture decisions documented. 17 lessons learned. All risks closed or accepted. Final metrics. |
 | `HANDOFF.md` | Updated to post-S20. 720 tests, project complete status. S20 changes documented. |
 | `CLAUDE.md` | Updated header date. Added AD-S20-1/2/3. Updated chat route internals description. |
 | `AGENTS.md` | Updated header date. Test count 718→720. Advisor package description enhanced. |
@@ -131,7 +131,7 @@ Logged only when `process.env.NODE_ENV === 'development'` and `result.usage?.inp
 
 - [x] EC-6: Single message conversion pipeline (no dual converters)
 - [x] EC-7: Token calibration log emits in development mode
-- [x] EC-8: STALKER_MASTER-PLAN.md updated to v5.0
+- [x] EC-8: STOCKER_MASTER-PLAN.md updated to v5.0
 - [x] EC-9: HANDOFF.md reflects post-S20 state
 - [x] EC-10: CLAUDE.md includes S20 section
 - [x] EC-11: AGENTS.md test count and package descriptions current
@@ -166,7 +166,7 @@ Logged only when `process.env.NODE_ENV === 'development'` and `result.usage?.inp
 
 ## Project Completion Statement
 
-STALKER is **complete**. The system tracks a real 83-instrument portfolio with correct FIFO lot accounting, Decimal-precise PnL computation, and an LLM advisor with context window management. Every planned feature has been delivered. Every known bug has been fixed. Every document reflects the true state of the system.
+STOCKER is **complete**. The system tracks a real 83-instrument portfolio with correct FIFO lot accounting, Decimal-precise PnL computation, and an LLM advisor with context window management. Every planned feature has been delivered. Every known bug has been fixed. Every document reflects the true state of the system.
 
 The arc from Session 1 (monorepo scaffolding + FIFO engine) to Session 20 (documentation close-out + last bug fix) spans 20 sessions with zero scope cuts, 71→720 tests (10× growth), and 0→22 API endpoints all implemented.
 

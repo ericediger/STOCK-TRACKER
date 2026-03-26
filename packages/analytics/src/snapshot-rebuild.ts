@@ -1,4 +1,4 @@
-import type { Transaction, Instrument } from '@stalker/shared';
+import type { Transaction, Instrument } from '@stocker/shared';
 import type { PriceLookup, SnapshotStore } from './interfaces.js';
 import { buildPortfolioValueSeries } from './value-series.js';
 import type { CalendarFns } from './value-series.js';

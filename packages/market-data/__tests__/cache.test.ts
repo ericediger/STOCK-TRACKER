@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { toDecimal } from '@stalker/shared';
+import { toDecimal } from '@stocker/shared';
 import { upsertQuote, getLatestQuote, isQuoteFresh } from '../src/cache.js';
 import type { PrismaClientForCache, LatestQuoteRecord } from '../src/cache.js';
 

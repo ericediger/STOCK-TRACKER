@@ -9,7 +9,7 @@
 
 ## Session Overview
 
-Session 11 was the first time STALKER contacted real market data APIs. Phase 0 (manual smoke tests, performed before this session) revealed that FMP's entire `/api/v3/` endpoint namespace is dead for new accounts, FMP historical data is premium-only, and response shapes differ significantly from the mock fixtures built in Session 2. This session migrated FMP to the `/stable/` API, built a new Tiingo provider to replace Stooq for historical bars, rewired the provider chain, and updated all mock fixtures to match real API response shapes.
+Session 11 was the first time STOCKER contacted real market data APIs. Phase 0 (manual smoke tests, performed before this session) revealed that FMP's entire `/api/v3/` endpoint namespace is dead for new accounts, FMP historical data is premium-only, and response shapes differ significantly from the mock fixtures built in Session 2. This session migrated FMP to the `/stable/` API, built a new Tiingo provider to replace Stooq for historical bars, rewired the provider chain, and updated all mock fixtures to match real API response shapes.
 
 ---
 

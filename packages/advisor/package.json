@@ -1,5 +1,5 @@
 {
-  "name": "@stalker/advisor",
+  "name": "@stocker/advisor",
   "version": "0.1.0",
   "private": true,
   "main": "./src/index.ts",
@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.78.0",
-    "@stalker/shared": "workspace:*"
+    "@stocker/shared": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.7.3"

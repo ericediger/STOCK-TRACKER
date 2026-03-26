@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { checkBudget } from '../src/budget.js';
-import type { ProviderLimits } from '@stalker/shared';
+import type { ProviderLimits } from '@stocker/shared';
 
 const FMP_LIMITS: ProviderLimits = {
   requestsPerMinute: 5,

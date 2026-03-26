@@ -64,7 +64,7 @@ apps/web/src/lib/cn.ts               — className merge utility (clsx + twMerge
 **Deliverables:**
 
 #### D1: Tailwind Config — Full Token System
-Extend `tailwind.config.ts` with the STALKER design token system adapted from the Bookworm style guide:
+Extend `tailwind.config.ts` with the STOCKER design token system adapted from the Bookworm style guide:
 
 **Colors (dark theme):**
 | Token | Role | Value (approximate) |

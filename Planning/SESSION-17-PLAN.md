@@ -14,7 +14,7 @@ Session 16 consolidated the navigation from 5 tabs to 3 and transformed the dash
 
 Session 17 closes this gap, completes any S16 scope cuts, tunes the advisor for 83-instrument scale, and reserves capacity for visual UAT findings. This is the final engineering session before the system enters sustained production use.
 
-**Session 17 = last coding session. After this, STALKER is production-ready.**
+**Session 17 = last coding session. After this, STOCKER is production-ready.**
 
 ---
 
@@ -394,7 +394,7 @@ Update `HANDOFF.md` to reflect production-ready state.
 
 ## 18. Post-S17 State (Expected)
 
-After S17, STALKER should be:
+After S17, STOCKER should be:
 
 - **Functionally complete:** All CRUD flows accessible from the UI. No orphaned capabilities.
 - **Operationally stable:** Quote pipeline running at 83-instrument scale, advisor tuned for large portfolios.

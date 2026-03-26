@@ -1,8 +1,8 @@
 {
-  "name": "stalker",
+  "name": "stocker",
   "private": true,
   "scripts": {
-    "dev": "concurrently -n web,sched -c blue,green \"pnpm --filter web dev\" \"pnpm --filter @stalker/scheduler start\"",
+    "dev": "concurrently -n web,sched -c blue,green \"pnpm --filter web dev\" \"pnpm --filter @stocker/scheduler start\"",
     "build": "pnpm --filter web build",
     "test": "vitest",
     "lint": "tsc --noEmit",

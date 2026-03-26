@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { MockPriceLookup } from '../src/mocks.js';
-import { toDecimal } from '@stalker/shared';
+import { toDecimal } from '@stocker/shared';
 
 describe('MockPriceLookup', () => {
   const bars = {

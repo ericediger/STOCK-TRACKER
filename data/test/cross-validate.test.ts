@@ -21,21 +21,21 @@ import {
   sub,
   mul,
   ZERO,
-} from '@stalker/shared';
+} from '@stocker/shared';
 import type {
   Transaction,
   Instrument,
   TransactionType,
   InstrumentType,
-} from '@stalker/shared';
+} from '@stocker/shared';
 import {
   processTransactions,
   computeRealizedPnL,
   buildPortfolioValueSeries,
   MockPriceLookup,
   MockSnapshotStore,
-} from '@stalker/analytics';
-import type { HoldingSnapshotEntry, CalendarFns } from '@stalker/analytics';
+} from '@stocker/analytics';
+import type { HoldingSnapshotEntry, CalendarFns } from '@stocker/analytics';
 
 // ---------------------------------------------------------------------------
 // Load fixture files

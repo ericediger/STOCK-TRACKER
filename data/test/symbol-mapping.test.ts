@@ -6,8 +6,8 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { getProviderSymbol } from '@stalker/market-data';
-import type { Instrument, InstrumentType } from '@stalker/shared';
+import { getProviderSymbol } from '@stocker/market-data';
+import type { Instrument, InstrumentType } from '@stocker/shared';
 
 // ---------------------------------------------------------------------------
 // Helpers

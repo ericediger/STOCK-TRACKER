@@ -17,7 +17,7 @@ vi.mock('@/lib/prisma', () => ({
   },
 }));
 
-vi.mock('@stalker/market-data', () => ({
+vi.mock('@stocker/market-data', () => ({
   isMarketOpen: vi.fn().mockReturnValue(false),
 }));
 
@@ -91,7 +91,7 @@ describe('GET /api/market/status', () => {
       },
     }));
 
-    vi.doMock('@stalker/market-data', () => ({
+    vi.doMock('@stocker/market-data', () => ({
       isMarketOpen: vi.fn().mockReturnValue(false),
     }));
 

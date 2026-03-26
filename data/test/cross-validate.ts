@@ -1,16 +1,16 @@
 /**
- * Cross-Validation Script for STALKER Reference Portfolio
+ * Cross-Validation Script for STOCKER Reference Portfolio
  *
  * A standalone script that independently recomputes portfolio values, FIFO lot
  * states, and realized PnL from the reference-portfolio.json fixtures, then
  * compares every value against expected-outputs.json.
  *
  * THREE independent validation paths:
- *   Part A: Uses @stalker/analytics engine (processTransactions, buildPortfolioValueSeries)
+ *   Part A: Uses @stocker/analytics engine (processTransactions, buildPortfolioValueSeries)
  *   Part B: Fully independent FIFO + valuation from scratch (no analytics engine)
  *   Part C: Cross-checks engine vs independent for consistency
  *
- * All financial math uses Decimal.js via @stalker/shared. No Number() on money.
+ * All financial math uses Decimal.js via @stocker/shared. No Number() on money.
  *
  * Usage:
  *   npx tsx data/test/cross-validate.ts
@@ -25,21 +25,21 @@ import {
   sub,
   mul,
   ZERO,
-} from '@stalker/shared';
+} from '@stocker/shared';
 import type {
   Transaction,
   Instrument,
   TransactionType,
   InstrumentType,
-} from '@stalker/shared';
+} from '@stocker/shared';
 import {
   processTransactions,
   computeRealizedPnL,
   buildPortfolioValueSeries,
   MockPriceLookup,
   MockSnapshotStore,
-} from '@stalker/analytics';
-import type { HoldingSnapshotEntry, CalendarFns } from '@stalker/analytics';
+} from '@stocker/analytics';
+import type { HoldingSnapshotEntry, CalendarFns } from '@stocker/analytics';
 
 // ---------------------------------------------------------------------------
 // Load fixture files
@@ -309,14 +309,14 @@ function section(title: string): void {
 // ---------------------------------------------------------------------------
 
 async function main(): Promise<void> {
-  console.log('STALKER Reference Portfolio Cross-Validation');
+  console.log('STOCKER Reference Portfolio Cross-Validation');
   console.log(`Date: ${new Date().toISOString().split('T')[0]}`);
   console.log(`Fixtures: ${fixtureDir}`);
   console.log(`Instruments: ${instruments.length}, Transactions: ${allTransactions.length}`);
   console.log(`Checkpoints: ${expectedOutputs.checkpoints.length}`);
 
   // =========================================================================
-  // Part A: Engine-based validation (using @stalker/analytics)
+  // Part A: Engine-based validation (using @stocker/analytics)
   // =========================================================================
   section('PART A: Analytics Engine Validation');
 

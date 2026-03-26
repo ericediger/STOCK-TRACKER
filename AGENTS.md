@@ -1,4 +1,4 @@
-# AGENTS.md — STALKER
+# AGENTS.md — STOCKER
 
 > **Purpose:** Operating schema for agentic work in this repo: roles, guardrails, coordination model, session contract, and quality gates. The "what." See CLAUDE.md for the architecture and coding rules.
 > **Owner:** Eric Ediger
@@ -11,7 +11,7 @@
 Sessions default to **solo** for most work. **Hybrid** comms policy and **plan approval enabled** apply when multi-agent sessions are warranted.
 
 **Mode selection rationale:**
-- **Solo** is the default. STALKER is a local-first, single-developer project. Most sessions are sequential with tightly coupled tasks.
+- **Solo** is the default. STOCKER is a local-first, single-developer project. Most sessions are sequential with tightly coupled tasks.
 - **Subagents** are used when a session has two or more clearly separable workstreams (e.g., backend API work vs. frontend component work) with no mid-task dependency on each other.
 - **Agent Teams** (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`) are reserved for sessions requiring genuine parallel execution with mid-task coordination. The 3–4× token cost must be justified explicitly in the Session Contract.
 
@@ -224,7 +224,7 @@ The lead verifies all teammate commits are present in `git log` before session s
 | `CLAUDE.md` | Architecture overview, coding rules, session history, agent protocols — read first every session |
 | `AGENTS.md` | This file — tech stack, design decisions, coordination model |
 | `HANDOFF.md` | Current project state — read at every session start, written at every session end |
-| `STALKER_MASTER-PLAN.md` | Roadmap, epics, strategic decisions — read during planning sessions |
+| `STOCKER_MASTER-PLAN.md` | Roadmap, epics, strategic decisions — read during planning sessions |
 | `SESSION-{N}-PLAN.md` | Implementation spec for session N — read only during that session |
 | `SESSION-{N}-KICKOFF.md` | Launch prompt for session N — used to start that session |
 | `KNOWN-LIMITATIONS.md` | Documented MVP gaps with impact and mitigation |

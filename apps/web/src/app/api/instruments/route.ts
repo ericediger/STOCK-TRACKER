@@ -7,8 +7,8 @@ import {
   generateUlid,
   EXCHANGE_TIMEZONE_MAP,
   DEFAULT_TIMEZONE,
-} from '@stalker/shared';
-import type { Instrument, InstrumentType } from '@stalker/shared';
+} from '@stocker/shared';
+import type { Instrument, InstrumentType } from '@stocker/shared';
 
 function serializeInstrument(instrument: {
   id: string;

@@ -1,5 +1,5 @@
-import { ZERO, add, sub, isNegative } from '@stalker/shared';
-import type { Transaction, ValidationResult } from '@stalker/shared';
+import { ZERO, add, sub, isNegative } from '@stocker/shared';
+import type { Transaction, ValidationResult } from '@stocker/shared';
 
 /**
  * Validate that at every point in the timeline, cumulative buys >= cumulative sells.

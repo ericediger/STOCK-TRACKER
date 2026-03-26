@@ -7,7 +7,7 @@ export type {
   PriceBar,
   Instrument,
   Resolution,
-} from '@stalker/shared';
+} from '@stocker/shared';
 
 // === Provider Error Classification ===
 export type ProviderErrorType =

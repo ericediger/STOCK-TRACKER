@@ -1,6 +1,6 @@
 # SESSION-1-PLAN: Project Scaffolding + Data Foundation + Analytics Core
 
-**Project:** STALKER (Stock & Portfolio Tracker + LLM Advisor)
+**Project:** STOCKER (Stock & Portfolio Tracker + LLM Advisor)
 **Session:** 1 of 9
 **Date:** 2026-02-21
 **Depends on:** Nothing (this is the first session)

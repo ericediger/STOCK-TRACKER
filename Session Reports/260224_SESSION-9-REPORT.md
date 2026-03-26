@@ -9,7 +9,7 @@
 
 ## Session Overview
 
-Session 9 was the final session of the STALKER project. Its sole objective was to verify every number is correct, every page works end-to-end, and the advisor produces useful responses against real data — then sign off the MVP. The session used a phased approach: a blocking lead gate (Phase 0) for live LLM verification, parallel teammates for validation and polish (Phases 1-2), and lead integration for final signoff (Phase 3).
+Session 9 was the final session of the STOCKER project. Its sole objective was to verify every number is correct, every page works end-to-end, and the advisor produces useful responses against real data — then sign off the MVP. The session used a phased approach: a blocking lead gate (Phase 0) for live LLM verification, parallel teammates for validation and polish (Phases 1-2), and lead integration for final signoff (Phase 3).
 
 All 10 exit criteria were met. The MVP is shipped.
 
@@ -69,7 +69,7 @@ No system prompt iteration was needed — all intents passed on first attempt.
 
 **Build fix:** useFocusTrap.ts failed build under TypeScript strict mode (`'last' is possibly 'undefined'`). Fixed with non-null assertions (`!`) after length > 0 guard.
 
-**Project documents updated:** CLAUDE.md, AGENTS.md, HANDOFF.md, Planning/STALKER_MASTER-PLAN.md all reflect Session 9 completion and MVP status.
+**Project documents updated:** CLAUDE.md, AGENTS.md, HANDOFF.md, Planning/STOCKER_MASTER-PLAN.md all reflect Session 9 completion and MVP status.
 
 **MVP acceptance criteria:** All 21 criteria signed off (11 from Spec §13 + 10 from UX Plan §11.1).
 
@@ -128,7 +128,7 @@ const last = focusable[focusable.length - 1]!;
 | `CLAUDE.md` | Session 9 additions |
 | `AGENTS.md` | Model, test counts |
 | `HANDOFF.md` | Post-Session 9 state |
-| `Planning/STALKER_MASTER-PLAN.md` | Session 9 status, risk register |
+| `Planning/STOCKER_MASTER-PLAN.md` | Session 9 status, risk register |
 | `package.json` | Minor dependency update |
 | `pnpm-lock.yaml` | Lockfile update |
 
@@ -154,7 +154,7 @@ const last = focusable[focusable.length - 1]!;
 | `SESSION-8-HARDENING-ADDENDUM.md` | `Planning/SESSION-8-HARDENING-ADDENDUM.md` |
 | `SESSION-8-KICKOFF.md` | `Planning/SESSION-8-KICKOFF.md` |
 | `SESSION-8-PLAN.md` | `Planning/SESSION-8-PLAN.md` |
-| `STALKER_MASTER-PLAN.md` | `Planning/STALKER_MASTER-PLAN.md` |
+| `STOCKER_MASTER-PLAN.md` | `Planning/STOCKER_MASTER-PLAN.md` |
 
 ---
 

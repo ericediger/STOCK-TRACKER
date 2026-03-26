@@ -778,4 +778,4 @@ If Session 19 delivers full scope:
 | KL-6 | In-process rate limiter | Accepted — single user |
 | 14 | Responsive refinements | Low priority — user is on desktop |
 
-At this point, STALKER has **zero open functional limitations**. The remaining items are either accepted trade-offs or low-priority cosmetic work. The system is production-ready for its single-user, desktop deployment target.
+At this point, STOCKER has **zero open functional limitations**. The remaining items are either accepted trade-offs or low-priority cosmetic work. The system is production-ready for its single-user, desktop deployment target.

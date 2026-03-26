@@ -472,7 +472,7 @@ Create `SESSION-9-REPORT.md` with:
 - `CLAUDE.md` — any new architecture decisions
 - `AGENTS.md` — final package inventory
 - `HANDOFF.md` — final state
-- `STALKER_MASTER-PLAN.md` — update Session 9 status, close risk register items
+- `STOCKER_MASTER-PLAN.md` — update Session 9 status, close risk register items
 
 ---
 
@@ -517,7 +517,7 @@ WON'T (explicitly deferred):
 | Lead (Phase 0) | `packages/advisor/src/system-prompt.ts`, `packages/advisor/src/tool-loop.ts`, `packages/advisor/__tests__/`, `data/test/advisor-live-verification.md`, `data/test/smoke-test-results.md` | Everything else |
 | Teammate 1 (`validation-engineer`) | `data/test/cross-validate.ts`, `data/test/cross-validation-results.md`, `data/test/numeric-display-audit.md` | `packages/analytics/`, `apps/web/src/app/api/` |
 | Teammate 2 (`polish-engineer`) | `apps/web/src/lib/hooks/useFocusTrap.ts`, `apps/web/src/components/advisor/AdvisorPanel.tsx` (focus trap wire), `apps/web/src/app/api/transactions/bulk/`, `apps/web/src/components/transactions/BulkPasteInput.tsx`, `KNOWN-LIMITATIONS.md`, `HANDOFF.md` | UX Plan, Spec |
-| Lead (Phase 3) | `SESSION-9-REPORT.md`, `CLAUDE.md`, `AGENTS.md`, `STALKER_MASTER-PLAN.md` | All teammate deliverables |
+| Lead (Phase 3) | `SESSION-9-REPORT.md`, `CLAUDE.md`, `AGENTS.md`, `STOCKER_MASTER-PLAN.md` | All teammate deliverables |
 
 No filesystem overlap between teammates. Lead owns integration and project-level documents.
 

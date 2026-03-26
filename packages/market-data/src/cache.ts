@@ -1,4 +1,4 @@
-import type { Decimal } from '@stalker/shared';
+import type { Decimal } from '@stocker/shared';
 
 /**
  * Minimal Prisma client interface for LatestQuote operations.

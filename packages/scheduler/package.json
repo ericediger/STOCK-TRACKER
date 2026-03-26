@@ -1,5 +1,5 @@
 {
-  "name": "@stalker/scheduler",
+  "name": "@stocker/scheduler",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -12,8 +12,8 @@
   },
   "dependencies": {
     "@prisma/client": "^6.19.2",
-    "@stalker/market-data": "workspace:*",
-    "@stalker/shared": "workspace:*",
+    "@stocker/market-data": "workspace:*",
+    "@stocker/shared": "workspace:*",
     "dotenv": "^16.4.7"
   },
   "devDependencies": {

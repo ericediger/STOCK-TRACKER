@@ -1,4 +1,4 @@
-import type { ProviderLimits } from '@stalker/shared';
+import type { ProviderLimits } from '@stocker/shared';
 
 /** Market hours duration in seconds: 9:30 to 16:00 ET = 6.5 hours = 23400 seconds */
 const MARKET_HOURS_SECONDS = 23400;

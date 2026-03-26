@@ -1,9 +1,9 @@
 import { prisma } from '@/lib/prisma';
 import { apiError } from '@/lib/errors';
 import { PrismaSnapshotStore } from '@/lib/prisma-snapshot-store';
-import { toDecimal, ZERO, add, div, mul } from '@stalker/shared';
-import type { Decimal } from '@stalker/shared';
-import type { HoldingSnapshot } from '@stalker/shared';
+import { toDecimal, ZERO, add, div, mul } from '@stocker/shared';
+import type { Decimal } from '@stocker/shared';
+import type { HoldingSnapshot } from '@stocker/shared';
 
 export async function GET(): Promise<Response> {
   try {

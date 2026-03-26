@@ -1,4 +1,4 @@
-import { toDecimal } from '@stalker/shared';
+import { toDecimal } from '@stocker/shared';
 
 /* -------------------------------------------------------------------------- */
 /*  Types                                                                      */

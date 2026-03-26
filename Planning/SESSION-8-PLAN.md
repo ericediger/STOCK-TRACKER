@@ -9,9 +9,9 @@
 
 **Reference Documents:**
 - `SPEC_v4.md` §7.1–7.5 (Advisor), §8.5 (API), §11.3 (Error handling), §12 (Config)
-- `STALKER-ux-ui-plan.md` §3.6 (Chat panel), §10 (Prompt UX guidance)
+- `STOCKER-ux-ui-plan.md` §3.6 (Chat panel), §10 (Prompt UX guidance)
 - `SESSION-8-HARDENING-ADDENDUM.md` (Phase 0 tasks H-1 through H-5)
-- `STALKER_MASTER-PLAN_v3.md` §3 Session 8 details
+- `STOCKER_MASTER-PLAN_v3.md` §3 Session 8 details
 
 ---
 

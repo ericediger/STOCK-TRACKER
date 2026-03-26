@@ -1,7 +1,7 @@
-import type { SnapshotStore } from '@stalker/analytics';
-import type { PortfolioValueSnapshot, HoldingSnapshot } from '@stalker/shared';
+import type { SnapshotStore } from '@stocker/analytics';
+import type { PortfolioValueSnapshot, HoldingSnapshot } from '@stocker/shared';
 import type { PrismaClient, PortfolioValueSnapshot as PrismaSnapshot } from '@prisma/client';
-import { toDecimal } from '@stalker/shared';
+import { toDecimal } from '@stocker/shared';
 /**
  * Convert a Prisma PortfolioValueSnapshot row to the shared PortfolioValueSnapshot type.
  * Prisma Decimal != decimal.js Decimal, so we convert via toString().

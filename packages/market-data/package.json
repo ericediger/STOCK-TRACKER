@@ -1,5 +1,5 @@
 {
-  "name": "@stalker/market-data",
+  "name": "@stocker/market-data",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -10,7 +10,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@stalker/shared": "workspace:*",
+    "@stocker/shared": "workspace:*",
     "date-fns": "^3.0.0",
     "date-fns-tz": "^3.0.0"
   },

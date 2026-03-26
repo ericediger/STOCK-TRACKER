@@ -13,7 +13,7 @@
 
 ### Problem Statement
 
-STALKER is functionally correct (11/11 UAT, 602 tests, 749/749 PnL cross-validation) but operationally broken at 83-instrument scale:
+STOCKER is functionally correct (11/11 UAT, 602 tests, 749/749 PnL cross-validation) but operationally broken at 83-instrument scale:
 
 1. **Quote starvation:** Only 3/83 instruments have live quotes. FMP's 250 calls/day means ~3 full polls/day. Initial population takes an entire trading day.
 2. **UI scale mismatch:** Dashboard holdings table, staleness indicators, and data health footer were designed for 15–20 instruments. At 83, the UX breaks down.

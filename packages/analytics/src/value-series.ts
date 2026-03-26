@@ -1,12 +1,12 @@
-import { Decimal, ZERO, add, sub, mul, isZero, toDecimal } from '@stalker/shared';
-import type { Transaction, Instrument, Lot, RealizedTrade, PortfolioValueSnapshot } from '@stalker/shared';
+import { Decimal, ZERO, add, sub, mul, isZero, toDecimal } from '@stocker/shared';
+import type { Transaction, Instrument, Lot, RealizedTrade, PortfolioValueSnapshot } from '@stocker/shared';
 import type { PriceLookup, SnapshotStore, HoldingSnapshotEntry } from './interfaces.js';
 import { processTransactions } from './lot-engine.js';
 import { computeRealizedPnL } from './pnl.js';
 
 /**
  * Calendar interface — only the two functions we need.
- * Avoids a hard dependency on @stalker/market-data for testing.
+ * Avoids a hard dependency on @stocker/market-data for testing.
  */
 export interface CalendarFns {
   getNextTradingDay: (date: Date, exchange: string) => Date;

@@ -4,8 +4,8 @@ import {
   TiingoProvider,
   AlphaVantageProvider,
   CoinGeckoProvider,
-} from '@stalker/market-data';
-import type { PrismaClientForCache } from '@stalker/market-data';
+} from '@stocker/market-data';
+import type { PrismaClientForCache } from '@stocker/market-data';
 import { prisma } from './prisma';
 
 let instance: MarketDataService | null = null;

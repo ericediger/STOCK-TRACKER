@@ -11,7 +11,7 @@
 
 Read these files first:
 - `SESSION-12-PLAN.md` (full session plan — Phase 0, teammate specs, exit criteria)
-- `STALKER_PHASE-II_ADDENDUM.md` (binding provider info — overrides older docs)
+- `STOCKER_PHASE-II_ADDENDUM.md` (binding provider info — overrides older docs)
 - `CLAUDE.md`, `AGENTS.md`, `HANDOFF.md` (project conventions and current state)
 - `data/test/provider-smoke-results.md` (real API response shapes from Phase 0)
 

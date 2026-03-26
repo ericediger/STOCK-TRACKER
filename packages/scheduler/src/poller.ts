@@ -1,10 +1,10 @@
-import type { Instrument, Quote } from '@stalker/shared';
-import type { PollResult } from '@stalker/market-data';
-import { isMarketOpen } from '@stalker/market-data';
+import type { Instrument, Quote } from '@stocker/shared';
+import type { PollResult } from '@stocker/market-data';
+import { isMarketOpen } from '@stocker/market-data';
 
 /**
  * Minimal interface for the market data service.
- * The real MarketDataService class (from @stalker/market-data) will satisfy this.
+ * The real MarketDataService class (from @stocker/market-data) will satisfy this.
  * Using an interface allows the scheduler to be built independently.
  */
 export interface MarketDataServiceLike {

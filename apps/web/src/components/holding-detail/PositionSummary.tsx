@@ -7,7 +7,7 @@ import {
   formatRelativeTime,
 } from "@/lib/format";
 import { ValueChange } from "@/components/ui/ValueChange";
-import { toDecimal, div } from "@stalker/shared";
+import { toDecimal, div } from "@stocker/shared";
 import type { HoldingDetail } from "@/lib/hooks/useHoldingDetail";
 
 interface PositionSummaryProps {

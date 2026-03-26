@@ -9,9 +9,9 @@
   },
   "dependencies": {
     "@prisma/client": "^6.4.1",
-    "@stalker/analytics": "workspace:*",
-    "@stalker/market-data": "workspace:*",
-    "@stalker/shared": "workspace:*",
+    "@stocker/analytics": "workspace:*",
+    "@stocker/market-data": "workspace:*",
+    "@stocker/shared": "workspace:*",
     "@tailwindcss/postcss": "^4.2.0",
     "clsx": "^2.1.1",
     "decimal.js": "^10.6.0",

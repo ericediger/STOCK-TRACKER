@@ -1,5 +1,5 @@
-import { Decimal, sub, mul, add, div, ZERO } from '@stalker/shared';
-import type { Lot, RealizedTrade, UnrealizedPnL, HoldingSummary } from '@stalker/shared';
+import { Decimal, sub, mul, add, div, ZERO } from '@stocker/shared';
+import type { Lot, RealizedTrade, UnrealizedPnL, HoldingSummary } from '@stocker/shared';
 
 export function computeUnrealizedPnL(lots: Lot[], markPrice: Decimal): UnrealizedPnL {
   const perLot = lots.map(lot => ({

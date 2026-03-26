@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { apiError } from '@/lib/errors';
-import { processTransactions, computeUnrealizedPnL, computeRealizedPnL } from '@stalker/analytics';
-import { toDecimal, ZERO } from '@stalker/shared';
-import type { Transaction, TransactionType } from '@stalker/shared';
+import { processTransactions, computeUnrealizedPnL, computeRealizedPnL } from '@stocker/analytics';
+import { toDecimal, ZERO } from '@stocker/shared';
+import type { Transaction, TransactionType } from '@stocker/shared';
 
 function toSharedTransaction(prismaTx: {
   id: string;

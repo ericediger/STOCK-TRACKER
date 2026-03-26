@@ -24,7 +24,7 @@ const jetbrainsMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'STALKER — Portfolio Tracker',
+  title: 'STOCKER — Portfolio Tracker',
   description: 'Stock & Portfolio Tracker + LLM Advisor',
 };
 

@@ -7,7 +7,7 @@ import {
   formatCurrency,
   formatQuantity,
 } from "@/lib/format";
-import { toDecimal, mul } from "@stalker/shared";
+import { toDecimal, mul } from "@stocker/shared";
 import {
   sortTransactions,
   type TransactionRow,

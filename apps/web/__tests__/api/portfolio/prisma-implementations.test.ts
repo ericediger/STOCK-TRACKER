@@ -2,7 +2,7 @@ import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
 import { PrismaClient } from '@prisma/client';
 import { PrismaPriceLookup } from '../../../src/lib/prisma-price-lookup';
 import { PrismaSnapshotStore } from '../../../src/lib/prisma-snapshot-store';
-import { toDecimal, ZERO } from '@stalker/shared';
+import { toDecimal, ZERO } from '@stocker/shared';
 import path from 'node:path';
 
 const DB_PATH = path.resolve(import.meta.dirname, '..', '..', '..', 'data', 'portfolio.db');

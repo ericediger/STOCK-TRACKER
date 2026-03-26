@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { apiError } from '@/lib/errors';
-import { generateUlid, toDecimal } from '@stalker/shared';
-import type { InstrumentType, TransactionType } from '@stalker/shared';
+import { generateUlid, toDecimal } from '@stocker/shared';
+import type { InstrumentType, TransactionType } from '@stocker/shared';
 import {
   AnthropicAdapter,
   executeToolLoop,
@@ -16,10 +16,10 @@ import {
   windowMessages,
   generateSummary,
   formatSummaryPreamble,
-} from '@stalker/advisor';
-import type { Message, LLMAdapter, WindowableMessage } from '@stalker/advisor';
+} from '@stocker/advisor';
+import type { Message, LLMAdapter, WindowableMessage } from '@stocker/advisor';
 import { PrismaSnapshotStore } from '@/lib/prisma-snapshot-store';
-import { processTransactions } from '@stalker/analytics';
+import { processTransactions } from '@stocker/analytics';
 
 /**
  * Build tool executors that call real analytics/Prisma functions.

@@ -2,7 +2,7 @@
 
 **Date:** 2026-02-25
 **Author:** Systems Architect
-**Inputs:** SESSION-13-REPORT.md, SPEC v4.0 §13, UX/UI Plan §11, STALKER_MASTER-PLAN.md v4.0
+**Inputs:** SESSION-13-REPORT.md, SPEC v4.0 §13, UX/UI Plan §11, STOCKER_MASTER-PLAN.md v4.0
 **Status:** Ready for execution
 
 ---

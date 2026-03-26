@@ -1,4 +1,4 @@
-# DECISIONS.md — STALKER
+# DECISIONS.md — STOCKER
 
 > **Role:** Persistent log of architecture, product, and process decisions that carry forward across sessions. Every decision recorded here was made for a reason; that reason is the most valuable part of the entry. Agents consult this document before making any implementation choice that touches an area already decided. If a prior decision covers the situation, follow it. If a prior decision needs to change, propose an amendment — do not silently deviate.
 >

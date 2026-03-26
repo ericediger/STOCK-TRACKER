@@ -44,12 +44,3 @@ next-env.d.ts
 
 # Test
 coverage/
-
-# Project docs (not for version control)
-HANDOFF.md
-KNOWN-LIMITATIONS.md
-PROJECT-SPEC.md
-/data/test/Users
-/docs/session-logs
-/Planning
-/Session Reports

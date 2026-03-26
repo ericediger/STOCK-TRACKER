@@ -2,14 +2,14 @@
 
 > **Purpose:** Session transition artifact. Written by the lead at the end of every session. Read first by the lead at the start of the next session — before AGENTS.md, before any code.
 > **Replaces reading:** Do not re-read prior session plans or chat history. If it is not in this document, it is not guaranteed to be current.
-> **Last Updated:** 2026-03-05 (Post-S26, ES-reported defect remediation)
-> **Session:** Phase II Session 5 (S26) — Dashboard math, day change accuracy, chart gaps
+> **Last Updated:** 2026-03-26 (Post-S27, Project rename)
+> **Session:** Session 27 — Rename STALKER → STOCKER
 
 ---
 
 ## 1) Current State (One Paragraph)
 
-Phase II Session 5 (S26) fixed 8 ES-reported defects spanning portfolio math, day change accuracy, chart data gaps, and first-load reliability. Key changes: (1) Hero percentage now correctly multiplied by 100; (2) Crypto PriceBars backfilled (365 bars each for ETH/XRPUSD — CoinGecko free tier rejects 10yr ranges); (3) Timeseries API appends a live-recomputed "today" data point so chart matches hero; (4) Dashboard refetches holdings after snapshot rebuild completes (fixes empty table on first load); (5) Charts page 1D/1W ranges fall back to 30 most recent bars when date range returns empty; (6) Day $ column now shows position-level change (qty × per-share) not per-share; (7) Added `prevClose` to Quote interface and LatestQuote schema — Tiingo provides it directly, CoinGecko derives from 24h change — with PriceBar fallback; (8) Added 1D/1W range pills to Charts page. Quality gates green: 0 tsc errors, 770 tests pass, 64 files.
+Session 27 renamed the entire project from STALKER to STOCKER. The GitHub repo was already renamed by the ES prior to the session. All `@stalker/*` workspace package names were changed to `@stocker/*` (shared, analytics, market-data, advisor, scheduler). Every TypeScript import, tsconfig path alias, vitest config alias, and package.json dependency was updated. All documentation (CLAUDE.md, AGENTS.md, HANDOFF.md, DECISIONS.md, README.md, PROJECT-SPEC.md, 40+ Planning docs, Session Reports, session logs) was updated. Four files were renamed (STALKER_MASTER-PLAN → STOCKER_MASTER-PLAN, etc.). The git remote was updated from the old STALKER URL to STOCKER. Quality gates green: 0 tsc errors, 770 tests pass, 64 files.
 
 ---
 
@@ -17,21 +17,17 @@ Phase II Session 5 (S26) fixed 8 ES-reported defects spanning portfolio math, da
 
 ### 2.1 Completed
 
-- **Hero percentage ×100 fix** — `changePct` in snapshot API was a decimal ratio (0.1567) but `formatPercent()` expects a percentage value (15.67). Added `.times(100)`.
+- **Package namespace rename** — All 7 `@stalker/*` packages renamed to `@stocker/*`. Updated in package.json files, all TypeScript imports (69+ source files), tsconfig.json path aliases, vitest.config.ts aliases, next.config.mjs transpilePackages. Lockfile regenerated via `pnpm install`.
 
-- **Crypto backfill fix** — CoinGecko free tier rejects 10-year range requests. Both `triggerBackfill()` functions (instruments route + auto-create-instrument) now cap crypto to 365 days. Ran one-time backfill: 365 bars each for ETH and XRPUSD.
+- **Documentation rename** — STALKER → STOCKER in all markdown documentation files (58+ files). GitHub URL updated to `https://github.com/ericediger/STOCKER`.
 
-- **Timeseries live "today" point** — `/api/portfolio/timeseries` now appends a synthetic today data point using live LatestQuote prices when the last snapshot is before today. Closes the chart-vs-hero value divergence (AD-S25-1 pattern applied to timeseries).
+- **File renames** — `STALKER_MASTER-PLAN.md` → `STOCKER_MASTER-PLAN.md`, `STALKER_PHASE-II_ADDENDUM.md` → `STOCKER_PHASE-II_ADDENDUM.md`, `stalker-mockups.jsx` → `stocker-mockups.jsx`, `STALKER-ux-ui-plan.md` → `STOCKER-ux-ui-plan.md`.
 
-- **Dashboard first-load fix** — Added `useEffect` in page.tsx that tracks `isRebuilding` transition (true→false) and calls `refetchHoldings()`. Previously, holdings fetched `[]` before rebuild and never refetched.
+- **UI title update** — Page title metadata in `apps/web/src/app/layout.tsx` changed from STALKER to STOCKER.
 
-- **Charts 1D/1W "No data" fix** — `/api/market/history` now falls back to 30 most recent bars when a date-filtered query returns empty (PriceBars are stale — equities stop at Feb 25).
+- **Git remote update** — `origin` URL changed from `git@github.com:ericediger/STALKER.git` to `git@github.com:ericediger/STOCKER.git`.
 
-- **Day $ per-position fix** — Holdings and detail APIs now compute `dayChange = qty × (price - prevClose)` instead of just `price - prevClose`.
-
-- **prevClose schema and provider pipeline** — Added `prevClose Decimal?` to LatestQuote schema and `prevClose?: Decimal` to Quote interface. Tiingo extracts from IEX `prevClose` field. CoinGecko derives: `price / (1 + usd_24h_change/100)`. Cache layer stores it. Holdings APIs prefer quote.prevClose, fall back to PriceBar close.
-
-- **Charts page 1D/1W range pills** — Added `1D` and `1W` to `ChartRange` type and `RANGE_OPTIONS`.
+- **Code comments** — Updated STALKER references in `anthropic-adapter.ts`, `cross-validate.ts`, `benchmark-rebuild.ts`, `.env.example`.
 
 ### 2.2 Quality Gates Run
 
@@ -44,14 +40,13 @@ Phase II Session 5 (S26) fixed 8 ES-reported defects spanning portfolio math, da
 
 | Decision | Rationale | Owner |
 |----------|-----------|-------|
-| AD-S26-1: prevClose stored in LatestQuote | PriceBars are stale (backfill-only, no daily updates). Providers already return prevClose data. Two-tier fallback: quote.prevClose → PriceBar close. | Lead Engineering |
-| AD-S26-2: CoinGecko backfill capped at 365 days | Free tier rejects ranges > 365 days. Equities keep 10yr (Tiingo supports it). | Lead Engineering |
-| AD-S26-3: Timeseries synthetic today point | Same live-recomputation pattern as snapshot API (AD-S25-1). Chart must show current portfolio value, not stale snapshot. | Lead Engineering |
-| AD-S26-4: Market history bar fallback | When date range returns 0 bars, return 30 most recent. Better to show stale data than "No data". | Lead Engineering |
+| AD-S27-1: Rename @stalker/* → @stocker/* | ES renamed the GitHub repo; all internal references must match. Package namespace is the critical path (affects builds). | Lead Engineering |
+| AD-S27-2: Keep stalker.db filename | Database file is not referenced by name in configs (uses portfolio.db). No functional impact. | Lead Engineering |
+| AD-S27-3: Historical commit messages unchanged | Git history preserves old @stalker/ references in commit messages. These are immutable records. | Lead Engineering |
 
 ### 2.4 What Was Not Completed
 
-- **prevClose data population** — The `prevClose` column exists but is NULL for all 95 quotes. Values will populate on next scheduler poll or manual refresh. PriceBar fallback ensures day change still displays in the interim.
+- **Historical permission entries** — `.claude/settings.local.json` contains old bash command strings with `@stalker/` in permission allow-list entries from past sessions. These are harmless (they just won't match future commands) and were left as-is.
 
 ---
 
@@ -63,15 +58,15 @@ None.
 
 ### Open items
 
-- **prevClose population** — Will auto-populate on next `pnpm dev` scheduler cycle. Until then, day change uses PriceBar fallback (stale but functional).
-- **PriceBar staleness** — Equity PriceBars stop at Feb 25. No mechanism to add new daily bars (scheduler only polls quotes). Not blocking — prevClose from Tiingo provides accurate day change. Long-term: add daily bar fetch to scheduler.
-- **PriceBar fallback unit tests (KL-PB)** — Still deferred. No unit test coverage for the S21 PriceBar fallback route.
+- **PriceBar staleness** — Equity PriceBars stop at Feb 25. No mechanism to add new daily bars. Not blocking.
+- **PriceBar fallback unit tests (KL-PB)** — Still deferred.
+- **Settings.local.json cleanup** — Old permission entries reference @stalker/ package names. Harmless but could be cleaned up.
 
 ---
 
 ## 4) Risks Surfaced This Session
 
-**PriceBar data gap widening.** PriceBars are only populated during initial backfill and never updated by the scheduler. The gap between last PriceBar (Feb 25) and current date grows daily. The prevClose fix mitigates this for day change, but the chart page still shows stale data for short ranges (fallback to 30 most recent bars). Consider adding a daily bar fetch to the scheduler in a future session.
+None. This was a straightforward rename with no functional changes.
 
 ---
 
@@ -79,21 +74,21 @@ None.
 
 ### 5.1 Recommended Scope
 
-1. **ES re-verification** — Browser verification of all 8 Session 26 fixes.
+1. **ES re-verification** — Browser verification that the app still works correctly after rename.
 2. **Scheduler daily bar fetch** — Add end-of-day PriceBar insertion to the scheduler so charts stay current.
-3. **Stretch: prevClose verification** — Verify prevClose values populate correctly after first scheduler cycle.
+3. **Stretch: settings.local.json cleanup** — Remove stale permission entries referencing old paths.
 
 ### 5.2 Roles to Staff
 
 | Role | Required / Optional | Notes |
 |------|---------------------|-------|
-| Lead Engineering | Required | Owns any remaining fixes |
-| Executive Sponsor | Required | Manual browser verification |
+| Lead Engineering | Required | Owns any remaining work |
+| Executive Sponsor | Optional | Browser verification |
 
 ### 5.3 Context to Load
 
 1. This file (done).
-2. `DECISIONS.md` — new AD-S26-* entries.
+2. `DECISIONS.md` — new AD-S27-* entries.
 3. `CLAUDE.md` — coding rules and architecture.
 
 ### 5.4 Epic Status Summary
@@ -106,7 +101,7 @@ None.
 | Epic 4 — Crypto Asset Support | Complete | S24 |
 | Epic 5 — Advisor Enhancements | Complete | S24 |
 
-**All epics complete. UAT defects: 9 (S24-S25) + 8 (S26) = 17 total remediated.**
+**All epics complete. UAT defects: 17 remediated (S24-S26). Project rename complete (S27).**
 
 ---
 
@@ -120,11 +115,13 @@ No new escalations.
 
 ### Teammates Spawned
 
-None. Single-agent session — defect remediation.
+Two parallel agents:
+1. **Package rename agent** — Handled @stalker/ → @stocker/ in all code, configs, and lockfile
+2. **Documentation rename agent** — Handled STALKER → STOCKER in all docs, UI, file renames
 
 ### Coordination Issues
 
-None.
+None. Clean separation of concerns between agents.
 
 ---
 
@@ -139,10 +136,10 @@ None.
 | API endpoints | 22 |
 | UI components | 50+ |
 | Instruments in production DB | 88 |
-| Sessions completed | 26 |
-| UAT defects remediated | 17 (9 S24-S25 + 8 S26) |
+| Sessions completed | 27 |
+| UAT defects remediated | 17 (S24-S26) |
 
 ---
 
 *Handoff written by: Lead Engineering*
-*Next session starts: On-demand — pending ES verification of S26 fixes*
+*Next session starts: On-demand*

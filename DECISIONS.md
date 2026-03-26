@@ -5,7 +5,7 @@
 > **Authors:** Lead Engineering agent and Lead Product agent (joint custodians). Any agent may propose a decision entry; both leads must agree before it is recorded.
 > **Authorized amendments:** Amendments to existing entries require the same joint lead approval. If the amendment carries product authority implications (scope, user-facing behavior, release criteria), escalate to the Executive Sponsor before recording.
 > **Status:** Active
-> **Last Updated:** 2026-03-05
+> **Last Updated:** 2026-03-26
 > **Read by:** All agents at session start, after HANDOFF.md and before writing any code that touches a decided area.
 
 ---
@@ -466,7 +466,20 @@ Showing slightly stale chart data is strictly better than showing nothing. The u
 
 ## Category: Process and Operations
 
-*No decisions recorded yet.*
+### AD-S27-1 — Project Rename STALKER → STOCKER
+
+**Date:** 2026-03-26
+**Session / Epic:** S27 — Project rename
+**Status:** Active
+
+**Context:**
+The ES renamed the GitHub repository from STALKER to STOCKER. All internal references needed to match: workspace package names (`@stalker/*`), imports, documentation, UI, file names.
+
+**Decision:**
+Rename the `@stalker/*` package namespace to `@stocker/*` and update all documentation, UI, and configuration references. Historical git commit messages are left unchanged (immutable). The database file `stalker.db` is not referenced by config and was left as-is. Old permission entries in `.claude/settings.local.json` are harmless and left as-is.
+
+**Rationale:**
+Internal naming must match the canonical project name and GitHub repository URL. The rename is mechanical but must be comprehensive to avoid broken imports or confusing references.
 
 ---
 
@@ -481,6 +494,7 @@ All changes to existing decision entries after their initial recording must be l
 | 2026-03-03 | AD-S22-6 | Amended by AD-S25-3 | URL sort state removed; sort is now pure component state defaulting to symbol/asc on mount. UAT showed URL persistence broke user expectation. | Lead Engineering |
 | 2026-03-03 | — | S25 additions | AD-S25-1 (snapshot live recomputation), AD-S25-2 (day change server-side), AD-S25-3 (sort URL state removed). | Lead Engineering |
 | 2026-03-05 | — | S26 additions | AD-S26-1 (prevClose in LatestQuote), AD-S26-2 (CoinGecko 365-day cap), AD-S26-3 (timeseries live today point), AD-S26-4 (market history bar fallback). | Lead Engineering |
+| 2026-03-26 | — | S27 additions | AD-S27-1 (project rename STALKER → STOCKER). | Lead Engineering |
 
 ---
 

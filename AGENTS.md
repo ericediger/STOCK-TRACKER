@@ -1,7 +1,7 @@
 # AGENTS.md — STOCKER
 
 > **Purpose:** Operating schema for agentic work in this repo: roles, guardrails, coordination model, session contract, and quality gates. The "what." See CLAUDE.md for the architecture and coding rules.
-> **Owner:** Eric Ediger
+> **Owner:** (repo owner)
 > **Last Updated:** 2026-02-28 (Post-Session 20 — Hardening & Project Close-Out)
 
 ---
@@ -22,7 +22,7 @@ Sessions default to **solo** for most work. **Hybrid** comms policy and **plan a
 ## 2) Project Snapshot
 
 - **Primary Goal:** A local-first, single-user stock portfolio tracker with FIFO lot accounting, real-time market data polling, and an LLM-powered financial advisor.
-- **Stakeholders:** Single developer/user (Eric Ediger). No external stakeholders or end-users.
+- **Stakeholders:** Single developer/user. No external stakeholders or end-users.
 - **Non-Goals:**
   - Multi-user or multi-tenant support
   - Cloud deployment or hosted infrastructure

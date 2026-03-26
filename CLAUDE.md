@@ -3,7 +3,7 @@
 **Project:** STOCKER — Stock & Portfolio Tracker + LLM Advisor
 **Last Updated:** 2026-02-28 (Post-Session 20 — Hardening & Project Close-Out)
 **Local repo path:** ~/Desktop/_LOCAL APP DEVELOPMENT/STOCKER
-**GitHub:** https://github.com/ericediger/STOCKER
+**GitHub:** (private repo)
 
 ---
 

@@ -1,0 +1,24 @@
+{
+  "name": "@stocker/scheduler",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.2",
+    "@stocker/market-data": "workspace:*",
+    "@stocker/shared": "workspace:*",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.4",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5"
+  }
+}

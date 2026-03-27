@@ -1,0 +1,202 @@
+"use client";
+
+import { useRef, useEffect, useState, useMemo } from "react";
+import {
+  CandlestickSeries,
+  AreaSeries,
+  createSeriesMarkers,
+  type ISeriesApi,
+  type ISeriesMarkersPluginApi,
+  type SeriesType,
+  type Time,
+  type AreaData,
+} from "lightweight-charts";
+import { useChart } from "@/lib/hooks/useChart";
+import { useMarketHistory } from "@/lib/hooks/useMarketHistory";
+import { toCandlestickData } from "@/lib/chart-candlestick-utils";
+import type { PriceBar } from "@/lib/chart-candlestick-utils";
+import {
+  transactionsToMarkers,
+  type TransactionForMarker,
+} from "@/lib/chart-marker-utils";
+import { PillToggle } from "@/components/ui/PillToggle";
+import { Skeleton } from "@/components/ui/Skeleton";
+
+type ChartRange = "1D" | "1W" | "1M" | "3M" | "6M" | "1Y" | "ALL";
+
+const RANGE_OPTIONS: { label: string; value: ChartRange }[] = [
+  { label: "1D", value: "1D" },
+  { label: "1W", value: "1W" },
+  { label: "1M", value: "1M" },
+  { label: "3M", value: "3M" },
+  { label: "6M", value: "6M" },
+  { label: "1Y", value: "1Y" },
+  { label: "ALL", value: "ALL" },
+];
+
+const CHART_HEIGHT = 340;
+
+function getStartDate(range: ChartRange): string | undefined {
+  if (range === "ALL") return undefined;
+  const now = new Date();
+  switch (range) {
+    case "1D":
+      now.setDate(now.getDate() - 1);
+      break;
+    case "1W":
+      now.setDate(now.getDate() - 7);
+      break;
+    case "1M":
+      now.setMonth(now.getMonth() - 1);
+      break;
+    case "3M":
+      now.setMonth(now.getMonth() - 3);
+      break;
+    case "6M":
+      now.setMonth(now.getMonth() - 6);
+      break;
+    case "1Y":
+      now.setFullYear(now.getFullYear() - 1);
+      break;
+  }
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, "0");
+  const d = String(now.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+/**
+ * Convert API PriceBar objects to TradingView AreaData (close price only).
+ * Used for CRYPTO instruments where OHLC data is not available (AD-S22-3).
+ * NOTE: This is an approved location for Number() on financial values (AD-S6c exception).
+ */
+function toAreaData(bars: PriceBar[]): AreaData<Time>[] {
+  if (!bars || bars.length === 0) return [];
+  return bars
+    .map((bar) => {
+      const value = Number(bar.close);
+      if (isNaN(value)) return null;
+      return { time: bar.date as Time, value };
+    })
+    .filter((item): item is AreaData<Time> => item !== null);
+}
+
+interface CandlestickChartProps {
+  symbol: string;
+  transactions?: TransactionForMarker[];
+  instrumentType?: string;
+}
+
+export function CandlestickChart({ symbol, transactions, instrumentType }: CandlestickChartProps) {
+  const [range, setRange] = useState<ChartRange>("3M");
+  const containerRef = useRef<HTMLDivElement>(null);
+  const seriesRef = useRef<ISeriesApi<SeriesType> | null>(null);
+  const markersRef = useRef<ISeriesMarkersPluginApi<Time> | null>(null);
+
+  const startDate = useMemo(() => getStartDate(range), [range]);
+  const { data: bars, isLoading } = useMarketHistory(symbol, startDate);
+
+  const { chart } = useChart({
+    container: containerRef,
+    options: { height: CHART_HEIGHT },
+  });
+
+  const isCrypto = instrumentType === 'CRYPTO';
+
+  // Attach series once chart is ready — candlestick for equities, area for crypto (AD-S22-3)
+  useEffect(() => {
+    if (!chart) return;
+    if (seriesRef.current) return;
+
+    const series = isCrypto
+      ? chart.addSeries(AreaSeries, {
+          lineColor: '#6366f1',
+          topColor: 'rgba(99, 102, 241, 0.4)',
+          bottomColor: 'rgba(99, 102, 241, 0.04)',
+          lineWidth: 2,
+        })
+      : chart.addSeries(CandlestickSeries, {
+          upColor: "#22c55e",
+          downColor: "#ef4444",
+          wickUpColor: "#22c55e",
+          wickDownColor: "#ef4444",
+          borderVisible: false,
+        });
+    seriesRef.current = series;
+
+    return () => {
+      seriesRef.current = null;
+    };
+  }, [chart, isCrypto]);
+
+  // Update data when bars change
+  useEffect(() => {
+    if (!seriesRef.current) return;
+    if (isCrypto) {
+      const areaData = toAreaData(bars);
+      seriesRef.current.setData(areaData);
+      if (chart && areaData.length > 0) {
+        chart.timeScale().fitContent();
+      }
+    } else {
+      const chartData = toCandlestickData(bars);
+      seriesRef.current.setData(chartData);
+      if (chart && chartData.length > 0) {
+        chart.timeScale().fitContent();
+      }
+    }
+  }, [bars, chart, isCrypto]);
+
+  // Update transaction markers when transactions or series change
+  useEffect(() => {
+    if (!seriesRef.current) return;
+
+    // Clean up previous markers plugin
+    if (markersRef.current) {
+      markersRef.current.detach();
+      markersRef.current = null;
+    }
+
+    if (transactions && transactions.length > 0) {
+      const markers = transactionsToMarkers(transactions);
+      if (markers.length > 0) {
+        markersRef.current = createSeriesMarkers(seriesRef.current, markers);
+      }
+    }
+  }, [transactions, bars]);
+
+  const hasData = bars.length > 0;
+
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-heading text-text-primary">Price Chart</h2>
+        <PillToggle
+          options={RANGE_OPTIONS}
+          value={range}
+          onChange={(v) => setRange(v as ChartRange)}
+        />
+      </div>
+      <div className="relative">
+        {/* Always render the container so useChart can initialize on mount */}
+        <div
+          ref={containerRef}
+          style={{ height: CHART_HEIGHT }}
+          className={isLoading || !hasData ? "invisible absolute inset-0" : ""}
+        />
+        {isLoading && !hasData ? (
+          <Skeleton height={`${CHART_HEIGHT}px`} className="w-full rounded-lg" />
+        ) : !hasData ? (
+          <div
+            className="flex items-center justify-center bg-bg-secondary border border-border-primary rounded-lg"
+            style={{ height: CHART_HEIGHT }}
+          >
+            <p className="text-text-tertiary text-sm">
+              No data for selected range
+            </p>
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+}

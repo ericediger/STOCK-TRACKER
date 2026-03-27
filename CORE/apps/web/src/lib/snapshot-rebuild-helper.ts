@@ -1,0 +1,101 @@
+import { prisma } from '@/lib/prisma';
+import { BatchPriceLookup } from '@/lib/batch-price-lookup';
+import { PrismaSnapshotStore } from '@/lib/prisma-snapshot-store';
+import { rebuildSnapshotsFrom } from '@stocker/analytics';
+import { getNextTradingDay, isTradingDay } from '@stocker/market-data';
+import { toDecimal } from '@stocker/shared';
+import type { Instrument, Transaction, InstrumentType, TransactionType } from '@stocker/shared';
+
+function toSharedInstrument(prismaInst: {
+  id: string;
+  symbol: string;
+  name: string;
+  type: string;
+  currency: string;
+  exchange: string;
+  exchangeTz: string;
+  providerSymbolMap: string;
+  firstBarDate: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}): Instrument {
+  return {
+    ...prismaInst,
+    type: prismaInst.type as InstrumentType,
+    providerSymbolMap: JSON.parse(prismaInst.providerSymbolMap) as Record<string, string>,
+  };
+}
+
+function toSharedTransaction(prismaTx: {
+  id: string;
+  instrumentId: string;
+  type: string;
+  quantity: unknown;
+  price: unknown;
+  fees: unknown;
+  tradeAt: Date;
+  notes: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}): Transaction {
+  return {
+    ...prismaTx,
+    type: prismaTx.type as TransactionType,
+    quantity: toDecimal(prismaTx.quantity!.toString()),
+    price: toDecimal(prismaTx.price!.toString()),
+    fees: toDecimal(prismaTx.fees!.toString()),
+  };
+}
+
+function toDateStr(d: Date): string {
+  const year = d.getUTCFullYear();
+  const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(d.getUTCDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+/**
+ * Trigger a snapshot rebuild from the given date forward.
+ * Loads all instruments and transactions from the database and delegates to the analytics engine.
+ *
+ * AD-S10a: The entire delete-recompute-insert cycle runs inside a Prisma interactive
+ * transaction. If the recompute throws mid-flight, the transaction rolls back and zero
+ * snapshots are deleted. This prevents partial snapshot state on crash or error.
+ */
+export async function triggerSnapshotRebuild(affectedDate: Date): Promise<void> {
+  const affectedDateStr = toDateStr(affectedDate);
+  const startTime = Date.now();
+
+  await prisma.$transaction(async (tx) => {
+    const [prismaInstruments, prismaTransactions] = await Promise.all([
+      tx.instrument.findMany(),
+      tx.transaction.findMany({ orderBy: { tradeAt: 'asc' } }),
+    ]);
+
+    if (prismaTransactions.length === 0) {
+      // No transactions remain — clear all snapshots
+      const store = new PrismaSnapshotStore(tx);
+      await store.deleteFrom('1970-01-01');
+      return;
+    }
+
+    const instruments = prismaInstruments.map(toSharedInstrument);
+    const transactions = prismaTransactions.map(toSharedTransaction);
+
+    // Pre-load all price bars into memory for batch lookup (AD-S14-3)
+    const instrumentIds = instruments.map((i) => i.id);
+    const priceLookup = await BatchPriceLookup.preload(tx, instrumentIds);
+
+    await rebuildSnapshotsFrom({
+      affectedDate: affectedDateStr,
+      transactions,
+      instruments,
+      priceLookup,
+      snapshotStore: new PrismaSnapshotStore(tx),
+      calendar: { getNextTradingDay, isTradingDay },
+    });
+
+    const elapsed = Date.now() - startTime;
+    console.log(`[snapshot-rebuild] Completed in ${elapsed}ms for ${instruments.length} instruments`);
+  }, { timeout: 60000 }); // 60s timeout (reduced from 600s after batch price optimization — actual: ~4s for 83 instruments)
+}

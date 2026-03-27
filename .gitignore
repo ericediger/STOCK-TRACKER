@@ -9,7 +9,7 @@ node_modules/
 # Database
 *.db
 *.db-journal
-data/portfolio.db
+*.db.pre-s18
 
 # Build
 .next/
@@ -17,12 +17,8 @@ out/
 dist/
 build/
 
-# Generated
-packages/*/dist/
-apps/web/.next/
-
 # Prisma
-apps/web/prisma/migrations/
+**/prisma/migrations/
 
 # IDE
 .idea/
@@ -44,3 +40,8 @@ next-env.d.ts
 
 # Test
 coverage/
+
+# Non-source directories (tracked via .git/info/exclude for local-only)
+Planning/
+Session Reports/
+Docs/

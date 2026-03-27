@@ -1,0 +1,48 @@
+# KNOWN-LIMITATIONS.md — STOCKER Known Gaps
+
+**Last Updated:** 2026-03-01 (Phase II Session 1 / S22)
+
+This document catalogues known limitations in STOCKER. Each entry includes the impact assessment and any existing mitigations.
+
+---
+
+## Resolved in Session 10
+
+| ID | Limitation | Resolution |
+|----|-----------|------------|
+| W-3 | Snapshot rebuild outside Prisma transaction | AD-S10a: Wrapped in `prisma.$transaction()` with 30s timeout |
+| W-4 | GET snapshot writes to DB on cold start | AD-S10b: GET is read-only; explicit POST /api/portfolio/rebuild added |
+| W-5 | Anthropic tool_result message translation | Block comment added documenting the translation and rationale |
+| W-8 | Decimal formatting in tool executors | `formatNum()` uses `Decimal.toFixed(2)` instead of `parseFloat()` |
+
+## Resolved in Session 11
+
+| ID | Limitation | Resolution |
+|----|-----------|------------|
+| -- | FMP `/api/v3/` endpoints dead for new accounts | Migrated all FMP calls to `/stable/` endpoints (search-symbol, quote) |
+| -- | Stooq unreliable (no formal API, CAPTCHA risk) | Replaced with Tiingo provider; Stooq code deprecated |
+| -- | No per-hour rate limit bucket | Added sliding window per-hour bucket to RateLimiter for Tiingo (50/hr) |
+| -- | Tiingo HTTP 200 with text body on rate limit | TiingoProvider uses text-first JSON parsing to detect non-JSON error bodies |
+
+## Resolved in Session 17
+
+| ID | Limitation | Resolution |
+|----|-----------|------------|
+| KL-1 | No holiday/half-day market calendar | NYSE observed holidays for 2025-2026 added. `isTradingDay()` skips holidays for US exchanges. Half-days not tracked (negligible waste). Update annually. |
+
+## Resolved in Session 19
+
+| ID | Limitation | Resolution |
+|----|-----------|------------|
+| KL-2 | Advisor context window not managed | Message windowing with token estimation. Trims oldest turns when approaching budget. Turn-boundary trimming prevents orphaned tool calls. |
+| KL-3 | No summary generation for long threads | LLM-generated summaries stored in `AdvisorThread.summaryText`. Rolling updates on subsequent trims. Fire-and-forget after response is returned. |
+
+## Current Limitations
+
+| ID | Limitation | Impact | Mitigation |
+|----|-----------|--------|------------|
+| KL-4 | Bulk paste date conversion uses noon UTC | Timezone-specific trading session times not captured | Matches existing single-transaction pattern; acceptable for daily-resolution data |
+| KL-5 | Single provider dependency for historical bars | Tiingo is the sole history provider; no fallback if Tiingo is down | FMP free tier has no history support; AV free tier too limited. If Tiingo is unreachable, `getHistory()` returns empty array. Existing price bars in the database are unaffected. |
+| KL-6 | Rate limiter is in-process only | Scheduler and Next.js maintain separate rate limiter states | Single user, manual refresh is rare, providers have tolerance. Post-MVP: track call counts in SQLite `ProviderCallLog` table. |
+| KL-PB | PriceBar fallback route has zero unit test coverage | The S21 fallback logic in `GET /api/portfolio/holdings/[symbol]` that returns a synthetic `latestQuote` from the most recent PriceBar when no LatestQuote exists has no Prisma-mocked unit tests | Prisma mocking required. Deferred from S21. Add coverage in a future session. |
+| KL-7 | Single provider dependency for crypto data (CoinGecko) | CoinGecko is the sole provider for crypto search, quotes, and price history. No fallback chain. If CoinGecko is unreachable or changes authentication requirements, crypto data will be unavailable. | Free-tier rate limit (100 req/min unauthenticated) is subject to change without notice. In-process rate limiter (`COINGECKO_RPM`) mitigates within-session overuse. Existing price bars and cached quotes in the database are unaffected by transient outages. |

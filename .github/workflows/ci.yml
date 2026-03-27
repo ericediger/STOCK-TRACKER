@@ -10,6 +10,9 @@ jobs:
   check:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: CORE
 
     steps:
       - uses: actions/checkout@v4
@@ -22,6 +25,7 @@ jobs:
         with:
           node-version: 20
           cache: 'pnpm'
+          cache-dependency-path: CORE/pnpm-lock.yaml
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

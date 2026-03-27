@@ -192,19 +192,34 @@ export function AddInstrumentModal({
           }),
         });
 
-        if (res.status === 409) {
-          setErrors({
-            symbol: `Instrument with symbol '${symbol.toUpperCase()}' already exists`,
-          });
-          return;
-        }
+        let instrument: { id: string };
 
-        if (!res.ok) {
+        if (res.status === 409) {
+          // Instrument already exists — use it for the transaction
+          const conflictData = (await res.json()) as {
+            existingInstrument?: { id: string };
+          };
+          if (!conflictData.existingInstrument) {
+            setErrors({
+              symbol: `Instrument with symbol '${symbol.toUpperCase()}' already exists`,
+            });
+            return;
+          }
+          instrument = conflictData.existingInstrument;
+
+          // If no buy data provided, just show a helpful message
+          if (!hasBuyData) {
+            setErrors({
+              symbol: `'${symbol.toUpperCase()}' already exists. Fill in the buy fields below to add a transaction.`,
+            });
+            return;
+          }
+        } else if (!res.ok) {
           const data = (await res.json()) as { message?: string };
           throw new Error(data.message ?? `HTTP ${res.status}`);
+        } else {
+          instrument = (await res.json()) as { id: string };
         }
-
-        const instrument = (await res.json()) as { id: string };
 
         // Step 2: If buy fields are filled, create the initial transaction
         if (hasBuyData && buyQty.trim() && buyPrice.trim()) {
@@ -228,8 +243,9 @@ export function AddInstrumentModal({
               variant: "success",
             });
           } else {
+            const txError = (await txRes.json().catch(() => ({}))) as { message?: string };
             toast({
-              message: `${symbol.toUpperCase()} added. Transaction could not be created — add it manually.`,
+              message: txError.message ?? `Transaction could not be created for ${symbol.toUpperCase()} — add it manually.`,
               variant: "warning",
             });
           }

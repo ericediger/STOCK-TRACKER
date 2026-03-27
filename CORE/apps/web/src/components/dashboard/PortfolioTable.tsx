@@ -231,18 +231,18 @@ export function PortfolioTable({
     setCurrentPage(1);
   }, []);
 
-  // Sort handler: click → desc → asc → default (symbol asc)
+  // Sort handler: click → desc → asc → reset to default (symbol asc)
   const handleHeaderClick = useCallback((col: ColumnDef) => {
     if (!col.sortable || col.key === "actions") return;
     const colKey = col.key as SortColumn;
     let newCol: SortColumn;
     let newDir: SortDirection;
     if (sortColumn === colKey) {
-      if (sortDirection === "desc") {
+      if (sortDirection === "asc") {
         newCol = colKey;
-        newDir = "asc";
+        newDir = "desc";
       } else {
-        // Reset to default
+        // desc → reset to default
         newCol = "symbol";
         newDir = "asc";
       }

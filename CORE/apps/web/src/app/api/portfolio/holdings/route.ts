@@ -14,17 +14,43 @@ export async function GET(): Promise<Response> {
       orderBy: { date: 'desc' },
     });
 
+    // Build instrument lookup by symbol
+    const instruments = await prisma.instrument.findMany();
+
     if (!latestRow) {
-      return Response.json([]);
+      // No snapshots — return all instruments as zero-value entries
+      const quotes = await prisma.latestQuote.findMany();
+      const quoteByInstId = new Map<string, typeof quotes[number]>();
+      for (const q of quotes) {
+        quoteByInstId.set(q.instrumentId, q);
+      }
+      return Response.json(
+        instruments.map((inst) => {
+          const quote = quoteByInstId.get(inst.id);
+          return {
+            symbol: inst.symbol,
+            name: inst.name,
+            instrumentId: inst.id,
+            instrumentType: inst.type,
+            qty: '0',
+            price: quote ? quote.price.toString() : '0',
+            value: '0',
+            costBasis: '0',
+            unrealizedPnl: '0',
+            unrealizedPnlPct: '0',
+            dayChange: null,
+            dayChangePct: null,
+            allocation: '0',
+            firstBuyDate: null,
+          };
+        }),
+      );
     }
 
     const latest = await snapshotStore.getByDate(latestRow.date);
     if (!latest) {
       return Response.json([]);
     }
-
-    // Build instrument lookup by symbol
-    const instruments = await prisma.instrument.findMany();
     const instrumentBySymbol = new Map<string, typeof instruments[number]>();
     for (const inst of instruments) {
       instrumentBySymbol.set(inst.symbol, inst);
@@ -137,6 +163,30 @@ export async function GET(): Promise<Response> {
         dayChangePct,
         firstBuyDate: firstBuyDate ? firstBuyDate.toISOString() : null,
       });
+    }
+
+    // Include instruments with no transactions (not in snapshot) as zero-value entries
+    const symbolsInSnapshot = new Set(holdingsData.map((h) => h.symbol));
+    for (const inst of instruments) {
+      if (!symbolsInSnapshot.has(inst.symbol)) {
+        const quote = quoteByInstrumentId.get(inst.id);
+        const latestPrice = quote ? toDecimal(quote.price.toString()) : ZERO;
+        holdingsData.push({
+          symbol: inst.symbol,
+          name: inst.name,
+          instrumentId: inst.id,
+          instrumentType: inst.type,
+          qty: '0',
+          price: latestPrice.toString(),
+          currentValue: ZERO,
+          costBasis: '0',
+          unrealizedPnl: '0',
+          unrealizedPnlPct: '0',
+          dayChange: null,
+          dayChangePct: null,
+          firstBuyDate: null,
+        });
+      }
     }
 
     // Second pass: compute allocation using recomputed total value

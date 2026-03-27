@@ -100,9 +100,10 @@ function buildResponseFromSnapshots(
   instruments: Instrument[],
   startDateStr: string,
   endDateStr: string,
-  liveQuotesByInstrumentId?: Map<string, { price: string }>,
+  liveQuotesByInstrumentId?: Map<string, { price: string; prevClose?: string }>,
+  windowParam?: WindowParam,
 ): Record<string, unknown> {
-  const startValue = snapshots.length > 0 ? snapshots[0]!.totalValue : ZERO;
+  let startValue = snapshots.length > 0 ? snapshots[0]!.totalValue : ZERO;
 
   // Recompute endValue from latest quotes when available (fixes stale snapshot values)
   let endValue = snapshots.length > 0 ? snapshots[snapshots.length - 1]!.totalValue : ZERO;
@@ -128,6 +129,24 @@ function buildResponseFromSnapshots(
     }
     endValue = recomputedTotal;
     liveUnrealizedPnl = sub(recomputedTotal, recomputedCostBasis);
+
+    // For 1D window, recompute startValue using prevClose from LatestQuotes.
+    // This gives accurate previous-day portfolio value even when PriceBars
+    // are outdated (carry-forward snapshots all have identical values).
+    if (windowParam === '1D') {
+      const hasPrevClose = [...liveQuotesByInstrumentId.values()].some((q) => q.prevClose);
+      if (hasPrevClose) {
+        let prevCloseTotal = ZERO;
+        for (const [symbol, entry] of Object.entries(holdingsJson)) {
+          const inst = instrumentMap.get(symbol);
+          const quote = inst ? liveQuotesByInstrumentId.get(inst.id) : undefined;
+          const prevClose = quote?.prevClose ? toDecimal(quote.prevClose) : null;
+          const prevValue = prevClose ? entry.qty.times(prevClose) : entry.value;
+          prevCloseTotal = add(prevCloseTotal, prevValue);
+        }
+        startValue = prevCloseTotal;
+      }
+    }
   }
 
   const absoluteChange = sub(endValue, startValue);
@@ -288,11 +307,14 @@ export async function GET(request: NextRequest): Promise<Response> {
     const transactions = prismaTransactions.map(toSharedTransaction);
 
     // Build live quote lookup by instrumentId (most recent per instrument)
-    const liveQuotesByInstrumentId = new Map<string, { price: string }>();
+    const liveQuotesByInstrumentId = new Map<string, { price: string; prevClose?: string }>();
     for (const q of prismaQuotes) {
       const existing = liveQuotesByInstrumentId.get(q.instrumentId);
       if (!existing) {
-        liveQuotesByInstrumentId.set(q.instrumentId, { price: q.price.toString() });
+        liveQuotesByInstrumentId.set(q.instrumentId, {
+          price: q.price.toString(),
+          prevClose: q.prevClose ? q.prevClose.toString() : undefined,
+        });
       }
     }
 
@@ -304,7 +326,7 @@ export async function GET(request: NextRequest): Promise<Response> {
     if (cachedSnapshots.length > 0) {
       // Read-only path: use cached snapshots, recompute endValue with live quotes
       return Response.json(
-        buildResponseFromSnapshots(cachedSnapshots, transactions, instruments, startDateStr, endDateStr, liveQuotesByInstrumentId),
+        buildResponseFromSnapshots(cachedSnapshots, transactions, instruments, startDateStr, endDateStr, liveQuotesByInstrumentId, window as WindowParam),
       );
     }
 

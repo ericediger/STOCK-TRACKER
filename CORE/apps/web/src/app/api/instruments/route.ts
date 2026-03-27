@@ -55,7 +55,14 @@ export async function POST(request: NextRequest): Promise<Response> {
       where: { symbol },
     });
     if (existing) {
-      return apiError(409, 'CONFLICT', `Instrument with symbol '${symbol}' already exists`);
+      return Response.json(
+        {
+          error: 'CONFLICT',
+          message: `Instrument with symbol '${symbol}' already exists`,
+          existingInstrument: serializeInstrument(existing),
+        },
+        { status: 409 },
+      );
     }
 
     // Crypto instruments use fixed exchange and timezone (AD-S22-2)
